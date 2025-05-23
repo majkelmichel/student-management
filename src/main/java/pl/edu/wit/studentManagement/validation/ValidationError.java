@@ -1,17 +1,18 @@
 package pl.edu.wit.studentManagement.validation;
 
+import pl.edu.wit.studentManagement.entities.fields.EntityField;
 import pl.edu.wit.studentManagement.entities.fields.StudentField;
 
 public class ValidationError {
-    private final StudentField fieldName;
+    private final EntityField fieldName;
     private final ValidationErrorType error;
 
-    public ValidationError(StudentField fieldName, ValidationErrorType error) {
+    public ValidationError(EntityField fieldName, ValidationErrorType error) {
         this.fieldName = fieldName;
         this.error = error;
     }
 
-    public StudentField getFieldName() {
+    public EntityField getFieldName() {
         return fieldName;
     }
 
