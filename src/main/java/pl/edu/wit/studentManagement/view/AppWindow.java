@@ -1,20 +1,13 @@
 package pl.edu.wit.studentManagement.view;
 
 import pl.edu.wit.studentManagement.view.fragments.DashboardFragment;
-import pl.edu.wit.studentManagement.view.fragments.GroupsFragment;
 import pl.edu.wit.studentManagement.view.fragments.StudentsFragment;
 import com.formdev.flatlaf.FlatLightLaf;
-import pl.edu.wit.studentManagement.view.fragments.SubjectsFragment;
 
 import javax.swing.*;
-import java.awt.*;
 
 public final class AppWindow {
     private static JFrame frame;
-    private static JPanel contentPanel;
-    private static JLabel topBarHeader;
-    private static JButton backButton;
-    private static Runnable backButtonAction;
 
     public AppWindow() {
         try {
@@ -38,15 +31,6 @@ public final class AppWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1280, 720);
         frame.setLocationRelativeTo(null);
-
-
-        var mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(createTopBar(), BorderLayout.NORTH);
-
-        contentPanel = new JPanel(new BorderLayout());
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
-
-        frame.setContentPane(mainPanel);
     }
 
     public void show() {
@@ -54,89 +38,27 @@ public final class AppWindow {
         frame.setVisible(true);
     }
 
-    private JPanel createTopBar(){
-        // Pasek górny
-        var topBar = new JPanel(new BorderLayout());
-
-        var leftPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-
-        backButton = new JButton("← Powrót");
-        backButton.addActionListener(e -> backButtonAction.run());
-        leftPanel.add(backButton);
-
-        topBarHeader = new JLabel("-");
-        topBarHeader.setFont(new Font("SansSerif", Font.BOLD, 22));
-        leftPanel.add(topBarHeader);
-
-        topBar.add(leftPanel, BorderLayout.WEST);
-
-        // Panel na przyciski po prawej
-        var rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-
-        // Przycisk zmiany języka (toggle)
-        var langButton = new JButton("PL");
-        langButton.addActionListener(e -> {
-
-        });
-        rightButtonsPanel.add(langButton);
-
-        // Przycisk "O programie"
-        var aboutButton = new JButton("O programie");
-        aboutButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame,
-                    "Program do zarządzania studentami\nWersja 1.0\nAutorzy: ...",
-                    "O programie",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
-        rightButtonsPanel.add(aboutButton);
-
-        topBar.add(rightButtonsPanel, BorderLayout.EAST);
-
-        return topBar;
-    }
-
-    private static void setContent(JComponent newContent) {
-        contentPanel.removeAll();
-        contentPanel.add(newContent, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    private  static void setTitle(String title) {
-        topBarHeader.setText(title);
-    }
-
-    private static void setBackButtonAction(Runnable action){
-        if(action != null) {
-            backButtonAction = action;
-            backButton.setVisible(true);
-            return;
-        }
-
-        backButton.setVisible(false);
-    }
-
     public static void navigateToDashboard() {
-        setContent(new DashboardFragment().getPanel());
-        setTitle("Panel startowy");
-        setBackButtonAction(null);
+        frame.setContentPane(new DashboardFragment().getPanel());
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void navigateToStudents() {
-        setContent(new StudentsFragment().getPanel());
-        setTitle("Studenci");
-        setBackButtonAction(AppWindow::navigateToDashboard);
+        frame.setContentPane(new StudentsFragment().getPanel());
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void navigateToGroups() {
-        setContent(new GroupsFragment().getPanel());
-        setTitle("Grupy");
-        setBackButtonAction(AppWindow::navigateToDashboard);
+//        frame.setContentPane(new StudentsFragment().getPanel());
+//        frame.revalidate();
+//        frame.repaint();
     }
 
     public static void navigateToSubjects() {
-        setContent(new SubjectsFragment().getPanel());
-        setTitle("Przedmioty");
-        setBackButtonAction(AppWindow::navigateToDashboard);
+//        frame.setContentPane(new StudentsFragment().getPanel());
+//        frame.revalidate();
+//        frame.repaint();
     }
 }
