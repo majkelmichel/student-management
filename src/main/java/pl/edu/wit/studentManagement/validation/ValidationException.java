@@ -43,3 +43,4 @@ public class ValidationException extends Exception {
         return MessageFormat.format(pattern, messageArgs);
     }
 }
+

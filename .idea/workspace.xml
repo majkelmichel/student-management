@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AssignStudentToGroupDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
+    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Dodane pola w entities oraz DAO">
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="mz/entities" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -45,20 +41,15 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/majkelmichel/student-management.git&quot;,
-    &quot;accountId&quot;: &quot;22cf9e89-fabe-4a59-939b-32b077381cf8&quot;
+    &quot;accountId&quot;: &quot;f2ebe9f2-b1e7-4652-b4a1-d140caf41779&quot;
   }
 }</component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
 }</component>
-  <component name="ProjectId" id="2xVDuot2ytjMtgrzovIjk1ocKhK" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <OptionsSetting value="false" id="Update" />
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="2xGYFwZb8xYQvQa6MnDllcxu2nj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -67,11 +58,9 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "wb/ui",
-    "ignore.virus.scanning.warn.message": "true",
+    "git-widget-placeholder": "mz/entities",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Wojtek/IdeaProjects/student-management/src/main/resources/icons",
+    "last_opened_file_path": "C:/Users/Michal/IdeaProjects/student-management",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -87,16 +76,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources\icons" />
-      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources" />
       <recent name="C:\Users\Michal\IdeaProjects\student-management\src\main\java\pl\edu\wit\studentManagement\persistence" />
       <recent name="C:\Users\Michal\IdeaProjects\student-management\src\main\java\pl\edu\wit\studentManagement\group" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources\icons" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="pl.edu.wit.studentManagement.view.fragments" />
     </key>
   </component>
   <component name="RunManager">
@@ -122,8 +103,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26574.91" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26574.91" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
       </set>
     </attachedChunks>
   </component>
@@ -135,11 +116,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1747496885365</updated>
-      <workItem from="1747496886444" duration="9946000" />
-      <workItem from="1748014574840" duration="2270000" />
-      <workItem from="1748016913927" duration="851000" />
-      <workItem from="1749549165746" duration="100000" />
-      <workItem from="1750076558612" duration="5140000" />
+      <workItem from="1747496886444" duration="11782000" />
+      <workItem from="1747565781618" duration="841000" />
+      <workItem from="1747582591300" duration="207000" />
+      <workItem from="1748887287741" duration="4917000" />
     </task>
     <task id="LOCAL-00001" summary="Podstawowe klasy do projektu">
       <option name="closed" value="true" />
@@ -149,34 +129,39 @@
       <option name="project" value="LOCAL" />
       <updated>1747506816255</updated>
     </task>
-    <task id="LOCAL-00002" summary="Dodanie paska górnego i ikon dla przycisków.">
+    <task id="LOCAL-00002" summary="Podstawowe klasy do projektu">
       <option name="closed" value="true" />
-      <created>1749127943340</created>
+      <created>1747506860781</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1749127943341</updated>
+      <updated>1747506860781</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Podstawowe klasy do projektu">
+      <option name="closed" value="true" />
+      <created>1747506906990</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747506906990</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Dodane pola w entities oraz DAO">
+      <option name="closed" value="true" />
+      <created>1748891719089</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748891719089</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Podstawowe klasy do projektu" />
-    <MESSAGE value="Dodanie paska górnego i ikon dla przycisków." />
-    <option name="LAST_COMMIT_MESSAGE" value="Dodanie paska górnego i ikon dla przycisków." />
+    <MESSAGE value="Dodane pola w entities oraz DAO" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dodane pola w entities oraz DAO" />
   </component>
 </project>
