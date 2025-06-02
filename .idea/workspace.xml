@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Podstawowe klasy do projektu">
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/package-info.java" afterDir="false" />
+    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Dodane pola w entities oraz DAO">
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +25,30 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;majkelmichel&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/majkelmichel/student-management.git&quot;,
+    &quot;accountId&quot;: &quot;f2ebe9f2-b1e7-4652-b4a1-d140caf41779&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2xGYFwZb8xYQvQa6MnDllcxu2nj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -35,7 +58,7 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "mz/entities",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Michal/IdeaProjects/student-management",
     "node.js.detected.package.eslint": "true",
@@ -93,7 +116,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1747496885365</updated>
-      <workItem from="1747496886444" duration="9946000" />
+      <workItem from="1747496886444" duration="11782000" />
+      <workItem from="1747565781618" duration="841000" />
+      <workItem from="1747582591300" duration="207000" />
+      <workItem from="1748887287741" duration="4917000" />
     </task>
     <task id="LOCAL-00001" summary="Podstawowe klasy do projektu">
       <option name="closed" value="true" />
@@ -103,7 +129,31 @@
       <option name="project" value="LOCAL" />
       <updated>1747506816255</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Podstawowe klasy do projektu">
+      <option name="closed" value="true" />
+      <created>1747506860781</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747506860781</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Podstawowe klasy do projektu">
+      <option name="closed" value="true" />
+      <created>1747506906990</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747506906990</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Dodane pola w entities oraz DAO">
+      <option name="closed" value="true" />
+      <created>1748891719089</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748891719089</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,6 +161,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Podstawowe klasy do projektu" />
-    <option name="LAST_COMMIT_MESSAGE" value="Podstawowe klasy do projektu" />
+    <MESSAGE value="Dodane pola w entities oraz DAO" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dodane pola w entities oraz DAO" />
   </component>
 </project>

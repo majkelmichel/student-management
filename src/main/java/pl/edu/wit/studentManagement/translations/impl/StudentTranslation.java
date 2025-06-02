@@ -9,7 +9,7 @@ public class StudentTranslation implements Translation<StudentField> {
     public String getTranslation(StudentField studentField) {
         switch (studentField) {
             // TODO: implement translations
-            default -> {
+            default: {
                 return studentField.getFieldName();
             }
         }
