@@ -7,6 +7,11 @@ public class StudentTranslation implements Translation<StudentField> {
 
     @Override
     public String getTranslation(StudentField studentField) {
-        return studentField.getFieldName();
+        switch (studentField) {
+            // TODO: implement translations
+            default -> {
+                return studentField.getFieldName();
+            }
+        }
     }
 }
