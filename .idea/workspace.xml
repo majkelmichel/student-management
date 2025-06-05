@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Podstawowe klasy do projektu">
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/fields/EntityField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/group.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/student.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/subject.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/fields/StudentField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/fields/StudentField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Subject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/DashboardFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/DashboardFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +32,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="mz/entities" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -48,37 +55,47 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2xVDuot2ytjMtgrzovIjk1ocKhK" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Michal/IdeaProjects/student-management&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Michal/IdeaProjects/student-management/src/main/java/pl/edu/wit/studentManagement/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "wb/ui",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Wojtek/IdeaProjects/student-management/src/main/resources/icons",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Michal/IdeaProjects/student-management/src/main/java/pl/edu/wit/studentManagement/Main.java",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources\icons" />
+      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources" />
       <recent name="C:\Users\Michal\IdeaProjects\student-management\src\main\java\pl\edu\wit\studentManagement\persistence" />
       <recent name="C:\Users\Michal\IdeaProjects\student-management\src\main\java\pl\edu\wit\studentManagement\group" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Wojtek\IdeaProjects\student-management\src\main\resources\icons" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="pl.edu.wit.studentManagement.view.fragments" />
     </key>
   </component>
   <component name="RunManager">
@@ -134,6 +151,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Podstawowe klasy do projektu" />

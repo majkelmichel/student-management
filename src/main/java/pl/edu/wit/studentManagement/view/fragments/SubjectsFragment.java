@@ -1,27 +1,27 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
-import pl.edu.wit.studentManagement.entities.Student;
+import pl.edu.wit.studentManagement.entities.Subject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentsFragment {
+public class SubjectsFragment {
     private final JPanel panel;
-    private JList<Student> studentsList;
-    private JLabel idLabel, firstNameLabel, lastNameLabel, albumLabel;
+    private JList<Subject> subjectsList;
+    private JLabel idLabel, subjectNameLabel;
 
     // Czcionki używane w panelu
     private static final Font LABEL_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 14f);
     private static final Font LIST_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 15f);
 
-    public StudentsFragment() {
+    public SubjectsFragment() {
         panel = new JPanel(new BorderLayout());
 
-        List<Student> students = mockStudents();
+        List<Subject> subjects = mockSubjects();
 
-        var leftPanel = createLeftPanel(students);
+        var leftPanel = createLeftPanel(subjects);
         var rightPanel = createDetailsPanel();
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
@@ -30,40 +30,42 @@ public class StudentsFragment {
         panel.add(splitPane, BorderLayout.CENTER);
     }
 
-    private List<Student> mockStudents() {
-        List<Student> students = new ArrayList<>();
-        students.add(new Student(1, "Jan", "Kowalski", "12345"));
-        students.add(new Student(2, "Anna", "Nowak", "23456"));
-        students.add(new Student(3, "Piotr", "Wiśniewski", "34567"));
-        return students;
+    private List<Subject> mockSubjects() {
+        List<Subject> subjects = new ArrayList<>();
+        subjects.add(new Subject("Matematyka", new ArrayList<>()));
+        subjects.add(new Subject("Informatyka", new ArrayList<>()));
+        subjects.add(new Subject("Język angielski", new ArrayList<>()));
+        subjects.add(new Subject("Matematyka dyskretna", new ArrayList<>()));
+
+        return subjects;
     }
 
-    private JPanel createLeftPanel(List<Student> students) {
+    private JPanel createLeftPanel(List<Subject> subjects) {
         JPanel leftPanel = new JPanel(new BorderLayout(4, 4));
         leftPanel.add(createSearchPanel(), BorderLayout.NORTH);
 
-        DefaultListModel<Student> listModel = new DefaultListModel<>();
-        for (Student s : students) {
+        DefaultListModel<Subject> listModel = new DefaultListModel<>();
+        for (Subject s : subjects) {
             listModel.addElement(s);
         }
 
-        studentsList = new JList<>(listModel);
-        studentsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        studentsList.setFont(LIST_FONT);
-        studentsList.setCellRenderer(new DefaultListCellRenderer() {
+        subjectsList = new JList<>(listModel);
+        subjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        subjectsList.setFont(LIST_FONT);
+        subjectsList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Student student = (Student) value;
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, student.getFirstName() + " " + student.getLastName(), index, isSelected, cellHasFocus);
+                Subject subject = (Subject) value;
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, subject.getName(), index, isSelected, cellHasFocus);
                 label.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
                 label.setFont(LIST_FONT);
                 return label;
             }
         });
 
-        studentsList.addListSelectionListener(e -> updateDetailsPanel());
+        subjectsList.addListSelectionListener(e -> updateDetailsPanel());
 
-        leftPanel.add(new JScrollPane(studentsList), BorderLayout.CENTER);
+        leftPanel.add(new JScrollPane(subjectsList), BorderLayout.CENTER);
         return leftPanel;
     }
 
@@ -88,32 +90,22 @@ public class StudentsFragment {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         idLabel = new JLabel();
         idLabel.setFont(LABEL_FONT);
-        firstNameLabel = new JLabel();
-        firstNameLabel.setFont(LABEL_FONT);
-        lastNameLabel = new JLabel();
-        lastNameLabel.setFont(LABEL_FONT);
-        albumLabel = new JLabel();
-        albumLabel.setFont(LABEL_FONT);
+        subjectNameLabel = new JLabel();
+        subjectNameLabel.setFont(LABEL_FONT);
         rightPanel.add(idLabel);
-        rightPanel.add(firstNameLabel);
-        rightPanel.add(lastNameLabel);
-        rightPanel.add(albumLabel);
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły studenta"));
+        rightPanel.add(subjectNameLabel);
+        rightPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły przedmiotu"));
         return rightPanel;
     }
 
     private void updateDetailsPanel() {
-        Student selected = studentsList.getSelectedValue();
+        Subject selected = subjectsList.getSelectedValue();
         if (selected != null) {
             idLabel.setText("ID: " + selected.getId());
-            firstNameLabel.setText("Imię: " + selected.getFirstName());
-            lastNameLabel.setText("Nazwisko: " + selected.getLastName());
-            albumLabel.setText("Album: " + selected.getAlbum());
+            subjectNameLabel.setText("Nazwa: " + selected.getName());
         } else {
             idLabel.setText("");
-            firstNameLabel.setText("");
-            lastNameLabel.setText("");
-            albumLabel.setText("");
+            subjectNameLabel.setText("");
         }
     }
 
