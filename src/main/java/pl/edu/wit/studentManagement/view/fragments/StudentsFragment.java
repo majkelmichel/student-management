@@ -1,7 +1,6 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.entities.Student;
-import pl.edu.wit.studentManagement.view.AppWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +13,11 @@ public class StudentsFragment {
     private JLabel idLabel, firstNameLabel, lastNameLabel, albumLabel;
 
     // Czcionki używane w panelu
-    private static final Font TITLE_FONT = new JLabel().getFont().deriveFont(Font.BOLD, 18f);
     private static final Font LABEL_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 14f);
     private static final Font LIST_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 15f);
 
     public StudentsFragment() {
         panel = new JPanel(new BorderLayout());
-        panel.add(createHeaderPanel(), BorderLayout.NORTH);
 
         List<Student> students = mockStudents();
 
@@ -31,19 +28,6 @@ public class StudentsFragment {
         splitPane.setDividerLocation(300);
 
         panel.add(splitPane, BorderLayout.CENTER);
-    }
-
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        JButton backButton = new JButton("← Powrót");
-        backButton.addActionListener(e -> AppWindow.navigateToDashboard());
-        JLabel titleLabel = new JLabel("Studenci");
-        titleLabel.setFont(TITLE_FONT);
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        headerPanel.add(backButton, BorderLayout.WEST);
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return headerPanel;
     }
 
     private List<Student> mockStudents() {
