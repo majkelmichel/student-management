@@ -5,11 +5,11 @@ import pl.edu.wit.studentManagement.entities.StudentGroup;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class StudentGroupDao implements Dao<StudentGroup> {
-    // TODO: implement
     @Override
-    public Optional<StudentGroup> get(int id) {
+    public Optional<StudentGroup> get(UUID id) {
         return Optional.empty();
     }
 
@@ -29,7 +29,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(UUID id) {
         return false;
     }
 }

@@ -4,16 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Podstawowe klasy do projektu">
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/group.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/student.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/subject.png" afterDir="false" />
+    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddGroupDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddStudentDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddSubjectDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Subject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentGroupDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentGroupDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/interfaces/Dao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/interfaces/Dao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/StudentGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/StudentGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/impl/InMemoryStudentDataStreamHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/impl/InMemoryStudentDataStreamHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/interfaces/DataStreamHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/interfaces/DataStreamHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/DashboardFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/DashboardFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +35,8 @@
         <option value="package-info" />
         <option value="Exception" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -48,9 +57,12 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/majkelmichel/student-management.git&quot;,
-    &quot;accountId&quot;: &quot;9f3278a4-457c-45f7-96cc-b9066fd624f9&quot;
+    &quot;accountId&quot;: &quot;22cf9e89-fabe-4a59-939b-32b077381cf8&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -64,7 +76,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "wb/ui",
@@ -121,8 +133,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26574.91" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26574.91" />
       </set>
     </attachedChunks>
   </component>
@@ -137,6 +149,8 @@
       <workItem from="1747496886444" duration="9946000" />
       <workItem from="1748014574840" duration="2270000" />
       <workItem from="1748016913927" duration="851000" />
+      <workItem from="1749549165746" duration="100000" />
+      <workItem from="1750076558612" duration="5140000" />
     </task>
     <task id="LOCAL-00001" summary="Podstawowe klasy do projektu">
       <option name="closed" value="true" />
@@ -146,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747506816255</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Dodanie paska górnego i ikon dla przycisków.">
+      <option name="closed" value="true" />
+      <created>1749127943340</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1749127943341</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,6 +187,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Podstawowe klasy do projektu" />
-    <option name="LAST_COMMIT_MESSAGE" value="Podstawowe klasy do projektu" />
+    <MESSAGE value="Dodanie paska górnego i ikon dla przycisków." />
+    <option name="LAST_COMMIT_MESSAGE" value="Dodanie paska górnego i ikon dla przycisków." />
   </component>
 </project>

@@ -8,6 +8,7 @@ import pl.edu.wit.studentManagement.validation.ValidationException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Data Access Object (DAO) implementation for {@link Student} entities.
@@ -15,6 +16,12 @@ import java.util.Optional;
  * This class provides methods to perform CRUD operations on student data,
  * delegating the actual read/write logic to a {@link DataStreamHandler}.
  * </p>
+ *
+ * @see Student
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
+ *
  * @author Michał Zawadzki
  */
 public class StudentDao implements Dao<Student> {
@@ -32,10 +39,10 @@ public class StudentDao implements Dao<Student> {
      *          or an empty {@code Optional} if not student exists with the given ID
      */
     @Override
-    public Optional<Student> get(int id) {
+    public Optional<Student> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
-                    .filter(student -> student.getId() == id)
+                    .filter(student -> student.getId().equals(id))
                     .findFirst();
         } catch (IOException e) {
             return Optional.empty();
@@ -99,7 +106,7 @@ public class StudentDao implements Dao<Student> {
      * @param id the ID of the student to delete
      */
     @Override
-    public boolean delete(int id) {
+    public boolean delete(UUID id) {
         try {
             dataStreamHandler.deleteById(id);
             return true;
