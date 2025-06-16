@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.view;
 
 import pl.edu.wit.studentManagement.view.fragments.DashboardFragment;
+import pl.edu.wit.studentManagement.view.fragments.GroupsFragment;
 import pl.edu.wit.studentManagement.view.fragments.StudentsFragment;
 import com.formdev.flatlaf.FlatLightLaf;
 import pl.edu.wit.studentManagement.view.fragments.SubjectsFragment;
@@ -128,6 +129,9 @@ public final class AppWindow {
     }
 
     public static void navigateToGroups() {
+        setContent(new GroupsFragment().getPanel());
+        setTitle("Grupy");
+        setBackButtonAction(AppWindow::navigateToDashboard);
     }
 
     public static void navigateToSubjects() {
