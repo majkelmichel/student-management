@@ -1,8 +1,5 @@
-package pl.edu.wit.studentManagement.dao.impl;
+package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.dao.interfaces.Dao;
-import pl.edu.wit.studentManagement.entities.Subject;
-import pl.edu.wit.studentManagement.persistence.interfaces.DataStreamHandler;
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import java.io.IOException;
@@ -11,25 +8,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Data Access Object (DAO) implementation for {@link Subject} entities.
+ * DAO implementation for {@link Grade} entities.
  * <p>
- * Provides CRUD operations using a {@link DataStreamHandler} for persistence.
+ * Uses a {@link DataStreamHandler} for persistence of student grades.
  * </p>
  *
  * @author Michał Zawadzki
  */
-public class SubjectDao implements Dao<Subject> {
-    private final DataStreamHandler<Subject> dataStreamHandler;
+class GradeDao extends Dao<Grade> {
+    private final DataStreamHandler<Grade> dataStreamHandler;
 
-    public SubjectDao(DataStreamHandler<Subject> dataStreamHandler) {
+    GradeDao(DataStreamHandler<Grade> dataStreamHandler) {
         this.dataStreamHandler = dataStreamHandler;
     }
 
     @Override
-    public Optional<Subject> get(UUID id) {
+    Optional<Grade> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
-                    .filter(subject -> subject.getId().equals(id))
+                    .filter(grade -> grade.getStudentId().equals(id)) // May need revision if ID uniqueness differs
                     .findFirst();
         } catch (IOException e) {
             return Optional.empty();
@@ -37,7 +34,7 @@ public class SubjectDao implements Dao<Subject> {
     }
 
     @Override
-    public List<Subject> getAll() {
+    List<Grade> getAll() {
         try {
             return dataStreamHandler.readAll();
         } catch (IOException e) {
@@ -46,10 +43,10 @@ public class SubjectDao implements Dao<Subject> {
     }
 
     @Override
-    public boolean save(Subject subject) throws ValidationException {
-        // subject.validate();
+    boolean save(Grade grade) throws ValidationException {
+        // grade.validate();
         try {
-            dataStreamHandler.write(subject);
+            dataStreamHandler.write(grade);
             return true;
         } catch (IOException e) {
             return false;
@@ -57,10 +54,10 @@ public class SubjectDao implements Dao<Subject> {
     }
 
     @Override
-    public boolean update(Subject subject) throws ValidationException {
-        // subject.validate();
+    boolean update(Grade grade) throws ValidationException {
+        // grade.validate();
         try {
-            dataStreamHandler.update(subject);
+            dataStreamHandler.update(grade);
             return true;
         } catch (IOException e) {
             return false;
@@ -68,7 +65,7 @@ public class SubjectDao implements Dao<Subject> {
     }
 
     @Override
-    public boolean delete(UUID id) {
+    boolean delete(UUID id) {
         try {
             dataStreamHandler.deleteById(id);
             return true;

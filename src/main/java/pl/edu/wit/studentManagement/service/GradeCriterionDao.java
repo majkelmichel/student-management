@@ -1,8 +1,5 @@
-package pl.edu.wit.studentManagement.dao.impl;
+package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.dao.interfaces.Dao;
-import pl.edu.wit.studentManagement.entities.GradeCriterion;
-import pl.edu.wit.studentManagement.persistence.interfaces.DataStreamHandler;
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import java.io.IOException;
@@ -18,15 +15,15 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-public class GradeCriterionDao implements Dao<GradeCriterion> {
+class GradeCriterionDao extends Dao<GradeCriterion> {
     private final DataStreamHandler<GradeCriterion> dataStreamHandler;
 
-    public GradeCriterionDao(DataStreamHandler<GradeCriterion> dataStreamHandler) {
+    GradeCriterionDao(DataStreamHandler<GradeCriterion> dataStreamHandler) {
         this.dataStreamHandler = dataStreamHandler;
     }
 
     @Override
-    public Optional<GradeCriterion> get(UUID id) {
+    Optional<GradeCriterion> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
                     .filter(criterion -> criterion.getId() == id)
@@ -37,7 +34,7 @@ public class GradeCriterionDao implements Dao<GradeCriterion> {
     }
 
     @Override
-    public List<GradeCriterion> getAll() {
+    List<GradeCriterion> getAll() {
         try {
             return dataStreamHandler.readAll();
         } catch (IOException e) {
@@ -46,7 +43,7 @@ public class GradeCriterionDao implements Dao<GradeCriterion> {
     }
 
     @Override
-    public boolean save(GradeCriterion criterion) throws ValidationException {
+    boolean save(GradeCriterion criterion) throws ValidationException {
         // criterion.validate();
         try {
             dataStreamHandler.write(criterion);
@@ -57,7 +54,7 @@ public class GradeCriterionDao implements Dao<GradeCriterion> {
     }
 
     @Override
-    public boolean update(GradeCriterion criterion) throws ValidationException {
+    boolean update(GradeCriterion criterion) throws ValidationException {
         // criterion.validate();
         try {
             dataStreamHandler.update(criterion);
@@ -68,7 +65,7 @@ public class GradeCriterionDao implements Dao<GradeCriterion> {
     }
 
     @Override
-    public boolean delete(UUID id) {
+    boolean delete(UUID id) {
         try {
             dataStreamHandler.deleteById(id);
             return true;
