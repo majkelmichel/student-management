@@ -1,46 +1,57 @@
-package pl.edu.wit.studentManagement.entities;
+package pl.edu.wit.studentManagement.service;
 
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class GradeCriterion {
+class GradeCriterion implements Serializable {
     private final UUID id;
     private String name;
     private byte maxPoints;
+    private UUID subjectId;
 
-    public GradeCriterion(String name, byte maxPoints) {
+    GradeCriterion(String name, byte maxPoints, UUID subjectId) {
+        this.subjectId = subjectId;
         this.id = UUID.randomUUID();
         this.name = name;
         this.maxPoints = maxPoints;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
-    public byte getMaxPoints() {
+    byte getMaxPoints() {
         return maxPoints;
     }
 
-    public void setMaxPoints(byte maxPoints) {
+    void setMaxPoints(byte maxPoints) {
         this.maxPoints = maxPoints;
     }
 
-    public void validate() throws ValidationException {
+    void validate() throws ValidationException {
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException("criterion.name.empty");
         }
         if (maxPoints <= 0) {
             throw new ValidationException("criterion.maxPoints.invalid");
         }
+    }
+
+    UUID getSubjectId() {
+        return subjectId;
+    }
+
+    void setSubjectId(UUID subjectId) {
+        this.subjectId = subjectId;
     }
 }
