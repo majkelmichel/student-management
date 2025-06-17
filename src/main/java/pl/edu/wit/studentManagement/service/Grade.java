@@ -1,15 +1,16 @@
-package pl.edu.wit.studentManagement.entities;
+package pl.edu.wit.studentManagement.service;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Grade {
+class Grade implements Serializable {
     private final UUID id;
     private UUID subjectId;
     private UUID gradeCriterionId;
     private UUID studentId;
     private byte grade;
 
-    public Grade(UUID subjectId, UUID gradeCriterionId, UUID studentId, byte grade) {
+    Grade(UUID subjectId, UUID gradeCriterionId, UUID studentId, byte grade) {
         this.id = UUID.randomUUID();
         this.subjectId = subjectId;
         this.gradeCriterionId = gradeCriterionId;
@@ -17,39 +18,39 @@ public class Grade {
         this.grade = grade;
     }
 
-    public UUID getSubjectId() {
+    UUID getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(UUID subjectId) {
+    void setSubjectId(UUID subjectId) {
         this.subjectId = subjectId;
     }
 
-    public UUID getGradeCriterionId() {
+    UUID getGradeCriterionId() {
         return gradeCriterionId;
     }
 
-    public void setGradeCriterionId(UUID gradeCriterionId) {
+    void setGradeCriterionId(UUID gradeCriterionId) {
         this.gradeCriterionId = gradeCriterionId;
     }
 
-    public UUID getStudentId() {
+    UUID getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(UUID studentId) {
+    void setStudentId(UUID studentId) {
         this.studentId = studentId;
     }
 
-    public byte getGrade() {
+    byte getGrade() {
         return grade;
     }
 
-    public void setGrade(byte grade) {
+    void setGrade(byte grade) {
         this.grade = grade;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 }

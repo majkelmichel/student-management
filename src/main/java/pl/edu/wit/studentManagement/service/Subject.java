@@ -1,36 +1,37 @@
-package pl.edu.wit.studentManagement.entities;
+package pl.edu.wit.studentManagement.service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class Subject {
+class Subject implements Serializable {
     private final UUID id;
     private String name;
     private List<GradeCriterion> gradeCriteria;
 
-    public Subject(String name, List<GradeCriterion> gradeCriteria) {
+    Subject(String name, List<GradeCriterion> gradeCriteria) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.gradeCriteria = gradeCriteria;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public List<GradeCriterion> getGradeCriteria() {
+    List<GradeCriterion> getGradeCriteria() {
         return gradeCriteria;
     }
 
-    public void setGradeCriteria(List<GradeCriterion> gradeCriteria) {
+    void setGradeCriteria(List<GradeCriterion> gradeCriteria) {
         this.gradeCriteria = gradeCriteria;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 }
