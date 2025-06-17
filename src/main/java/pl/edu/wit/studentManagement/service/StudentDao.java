@@ -1,8 +1,5 @@
-package pl.edu.wit.studentManagement.dao.impl;
+package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.dao.interfaces.Dao;
-import pl.edu.wit.studentManagement.persistence.interfaces.DataStreamHandler;
-import pl.edu.wit.studentManagement.entities.Student;
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import java.io.IOException;
@@ -24,10 +21,10 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-public class StudentDao implements Dao<Student> {
+class StudentDao extends Dao<Student> {
     private final DataStreamHandler<Student> dataStreamHandler;
 
-    public StudentDao(DataStreamHandler<Student> dataStreamHandler) {
+    StudentDao(DataStreamHandler<Student> dataStreamHandler) {
         this.dataStreamHandler = dataStreamHandler;
     }
 
@@ -39,7 +36,7 @@ public class StudentDao implements Dao<Student> {
      *          or an empty {@code Optional} if not student exists with the given ID
      */
     @Override
-    public Optional<Student> get(UUID id) {
+    Optional<Student> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
                     .filter(student -> student.getId().equals(id))
@@ -56,7 +53,7 @@ public class StudentDao implements Dao<Student> {
      *         or an empty list if an I/O error occurs
      */
     @Override
-    public List<Student> getAll() {
+    List<Student> getAll() {
         try {
             return dataStreamHandler.readAll();
         } catch (IOException e) {
@@ -71,7 +68,7 @@ public class StudentDao implements Dao<Student> {
      * @throws ValidationException if the student data is invalid
      */
     @Override
-    public boolean save(Student student) throws ValidationException {
+    boolean save(Student student) throws ValidationException {
         student.validate();
         try {
             dataStreamHandler.write(student);
@@ -89,7 +86,7 @@ public class StudentDao implements Dao<Student> {
      * @throws ValidationException if the student data is invalid
      */
     @Override
-    public boolean update(Student student) throws ValidationException {
+    boolean update(Student student) throws ValidationException {
         student.validate();
         try {
             dataStreamHandler.update(student);
@@ -106,7 +103,7 @@ public class StudentDao implements Dao<Student> {
      * @param id the ID of the student to delete
      */
     @Override
-    public boolean delete(UUID id) {
+    boolean delete(UUID id) {
         try {
             dataStreamHandler.deleteById(id);
             return true;

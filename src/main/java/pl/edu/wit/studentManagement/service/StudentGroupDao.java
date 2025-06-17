@@ -1,8 +1,5 @@
-package pl.edu.wit.studentManagement.dao.impl;
+package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.dao.interfaces.Dao;
-import pl.edu.wit.studentManagement.entities.StudentGroup;
-import pl.edu.wit.studentManagement.persistence.interfaces.DataStreamHandler;
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import java.io.IOException;
@@ -24,7 +21,7 @@ import java.util.UUID;
  *
  * @author  Michał Zawadzki
  */
-public class StudentGroupDao implements Dao<StudentGroup> {
+class StudentGroupDao extends Dao<StudentGroup> {
     private final DataStreamHandler<StudentGroup> dataStreamHandler;
 
     /**
@@ -32,7 +29,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      *
      * @param dataStreamHandler the handler responsible for reading/writing {@code StudentGroup} data
      */
-    public StudentGroupDao(DataStreamHandler<StudentGroup> dataStreamHandler) {
+    StudentGroupDao(DataStreamHandler<StudentGroup> dataStreamHandler) {
         this.dataStreamHandler = dataStreamHandler;
     }
 
@@ -44,7 +41,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      *         or an empty {@code Optional} if no group exists with the given ID
      */
     @Override
-    public Optional<StudentGroup> get(UUID id) {
+    Optional<StudentGroup> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
                     .filter(g -> g.getId().equals(id))
@@ -61,7 +58,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      *         or an empty list if an I/O error occurs
      */
     @Override
-    public List<StudentGroup> getAll() {
+    List<StudentGroup> getAll() {
         try {
             return dataStreamHandler.readAll();
         } catch (IOException e) {
@@ -77,7 +74,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      * @throws ValidationException if the student group data is invalid
      */
     @Override
-    public boolean save(StudentGroup studentGroup) throws ValidationException {
+    boolean save(StudentGroup studentGroup) throws ValidationException {
         studentGroup.validate();
         try {
             dataStreamHandler.write(studentGroup);
@@ -96,7 +93,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      * @throws ValidationException if the student group data is invalid
      */
     @Override
-    public boolean update(StudentGroup studentGroup) throws ValidationException {
+    boolean update(StudentGroup studentGroup) throws ValidationException {
         studentGroup.validate();
         try {
             dataStreamHandler.update(studentGroup);
@@ -113,7 +110,7 @@ public class StudentGroupDao implements Dao<StudentGroup> {
      * @return {@code true} if the deletion succeeds, {@code false} otherwise
      */
     @Override
-    public boolean delete(UUID id) {
+    boolean delete(UUID id) {
         try {
             dataStreamHandler.deleteById(id);
             return true;
