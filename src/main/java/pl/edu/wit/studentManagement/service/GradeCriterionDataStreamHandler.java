@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-class GradeCriterionDataStreamHandler extends DataStreamHandler<pl.edu.wit.studentManagement.service.GradeCriterion> {
+class GradeCriterionDataStreamHandler extends DataStreamHandler<GradeCriterion> {
     private final File file;
 
     GradeCriterionDataStreamHandler(String filePath) {
@@ -21,9 +21,9 @@ class GradeCriterionDataStreamHandler extends DataStreamHandler<pl.edu.wit.stude
         }
     }
 
-    private List<pl.edu.wit.studentManagement.service.GradeCriterion> readAllInternal() throws IOException {
+    private List<GradeCriterion> readAllInternal() throws IOException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return (List<pl.edu.wit.studentManagement.service.GradeCriterion>) ois.readObject();
+            return (List<GradeCriterion>) ois.readObject();
         } catch (EOFException e) {
             return new ArrayList<>();
         } catch (ClassNotFoundException e) {
@@ -31,27 +31,27 @@ class GradeCriterionDataStreamHandler extends DataStreamHandler<pl.edu.wit.stude
         }
     }
 
-    private void writeAll(List<pl.edu.wit.studentManagement.service.GradeCriterion> criteria) throws IOException {
+    private void writeAll(List<GradeCriterion> criteria) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(criteria);
         }
     }
 
     @Override
-    List<pl.edu.wit.studentManagement.service.GradeCriterion> readAll() throws IOException {
+    List<GradeCriterion> readAll() throws IOException {
         return new ArrayList<>(readAllInternal());
     }
 
     @Override
-    void write(pl.edu.wit.studentManagement.service.GradeCriterion criterion) throws IOException {
-        List<pl.edu.wit.studentManagement.service.GradeCriterion> criteria = readAllInternal();
+    void write(GradeCriterion criterion) throws IOException {
+        List<GradeCriterion> criteria = readAllInternal();
         criteria.add(criterion);
         writeAll(criteria);
     }
 
     @Override
-    void update(pl.edu.wit.studentManagement.service.GradeCriterion criterion) throws IOException {
-        List<pl.edu.wit.studentManagement.service.GradeCriterion> criteria = readAllInternal();
+    void update(GradeCriterion criterion) throws IOException {
+        List<GradeCriterion> criteria = readAllInternal();
         boolean updated = false;
         for (int i = 0; i < criteria.size(); i++) {
             if (criteria.get(i).getId().equals(criterion.getId())) {
@@ -66,7 +66,7 @@ class GradeCriterionDataStreamHandler extends DataStreamHandler<pl.edu.wit.stude
 
     @Override
     void deleteById(UUID id) throws IOException {
-        List<pl.edu.wit.studentManagement.service.GradeCriterion> criteria = readAllInternal();
+        List<GradeCriterion> criteria = readAllInternal();
         boolean removed = criteria.removeIf(c -> c.getId().equals(id));
         if (!removed) throw new IOException("GradeCriterion not found: " + id);
         writeAll(criteria);
