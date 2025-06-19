@@ -70,18 +70,15 @@ class StudentGroupDao extends Dao<StudentGroup> {
      * Saves a new {@link StudentGroup} record.
      *
      * @param studentGroup the {@link StudentGroup} to be saved
-     * @return {@code true} if the operation succeeds, {@code false} otherwise
      * @throws ValidationException if the student group data is invalid
      */
     @Override
-    boolean save(StudentGroup studentGroup) throws ValidationException {
+    void save(StudentGroup studentGroup) throws ValidationException {
         studentGroup.validate();
         try {
             dataStreamHandler.write(studentGroup);
-            return true;
         } catch (IOException e) {
             // TODO: Handle exception
-            return false;
         }
     }
 
@@ -89,17 +86,14 @@ class StudentGroupDao extends Dao<StudentGroup> {
      * Updates an existing {@link StudentGroup} record.
      *
      * @param studentGroup the {@link StudentGroup} containing updated information
-     * @return {@code true} if the update succeeds, {@code false} otherwise
      * @throws ValidationException if the student group data is invalid
      */
     @Override
-    boolean update(StudentGroup studentGroup) throws ValidationException {
+    void update(StudentGroup studentGroup) throws ValidationException {
         studentGroup.validate();
         try {
             dataStreamHandler.update(studentGroup);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 

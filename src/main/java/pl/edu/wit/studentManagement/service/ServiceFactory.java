@@ -6,10 +6,13 @@ public class ServiceFactory {
     private static SubjectService subjectService;
 
     public static StudentService getStudentService() {
+        // TODO: add factory or something else for DAO
         if (studentService == null) {
             var studentDataStreamHandler = new StudentDataStreamHandler("student.dat");
             var studentDao = new StudentDao(studentDataStreamHandler);
-            studentService = new StudentService(studentDao);
+            var studentGroupDataStreamHandler = new StudentGroupDataStreamHandler("studentgroup.dat");
+            var studentGroupDao = new StudentGroupDao(studentGroupDataStreamHandler);
+            studentService = new StudentService(studentDao, studentGroupDao);
         }
 
         return studentService;

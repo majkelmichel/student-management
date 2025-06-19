@@ -9,7 +9,7 @@ import java.util.UUID;
 abstract class Dao<T> {
     abstract Optional<T> get(UUID id);
     abstract List<T> getAll();
-    abstract boolean save(T t) throws ValidationException;
-    abstract boolean update(T t) throws ValidationException;
+    abstract void save(T t) throws ValidationException;
+    abstract void update(T t) throws ValidationException;
     abstract boolean delete(UUID id);
 }
