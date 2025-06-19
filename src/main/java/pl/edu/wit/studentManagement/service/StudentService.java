@@ -100,6 +100,7 @@ public class StudentService {
      * @return true if deletion was successful, false otherwise
      */
     public boolean deleteStudent(UUID id) {
+        // TODO: add validation like, if student has grades or is assigned to a group
         return studentDao.delete(id);
     }
 
