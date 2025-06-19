@@ -43,24 +43,20 @@ class GradeDao extends Dao<Grade> {
     }
 
     @Override
-    boolean save(Grade grade) throws ValidationException {
+    void save(Grade grade) throws ValidationException {
         // grade.validate();
         try {
             dataStreamHandler.write(grade);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 
     @Override
-    boolean update(Grade grade) throws ValidationException {
+    void update(Grade grade) throws ValidationException {
         // grade.validate();
         try {
             dataStreamHandler.update(grade);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 

@@ -43,24 +43,20 @@ class SubjectDao extends Dao<Subject> {
     }
 
     @Override
-    boolean save(Subject subject) throws ValidationException {
+    void save(Subject subject) throws ValidationException {
         // subject.validate();
         try {
             dataStreamHandler.write(subject);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 
     @Override
-    boolean update(Subject subject) throws ValidationException {
+    void update(Subject subject) throws ValidationException {
         // subject.validate();
         try {
             dataStreamHandler.update(subject);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 
