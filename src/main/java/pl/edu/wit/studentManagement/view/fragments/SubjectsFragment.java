@@ -29,7 +29,7 @@ public class SubjectsFragment {
         var rightPanel = createDetailsPanel();
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-        splitPane.setDividerLocation(350);
+        splitPane.setResizeWeight(0.8);
 
         panel.add(splitPane, BorderLayout.CENTER);
     }
@@ -73,40 +73,29 @@ public class SubjectsFragment {
 
         leftPanel.add(new JScrollPane(subjectsList), BorderLayout.CENTER);
 
-        JPanel actionsPanel = new JPanel();
-        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-
-        JButton addButton = new JButton("Dodaj przedmiot");
-        JButton removeButton = new JButton("Usuń przedmiot");
-
-        actionsPanel.add(Box.createHorizontalGlue());
-        actionsPanel.add(addButton);
-        actionsPanel.add(Box.createHorizontalStrut(8));
-        actionsPanel.add(removeButton);
-
-        addButton.addActionListener(e -> {
-            String name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
-            if (name != null && !name.trim().isEmpty()) {
-                Subject newSubject = new Subject(name.trim(), new ArrayList<GradeCriterion>());
-                listModel.addElement(newSubject);
-                subjectsList.setSelectedValue(newSubject, true);
-            }
-        });
-
-        removeButton.addActionListener(e -> {
-            int idx = subjectsList.getSelectedIndex();
-            if (idx != -1) {
-                listModel.remove(idx);
-                if (!listModel.isEmpty()) {
-                    subjectsList.setSelectedIndex(Math.min(idx, listModel.size() - 1));
-                }
-            }
-        });
+        JPanel actionsPanel = createActionsPanel();
 
         leftPanel.add(actionsPanel, BorderLayout.SOUTH);
 
         return leftPanel;
+    }
+
+    private JPanel createActionsPanel() {
+        var actionsPanel  = new JPanel();
+        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
+
+        JButton addButton = new JButton("Dodaj przedmiot");
+        JButton removeButton = new JButton("Usuń przedmiot");
+
+        actionsPanel.add(addButton);
+        actionsPanel.add(Box.createHorizontalStrut(8));
+        actionsPanel.add(removeButton);
+
+        addButton.addActionListener(e -> handleAddSubject());
+        removeButton.addActionListener(e -> handleRemoveSubject());
+
+        return actionsPanel;
     }
 
     private JPanel createSearchPanel() {
@@ -125,15 +114,15 @@ public class SubjectsFragment {
     }
 
     private JPanel createDetailsPanel() {
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły przedmiotu"));
+        JPanel detailsPanel = new JPanel();
+        detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
+        detailsPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły przedmiotu"));
 
-        renderSubjectNameField(rightPanel);
-        renderCriteriaSection(rightPanel);
-        renderActionsPanel(rightPanel);
+        renderSubjectNameField(detailsPanel);
+        renderCriteriaSection(detailsPanel);
+        renderActionsPanel(detailsPanel);
 
-        return rightPanel;
+        return detailsPanel;
     }
 
     private void renderSubjectNameField(JPanel panel) {
@@ -178,35 +167,8 @@ public class SubjectsFragment {
         panel.add(Box.createVerticalStrut(8));
         panel.add(criteriaActions);
 
-        addCriterionBtn.addActionListener(e -> {
-            JTextField nameField = new JTextField();
-            JTextField maxPointsField = new JTextField();
-            JPanel dialogPanel = new JPanel(new GridLayout(2, 2, 4, 4));
-            dialogPanel.add(new JLabel("Nazwa kryterium:"));
-            dialogPanel.add(nameField);
-            dialogPanel.add(new JLabel("Maks. liczba punktów:"));
-            dialogPanel.add(maxPointsField);
-            int res = JOptionPane.showConfirmDialog(panel, dialogPanel, "Dodaj kryterium", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (res == JOptionPane.OK_OPTION) {
-                String name = nameField.getText().trim();
-                String ptsStr = maxPointsField.getText().trim();
-                if (!name.isEmpty() && !ptsStr.isEmpty()) {
-                    try {
-                        int pts = Integer.parseInt(ptsStr);
-                        criteriaTableModel.addRow(new Object[]{name, pts});
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        });
-
-        removeCriterionBtn.addActionListener(e -> {
-            int row = criteriaTable.getSelectedRow();
-            if (row != -1) {
-                criteriaTableModel.removeRow(row);
-            }
-        });
+        addCriterionBtn.addActionListener(e -> handleAddCriterion(panel));
+        removeCriterionBtn.addActionListener(e -> handleRemoveCriterion());
     }
 
     private void renderActionsPanel(JPanel panel) {
@@ -222,26 +184,8 @@ public class SubjectsFragment {
         actionsPanel.add(Box.createHorizontalStrut(8));
         actionsPanel.add(saveButton);
 
-        editButton.addActionListener(e -> {
-            subjectNameField.setEditable(true);
-            subjectNameField.requestFocus();
-        });
-
-        saveButton.addActionListener(e -> {
-            Subject selected = subjectsList.getSelectedValue();
-            if (selected != null) {
-                selected.setName(subjectNameField.getText().trim());
-                List<GradeCriterion> newCriteria = new ArrayList<>();
-                for (int i = 0; i < criteriaTableModel.getRowCount(); i++) {
-                    String critName = (String) criteriaTableModel.getValueAt(i, 0);
-                    int maxPts = (Integer) criteriaTableModel.getValueAt(i, 1);
-                    newCriteria.add(new GradeCriterion(critName, (byte) maxPts));
-                }
-                selected.setGradeCriteria(newCriteria);
-                subjectsList.repaint();
-                subjectNameField.setEditable(false);
-            }
-        });
+        editButton.addActionListener(e -> handleEditSubject());
+        saveButton.addActionListener(e -> handleSaveSubject());
 
         panel.add(Box.createVerticalStrut(16));
         panel.add(actionsPanel);
@@ -266,5 +210,76 @@ public class SubjectsFragment {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    // --- Handlery przycisków ---
+    private void handleAddSubject() {
+        String name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
+        if (name != null && !name.trim().isEmpty()) {
+            Subject newSubject = new Subject(name.trim(), new ArrayList<GradeCriterion>());
+            listModel.addElement(newSubject);
+            subjectsList.setSelectedValue(newSubject, true);
+        }
+    }
+
+    private void handleRemoveSubject() {
+        int idx = subjectsList.getSelectedIndex();
+        if (idx != -1) {
+            listModel.remove(idx);
+            if (!listModel.isEmpty()) {
+                subjectsList.setSelectedIndex(Math.min(idx, listModel.size() - 1));
+            }
+        }
+    }
+
+    private void handleAddCriterion(JPanel panel) {
+        JTextField nameField = new JTextField();
+        JTextField maxPointsField = new JTextField();
+        JPanel dialogPanel = new JPanel(new GridLayout(2, 2, 4, 4));
+        dialogPanel.add(new JLabel("Nazwa kryterium:"));
+        dialogPanel.add(nameField);
+        dialogPanel.add(new JLabel("Maks. liczba punktów:"));
+        dialogPanel.add(maxPointsField);
+        int res = JOptionPane.showConfirmDialog(panel, dialogPanel, "Dodaj kryterium", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (res == JOptionPane.OK_OPTION) {
+            String name = nameField.getText().trim();
+            String ptsStr = maxPointsField.getText().trim();
+            if (!name.isEmpty() && !ptsStr.isEmpty()) {
+                try {
+                    int pts = Integer.parseInt(ptsStr);
+                    criteriaTableModel.addRow(new Object[]{name, pts});
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void handleRemoveCriterion() {
+        int row = criteriaTable.getSelectedRow();
+        if (row != -1) {
+            criteriaTableModel.removeRow(row);
+        }
+    }
+
+    private void handleEditSubject() {
+        subjectNameField.setEditable(true);
+        subjectNameField.requestFocus();
+    }
+
+    private void handleSaveSubject() {
+        Subject selected = subjectsList.getSelectedValue();
+        if (selected != null) {
+            selected.setName(subjectNameField.getText().trim());
+            List<GradeCriterion> newCriteria = new ArrayList<>();
+            for (int i = 0; i < criteriaTableModel.getRowCount(); i++) {
+                String critName = (String) criteriaTableModel.getValueAt(i, 0);
+                int maxPts = (Integer) criteriaTableModel.getValueAt(i, 1);
+                newCriteria.add(new GradeCriterion(critName, (byte) maxPts));
+            }
+            selected.setGradeCriteria(newCriteria);
+            subjectsList.repaint();
+            subjectNameField.setEditable(false);
+        }
     }
 }

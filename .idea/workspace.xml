@@ -5,22 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Grade.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddGroupDialog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddStudentDialog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AddSubjectDialog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AssignStudentToGroupDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentGroupDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/impl/StudentGroupDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/interfaces/Dao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/dao/interfaces/Dao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/GradeCriterion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/StudentGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/entities/StudentGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/impl/InMemoryStudentDataStreamHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/impl/InMemoryStudentDataStreamHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/interfaces/DataStreamHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/persistence/interfaces/DataStreamHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/AppWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
     </list>
@@ -68,6 +56,7 @@
 }</component>
   <component name="ProjectId" id="2xVDuot2ytjMtgrzovIjk1ocKhK" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
