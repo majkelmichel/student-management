@@ -7,6 +7,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupD
 import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,14 +24,14 @@ public class StudentGroupService {
         return studentGroupDao.getAll().stream().map(StudentGroupMapper::toDto).collect(Collectors.toList());
     }
 
-    public StudentGroupWithStudentsDto getWithStudentsById(UUID id) {
-        var studentGroup = studentGroupDao.get(id).orElseThrow();
+    public Optional<StudentGroupWithStudentsDto> getWithStudentsById(UUID id) {
+        var studentGroup = studentGroupDao.get(id);
         var students = studentDao.getAll()
                 .stream()
-                .filter(student -> student.getStudentGroupId().equals(studentGroup.getId()))
+                .filter(student -> student.getStudentGroupId().equals(id))
                 .collect(Collectors.toList());
 
-        return StudentGroupMapper.toWithStudentsDto(studentGroup, students);
+        return studentGroup.map(g -> StudentGroupMapper.toWithStudentsDto(g, students));
     }
 
     public StudentGroupDto create(CreateStudentGroupDto studentGroupDto) throws ValidationException {
@@ -48,9 +49,9 @@ public class StudentGroupService {
     public StudentGroupDto update(UUID id, UpdateStudentGroupDto dto) throws ValidationException {
         var studentGroup = studentGroupDao.get(id).orElseThrow();
 
-        if (dto.getCode() != null) studentGroup.setCode(studentGroup.getCode());
-        if (dto.getDescription() != null) studentGroup.setDescription(studentGroup.getDescription());
-        if (dto.getSpecialization() != null) studentGroup.setSpecialization(studentGroup.getSpecialization());
+        if (dto.getCode() != null) studentGroup.setCode(dto.getCode());
+        if (dto.getDescription() != null) studentGroup.setDescription(dto.getDescription());
+        if (dto.getSpecialization() != null) studentGroup.setSpecialization(dto.getSpecialization());
 
         studentGroupDao.update(studentGroup);
 

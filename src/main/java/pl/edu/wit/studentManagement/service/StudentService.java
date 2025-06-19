@@ -107,10 +107,13 @@ public class StudentService {
      Searches for students matching the specified query.
      * <p>
      * The search checks if the query string (case-insensitive) is contained in any of the following:
-     * - Full name (first name + last name)
-     * - First name
-     * - Last name
-     * - Album number
+     * <ul>
+     * <li>Full name (first name + last name)</li>
+     * <li>First name</li>
+     * <li>Last name</li>
+     * <li>Album number</li>
+     * </ul>
+     * </p>
      *
      * @param query the search string
      * @return a list of matching students
