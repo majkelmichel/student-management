@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class StudentGroupService {
     private final Dao<StudentGroup> studentGroupDao;
@@ -28,7 +29,7 @@ public class StudentGroupService {
         var studentGroup = studentGroupDao.get(id);
         var students = studentDao.getAll()
                 .stream()
-                .filter(student -> student.getStudentGroupId().equals(id))
+                .filter(student -> Objects.equals(student.getStudentGroupId(), id))
                 .collect(Collectors.toList());
 
         return studentGroup.map(g -> StudentGroupMapper.toWithStudentsDto(g, students));
@@ -59,7 +60,9 @@ public class StudentGroupService {
     }
 
     public boolean delete(UUID id) throws ValidationException {
-        var studentsInGroup = studentDao.getAll().stream().filter(student -> student.getStudentGroupId().equals(id)).collect(Collectors.toList());
+        var studentsInGroup = studentDao.getAll().stream()
+            .filter(student -> Objects.equals(student.getStudentGroupId(), id))
+            .collect(Collectors.toList());
 
         if (!studentsInGroup.isEmpty()) throw new ValidationException("studentGroup.delete.notEmpty");
 
