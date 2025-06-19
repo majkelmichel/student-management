@@ -14,7 +14,6 @@ class StudentMapper {
 
     static Student fromDto(StudentDto studentDto) {
         return new Student(
-                studentDto.getId(),
                 studentDto.getFirstName(),
                 studentDto.getLastName(),
                 studentDto.getAlbum()

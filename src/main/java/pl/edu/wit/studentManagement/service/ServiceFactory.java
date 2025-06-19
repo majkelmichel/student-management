@@ -5,13 +5,19 @@ public class ServiceFactory {
     private static StudentGroupService studentGroupService;
     private static SubjectService subjectService;
 
+    // data stream handlers
+    private static final StudentDataStreamHandler studentDataStreamHandler = new StudentDataStreamHandler("student.dat");
+    private static final StudentGroupDataStreamHandler studentGroupDataStreamHandler = new StudentGroupDataStreamHandler("studentgroup.dat");
+    private static final SubjectDataStreamHandler subjectDataStreamHandler = new SubjectDataStreamHandler("subject.dat");
+
+    // DAOs
+    private static final Dao<Student> studentDao = new StudentDao(studentDataStreamHandler);
+    private static final Dao<StudentGroup> studentGroupDao = new StudentGroupDao(studentGroupDataStreamHandler);
+    private static final Dao<Subject> subjectDao = new SubjectDao(subjectDataStreamHandler);
+
     public static StudentService getStudentService() {
         // TODO: add factory or something else for DAO
         if (studentService == null) {
-            var studentDataStreamHandler = new StudentDataStreamHandler("student.dat");
-            var studentDao = new StudentDao(studentDataStreamHandler);
-            var studentGroupDataStreamHandler = new StudentGroupDataStreamHandler("studentgroup.dat");
-            var studentGroupDao = new StudentGroupDao(studentGroupDataStreamHandler);
             studentService = new StudentService(studentDao, studentGroupDao);
         }
 
@@ -20,9 +26,7 @@ public class ServiceFactory {
 
     public static StudentGroupService getStudentGroupService() {
         if (studentGroupService == null) {
-            var studentGroupDataStreamHandler = new StudentGroupDataStreamHandler("studentgroup.dat");
-            var studentGroupDao = new StudentGroupDao(studentGroupDataStreamHandler);
-            studentGroupService = new StudentGroupService(studentGroupDao);
+            studentGroupService = new StudentGroupService(studentGroupDao, studentDao);
         }
 
         return studentGroupService;
@@ -30,8 +34,6 @@ public class ServiceFactory {
 
     public static SubjectService getSubjectService() {
         if (subjectService == null) {
-            var subjectDataStreamHandler = new SubjectDataStreamHandler("subject.dat");
-            var subjectDao = new SubjectDao(subjectDataStreamHandler);
             subjectService = new SubjectService(subjectDao);
         }
 
