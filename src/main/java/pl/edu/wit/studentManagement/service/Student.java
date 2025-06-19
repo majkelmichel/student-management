@@ -15,8 +15,8 @@ class Student implements Serializable {
     private String album;
     private UUID studentGroupId;
 
-    Student(UUID id, String firstName, String lastName, String album) {
-        this.id = id;
+    Student(String firstName, String lastName, String album) {
+        this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.album = album;
