@@ -62,7 +62,6 @@ public class StudentService {
      */
     public StudentDto createStudent(CreateStudentDto createStudentDto) throws ValidationException {
         var newStudent = new Student(
-                UUID.randomUUID(),
                 createStudentDto.getFirstName(),
                 createStudentDto.getLastName(),
                 createStudentDto.getAlbum()
