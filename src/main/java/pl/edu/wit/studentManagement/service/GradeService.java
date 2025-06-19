@@ -42,4 +42,8 @@ public class GradeService {
 
         return GradeMapper.toDto(grade);
     }
+
+    public boolean deleteGrade(UUID gradeId) throws ValidationException {
+        return gradeDao.delete(gradeId);
+    }
 }
