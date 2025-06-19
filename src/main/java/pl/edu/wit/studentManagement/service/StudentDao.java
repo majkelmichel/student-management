@@ -68,14 +68,12 @@ class StudentDao extends Dao<Student> {
      * @throws ValidationException if the student data is invalid
      */
     @Override
-    boolean save(Student student) throws ValidationException {
+    void save(Student student) throws ValidationException {
         student.validate();
         try {
             dataStreamHandler.write(student);
-            return true;
         } catch (IOException e) {
             // TODO: Handle exception
-            return false;
         }
     }
 
@@ -86,14 +84,12 @@ class StudentDao extends Dao<Student> {
      * @throws ValidationException if the student data is invalid
      */
     @Override
-    boolean update(Student student) throws ValidationException {
+    void update(Student student) throws ValidationException {
         student.validate();
         try {
             dataStreamHandler.update(student);
-            return true;
         } catch (IOException e) {
             // TODO: Handle Exception
-            return false;
         }
     }
 
@@ -108,7 +104,6 @@ class StudentDao extends Dao<Student> {
             dataStreamHandler.deleteById(id);
             return true;
         } catch (IOException e) {
-            // TODO: Handle Exception
             return false;
         }
     }
