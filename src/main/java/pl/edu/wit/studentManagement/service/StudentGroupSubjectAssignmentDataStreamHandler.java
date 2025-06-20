@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * File-based data handler for persisting {@link StudentGroupSubjectAssignment} entities using Java serialization.
- * Manages all assignments in a single file.
+ * File-based data stream handler for persisting {@link StudentGroupSubjectAssignment} entities using Java serialization.
+ * <p>
+ * Manages all student group-subject assignments within a single file.
+ * Supports reading all assignments, writing new assignments, updating existing ones, and deleting by ID.
+ * Ensures the data file is initialized if it does not exist.
  *
  * @author Michał Zawadzki
  */
@@ -15,10 +18,11 @@ class StudentGroupSubjectAssignmentDataStreamHandler extends DataStreamHandler<S
     private final File file;
 
     /**
-     * Constructs a new handler for the given file path.
-     * Creates and initializes the file if it does not exist.
+     * Constructs a data stream handler for the specified file path.
+     * Creates the file and initializes it with an empty list if it does not exist.
      *
-     * @param filePath path to the file used for persistence
+     * @param filePath the file path to persist assignments
+     * @throws RuntimeException if the file cannot be created or initialized
      */
     StudentGroupSubjectAssignmentDataStreamHandler(String filePath) {
         this.file = new File(filePath);
@@ -32,6 +36,13 @@ class StudentGroupSubjectAssignmentDataStreamHandler extends DataStreamHandler<S
         }
     }
 
+    /**
+     * Reads all assignments from the file.
+     * Returns an empty list if the file is empty.
+     *
+     * @return list of all {@link StudentGroupSubjectAssignment} stored
+     * @throws IOException if reading the file or data deserialization fails
+     */
     @SuppressWarnings("unchecked")
     private List<StudentGroupSubjectAssignment> readAllInternal() throws IOException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
@@ -43,6 +54,12 @@ class StudentGroupSubjectAssignmentDataStreamHandler extends DataStreamHandler<S
         }
     }
 
+    /**
+     * Writes the entire list of assignments to the file, replacing existing content.
+     *
+     * @param assignments list of assignments to persist
+     * @throws IOException if writing to the file fails
+     */
     private void writeAll(List<StudentGroupSubjectAssignment> assignments) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(assignments);

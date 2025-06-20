@@ -43,7 +43,7 @@ class GradeCriterionDao extends Dao<GradeCriterion> {
 
     @Override
     void save(GradeCriterion criterion) throws ValidationException {
-        // criterion.validate();
+        criterion.validate();
         try {
             dataStreamHandler.write(criterion);
         } catch (IOException e) {
@@ -52,7 +52,7 @@ class GradeCriterionDao extends Dao<GradeCriterion> {
 
     @Override
     void update(GradeCriterion criterion) throws ValidationException {
-        // criterion.validate();
+        criterion.validate();
         try {
             dataStreamHandler.update(criterion);
         } catch (IOException e) {
