@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * <p>
  * Supports creating, retrieving, updating, deleting, and searching students.
  * This is the primary public interface for student management functionality.
- * </p>
  */
 public class StudentService {
     private final Dao<Student> studentDao;
@@ -109,12 +108,10 @@ public class StudentService {
      * <p>
      * The search checks if the query string (case-insensitive) is contained in any of the following:
      * <ul>
-     * <li>Full name (first name + last name)</li>
-     * <li>First name</li>
-     * <li>Last name</li>
-     * <li>Album number</li>
-     * </ul>
-     * </p>
+     * <li>Full name (first name + last name)
+     * <li>First name
+     * <li>Last name
+     * <li>Album number
      *
      * @param query the search string
      * @return a list of matching students

@@ -5,12 +5,29 @@ import pl.edu.wit.studentManagement.validation.ValidationException;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * Represents a student group with a unique identifier, code, specialization, and description.
+ * <p>
+ * Provides getters and setters for mutable fields and ensures the group's data integrity through validation.
+ * <p>
+ * Implements {@link Serializable} to allow object serialization.
+ *
+ * @author Michał Zawadzki
+ */
 class StudentGroup implements Serializable {
     private final UUID id;
     private String code;
     private String specialization;
     private String description;
 
+    /**
+     * Constructs a new {@code StudentGroup} with the specified code, specialization, and description.
+     * A unique UUID is generated automatically.
+     *
+     * @param code           the group code (e.g., "CS2023")
+     * @param specialization the group's specialization (e.g., "Computer Science")
+     * @param description    additional description about the group
+     */
     StudentGroup(String code, String specialization, String description) {
         this.id = UUID.randomUUID();
         this.code = code;
@@ -46,6 +63,20 @@ class StudentGroup implements Serializable {
         this.description = description;
     }
 
+    /**
+     * Validates the student group fields to ensure they meet the required criteria.
+     * <p>
+     * The group code and specialization must not be null or empty.
+     * Description can be null or empty.
+     *
+     * @throws ValidationException if code or specialization is null or empty
+     */
     void validate() throws ValidationException {
+        if (code == null || code.trim().isEmpty()) {
+            throw new ValidationException("studentGroup.code.empty");
+        }
+        if (specialization == null || specialization.trim().isEmpty()) {
+            throw new ValidationException("studentGroup.specialization.empty");
+        }
     }
 }

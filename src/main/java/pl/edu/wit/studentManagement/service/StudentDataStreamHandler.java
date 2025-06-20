@@ -13,26 +13,27 @@ import java.util.UUID;
  * <p>
  * The file format used is Java's built-in object serialization.
  * All {@link Student} objects must implement {@link Serializable}.
- * </p>
- *
- * Example usage:
+ * <p>
+ * The file is created if it does not exist upon instantiation and initialized with an empty list.
+ * <p>
+ * Usage example:
  * <pre>{@code
  * DataStreamHandler<Student> handler = new StudentDataStreamHandler("students.dat");
  * handler.write(new Student(...));
  * List<Student> all = handler.readAll();
  * }</pre>
  *
- * @author
+ * @author Michał Zawadzki
  */
 class StudentDataStreamHandler extends DataStreamHandler<Student> {
     private final File file;
 
     /**
-     * Constructs a new handler with the given file path.
-     * If the file does not exist, it will be created and initialized with an empty list.
+     * Constructs a new handler for the given file path.
+     * Creates the file if it does not exist and initializes it with an empty list.
      *
      * @param filePath path to the file used for persistence
-     * @throws RuntimeException if the file cannot be created
+     * @throws RuntimeException if the file cannot be created or initialized
      */
     StudentDataStreamHandler(String filePath) {
         this.file = new File(filePath);
@@ -49,7 +50,7 @@ class StudentDataStreamHandler extends DataStreamHandler<Student> {
     /**
      * Reads and deserializes all {@link Student} objects from the file.
      *
-     * @return list of students
+     * @return list of students, empty if file is empty
      * @throws IOException if the file cannot be read or contains invalid data
      */
     @SuppressWarnings("unchecked")
@@ -66,7 +67,7 @@ class StudentDataStreamHandler extends DataStreamHandler<Student> {
     /**
      * Serializes and writes the entire list of students to the file.
      *
-     * @param students the list to write
+     * @param students list of students to write
      * @throws IOException if the write operation fails
      */
     private void writeAll(List<Student> students) throws IOException {
@@ -100,11 +101,10 @@ class StudentDataStreamHandler extends DataStreamHandler<Student> {
     }
 
     /**
-     * Updates an existing student in the file.
-     * The student is matched by its ID.
+     * Updates an existing student in the file by matching its ID.
      *
      * @param student the updated student object
-     * @throws IOException if the student does not exist or if writing fails
+     * @throws IOException if the student does not exist or writing fails
      */
     @Override
     void update(Student student) throws IOException {
@@ -127,10 +127,10 @@ class StudentDataStreamHandler extends DataStreamHandler<Student> {
     }
 
     /**
-     * Deletes a student from the file using its ID.
+     * Deletes a student from the file by its ID.
      *
-     * @param id the UUID of the student to delete
-     * @throws IOException if the student does not exist or if writing fails
+     * @param id UUID of the student to delete
+     * @throws IOException if the student does not exist or writing fails
      */
     @Override
     void deleteById(UUID id) throws IOException {

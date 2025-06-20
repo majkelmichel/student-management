@@ -1,20 +1,13 @@
 package pl.edu.wit.studentManagement.service.dto.gradeCriterion;
 
-import java.util.UUID;
-
 /**
- * Data Transfer Object representing a grade criterion.
+ * Data Transfer Object used for creating a new grade criterion.
  *
  * @author Michał Zawadzki
  */
-public class GradeCriterionDto {
+public class CreateGradeCriterionDto {
     /**
-     * The unique identifier of the grade criterion.
-     */
-    private final UUID id;
-
-    /**
-     * The name of the grade criterion.
+     * The name of the grade criterion (e.g., "Final Exam", "Project").
      */
     private final String name;
 
@@ -24,14 +17,12 @@ public class GradeCriterionDto {
     private final byte maxPoints;
 
     /**
-     * Constructs a GradeCriterionDto.
+     * Constructs a new CreateCriterionDto.
      *
-     * @param id        the unique ID of the criterion
      * @param name      the name of the criterion
      * @param maxPoints the maximum points achievable
      */
-    public GradeCriterionDto(UUID id, String name, byte maxPoints) {
-        this.id = id;
+    public CreateGradeCriterionDto(String name, byte maxPoints) {
         this.name = name;
         this.maxPoints = maxPoints;
     }
@@ -42,9 +33,5 @@ public class GradeCriterionDto {
 
     public byte getMaxPoints() {
         return maxPoints;
-    }
-
-    public UUID getId() {
-        return id;
     }
 }

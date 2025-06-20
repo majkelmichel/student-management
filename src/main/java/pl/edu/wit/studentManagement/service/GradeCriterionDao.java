@@ -11,7 +11,6 @@ import java.util.UUID;
  * DAO implementation for {@link GradeCriterion} entities.
  * <p>
  * Provides CRUD operations using a {@link DataStreamHandler}.
- * </p>
  *
  * @author Michał Zawadzki
  */

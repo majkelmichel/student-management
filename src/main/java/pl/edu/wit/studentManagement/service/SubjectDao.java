@@ -11,7 +11,6 @@ import java.util.UUID;
  * Data Access Object (DAO) implementation for {@link Subject} entities.
  * <p>
  * Provides CRUD operations using a {@link DataStreamHandler} for persistence.
- * </p>
  *
  * @author Michał Zawadzki
  */
