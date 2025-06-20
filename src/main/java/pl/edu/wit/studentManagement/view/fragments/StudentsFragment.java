@@ -21,7 +21,6 @@ public class StudentsFragment {
     private DefaultTableModel tableModel;
     private final StudentService studentService = ServiceFactory.getStudentService();
     private List<StudentDto> currentStudents;
-    private JTextField searchField;
 
     private static final Font LABEL_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 14f);
     private static final Font LIST_FONT = new JLabel().getFont().deriveFont(Font.PLAIN, 15f);
@@ -38,6 +37,8 @@ public class StudentsFragment {
         splitPane.setResizeWeight(0.8);
 
         panel.add(splitPane, BorderLayout.CENTER);
+
+        setDetailsEditable(false);
     }
 
     private JPanel createLeftPanel() {
@@ -45,12 +46,6 @@ public class StudentsFragment {
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
-
-        JPanel searchPanel = createSearchPanel();
-        searchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        topPanel.add(Box.createVerticalStrut(8));
-        topPanel.add(searchPanel);
-        topPanel.add(Box.createVerticalStrut(8));
 
         leftPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -94,29 +89,6 @@ public class StudentsFragment {
         leftPanel.add(actionsPanel, BorderLayout.SOUTH);
 
         return leftPanel;
-    }
-
-    private JPanel createSearchPanel() {
-        JPanel searchPanel = new JPanel(new BorderLayout());
-        JLabel searchLabel = new JLabel("Szukaj:");
-        searchLabel.setBorder(BorderFactory.createEmptyBorder(2, 8, 2, 8));
-        searchLabel.setFont(LABEL_FONT);
-        searchField = new JTextField();
-        searchField.setFont(LABEL_FONT);
-        Dimension searchFieldSize = new Dimension(Integer.MAX_VALUE, 32);
-        searchField.setPreferredSize(searchFieldSize);
-        searchField.setMinimumSize(searchFieldSize);
-        searchPanel.add(searchLabel, BorderLayout.WEST);
-        searchPanel.add(searchField, BorderLayout.CENTER);
-
-        searchField.addActionListener(e -> handleSearch());
-        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
-        });
-
-        return searchPanel;
     }
 
     private JPanel createDetailsPanel() {
@@ -164,6 +136,12 @@ public class StudentsFragment {
         return detailsPanel;
     }
 
+    private void setDetailsEditable(boolean editable) {
+        firstNameField.setEditable(editable);
+        lastNameField.setEditable(editable);
+        albumField.setEditable(editable);
+    }
+
     private void updateDetailsPanel() {
         if (studentsTable == null) {
             return;
@@ -176,12 +154,14 @@ public class StudentsFragment {
             firstNameField.setText(selected.getFirstName());
             lastNameField.setText(selected.getLastName());
             albumField.setText(selected.getAlbum());
+            setDetailsEditable(true);
             return;
         }
 
         firstNameField.setText("");
         lastNameField.setText("");
         albumField.setText("");
+        setDetailsEditable(false);
     }
 
     public JPanel getPanel() {
@@ -235,30 +215,29 @@ public class StudentsFragment {
             updateDto.setAlbum(albumField.getText());
             try {
                 studentService.updateStudent(selected.getId(), updateDto);
+                // Zapamiętaj ID studenta przed odświeżeniem
+                UUID selectedId = selected.getId();
                 refreshStudentsFromService();
+                // Przywróć zaznaczenie tego samego studenta po odświeżeniu
+                int newIndex = -1;
+                for (int i = 0; i < currentStudents.size(); i++) {
+                    if (currentStudents.get(i).getId().equals(selectedId)) {
+                        newIndex = i;
+                        break;
+                    }
+                }
+                if (newIndex != -1) {
+                    studentsTable.setRowSelectionInterval(newIndex, newIndex);
+                    updateDetailsPanel();
+                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(panel, "Błąd zapisu: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    private void handleSearch() {
-        String query = searchField.getText();
-        if (query == null || query.isBlank()) {
-            currentStudents = studentService.getAllStudents();
-        } else {
-            currentStudents = studentService.search(query);
-        }
-        refreshTableData(currentStudents);
-    }
-
     private void refreshStudentsFromService() {
-        String query = searchField.getText();
-        if (query == null || query.isBlank()) {
-            currentStudents = studentService.getAllStudents();
-        } else {
-            currentStudents = studentService.search(query);
-        }
+        currentStudents = studentService.getAllStudents();
         refreshTableData(currentStudents);
     }
 

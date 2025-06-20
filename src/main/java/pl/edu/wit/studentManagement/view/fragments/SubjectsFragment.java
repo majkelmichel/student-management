@@ -45,7 +45,6 @@ public class SubjectsFragment {
 
     private JPanel createLeftPanel(List<SubjectDto> subjects) {
         JPanel leftPanel = new JPanel(new BorderLayout(4, 4));
-        leftPanel.add(createSearchPanel(), BorderLayout.NORTH);
 
         listModel = new DefaultListModel<>();
         for (SubjectDto s : subjects) {
@@ -93,21 +92,6 @@ public class SubjectsFragment {
         removeButton.addActionListener(e -> handleRemoveSubject());
 
         return actionsPanel;
-    }
-
-    private JPanel createSearchPanel() {
-        JPanel searchPanel = new JPanel(new BorderLayout());
-        JLabel searchLabel = new JLabel("Szukaj:");
-        searchLabel.setBorder(BorderFactory.createEmptyBorder(2, 8, 2, 8));
-        searchLabel.setFont(LABEL_FONT);
-        JTextField searchField = new JTextField();
-        searchField.setFont(LABEL_FONT);
-        Dimension searchFieldSize = new Dimension(Integer.MAX_VALUE, 32);
-        searchField.setPreferredSize(searchFieldSize);
-        searchField.setMinimumSize(searchFieldSize);
-        searchPanel.add(searchLabel, BorderLayout.WEST);
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        return searchPanel;
     }
 
     private JPanel createDetailsPanel() {

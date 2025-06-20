@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AssignStudentToGroupDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/dialogs/AssignStudentToGroupDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/service/StudentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/service/StudentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
@@ -31,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="mz/entities" />
+        <entry key="$PROJECT_DIR$" value="wb/fix-entities" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,12 +41,12 @@
     &quot;assignee&quot;: &quot;majkelmichel&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/majkelmichel/student-management.git&quot;,
-    &quot;accountId&quot;: &quot;22cf9e89-fabe-4a59-939b-32b077381cf8&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/majkelmichel/student-management.git",
+    "accountId": "c7817116-a07f-4597-9529-00b4a2ba9573"
   }
-}</component>
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -122,8 +121,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26574.91" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26574.91" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
       </set>
     </attachedChunks>
   </component>
@@ -140,6 +139,7 @@
       <workItem from="1748016913927" duration="851000" />
       <workItem from="1749549165746" duration="100000" />
       <workItem from="1750076558612" duration="5140000" />
+      <workItem from="1750439189020" duration="2196000" />
     </task>
     <task id="LOCAL-00001" summary="Podstawowe klasy do projektu">
       <option name="closed" value="true" />

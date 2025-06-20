@@ -60,17 +60,13 @@ public class GroupsFragment
 
         JButton addButton = new JButton("Dodaj grupę");
         JButton removeButton = new JButton("Usuń grupę");
-        JButton assignStudentButton = new JButton("Przypisz studenta do grupy");
 
         actionsPanel.add(addButton);
         actionsPanel.add(Box.createHorizontalStrut(8));
         actionsPanel.add(removeButton);
-        actionsPanel.add(Box.createHorizontalStrut(8));
-        actionsPanel.add(assignStudentButton);
 
         addButton.addActionListener(e -> handleAddGroup());
         removeButton.addActionListener(e -> handleRemoveGroup());
-        assignStudentButton.addActionListener(e -> handleAssignStudentToGroup());
         groupsTable.getSelectionModel().addListSelectionListener(e -> handleGroupSelected());
         saveButton.addActionListener(e -> handleSaveGroup());
 
@@ -131,10 +127,24 @@ public class GroupsFragment
         studentsScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsPanel.add(studentsScroll);
 
-        JButton removeStudentButton = new JButton("Usuń z grupy");
+        var actionsPanel = new JPanel();
+        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
+        actionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        var assignStudentButton = new JButton("Przypisz studentów do grupy");
+        assignStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        assignStudentButton.addActionListener(e -> handleAssignStudentsToGroup());
+        actionsPanel.add(assignStudentButton);
+
+        actionsPanel.add(Box.createHorizontalStrut(8));
+
+        var removeStudentButton = new JButton("Usuń z grupy");
         removeStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         removeStudentButton.addActionListener(e -> handleRemoveStudentFromGroup());
-        detailsPanel.add(removeStudentButton);
+        actionsPanel.add(removeStudentButton);
+
+        detailsPanel.add(actionsPanel);
 
         return detailsPanel;
     }
@@ -233,13 +243,29 @@ public class GroupsFragment
             try {
                 studentGroupService.update(group.getId(), dto);
                 reloadGroups();
+
+                // Przywrócenie zaznaczenia i szczegółów po zapisie
+                if (groups.size() > 0) {
+                    // Szukamy zaktualizowanej grupy po id
+                    int newIndex = -1;
+                    for (int i = 0; i < groups.size(); i++) {
+                        if (groups.get(i).getId().equals(group.getId())) {
+                            newIndex = i;
+                            break;
+                        }
+                    }
+                    if (newIndex != -1) {
+                        groupsTable.setRowSelectionInterval(newIndex, newIndex);
+                        handleGroupSelected();
+                    }
+                }
             } catch (ValidationException ex) {
                 JOptionPane.showMessageDialog(panel, "Błąd walidacji: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    private void handleAssignStudentToGroup() {
+    private void handleAssignStudentsToGroup() {
         int selectedGroupRow = groupsTable.getSelectedRow();
         if (selectedGroupRow == -1) {
             JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -258,7 +284,6 @@ public class GroupsFragment
                 }
             }
             reloadGroupStudents(group.getId());
-            JOptionPane.showMessageDialog(panel, "Wybrani studenci zostali przypisani do grupy.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -269,15 +294,15 @@ public class GroupsFragment
             return;
         }
         var student = groupStudents.get(selectedStudentRow);
-        var studentService = ServiceFactory.getStudentService();
+
         try {
             studentService.assignStudentToGroup(student.getId(), null);
+
             int selectedGroupRow = groupsTable.getSelectedRow();
             if (selectedGroupRow != -1) {
                 StudentGroupDto group = groups.get(selectedGroupRow);
                 reloadGroupStudents(group.getId());
             }
-            JOptionPane.showMessageDialog(panel, "Student został usunięty z grupy.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panel, "Błąd usuwania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }

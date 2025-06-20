@@ -146,7 +146,6 @@ public class StudentService {
      */
     public void assignStudentToGroup(UUID studentId, UUID groupId) throws ValidationException {
         var student = studentDao.get(studentId).orElseThrow();
-        var studentGroup = studentGroupDao.get(groupId).orElseThrow();
 
         student.setStudentGroupId(groupId);
 
