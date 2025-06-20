@@ -8,14 +8,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * DAO for managing {@link StudentGroupSubjectAssignment} persistence.
- * Supports CRUD operations.
+ * DAO for managing persistence and retrieval of {@link StudentGroupSubjectAssignment} entities.
+ * <p>
+ * Provides basic CRUD operations and additional query methods to find assignments by student group or subject IDs.
+ * Uses a {@link DataStreamHandler} implementation for file-based storage.
  *
  * @author Michał Zawadzki
  */
 class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment> {
     private final DataStreamHandler<StudentGroupSubjectAssignment> dataHandler;
 
+    /**
+     * Constructs the DAO with the specified file path for persistence.
+     *
+     * @param filePath path to the file used for storing assignments
+     */
     StudentGroupSubjectAssignmentDao(String filePath) {
         this.dataHandler = new StudentGroupSubjectAssignmentDataStreamHandler(filePath);
     }
@@ -71,10 +78,10 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
     }
 
     /**
-     * Finds all assignments by StudentGroup ID.
+     * Retrieves all assignments associated with the specified student group.
      *
-     * @param studentGroupId the student group ID
-     * @return list of assignments for the given student group
+     * @param studentGroupId the ID of the student group
+     * @return list of assignments linked to the student group
      */
     List<StudentGroupSubjectAssignment> findByStudentGroupId(UUID studentGroupId) {
         try {
@@ -87,10 +94,10 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
     }
 
     /**
-     * Finds all assignments by Subject ID.
+     * Retrieves all assignments associated with the specified subject.
      *
-     * @param subjectId the subject ID
-     * @return list of assignments for the given subject
+     * @param subjectId the ID of the subject
+     * @return list of assignments linked to the subject
      */
     List<StudentGroupSubjectAssignment> findBySubjectId(UUID subjectId) {
         try {

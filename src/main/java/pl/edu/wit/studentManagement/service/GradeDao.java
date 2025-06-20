@@ -8,9 +8,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * DAO implementation for {@link Grade} entities.
+ * Data Access Object (DAO) for managing {@link Grade} entities.
  * <p>
- * Uses a {@link DataStreamHandler} for persistence of student grades.
+ * This class provides CRUD operations backed by a {@link DataStreamHandler}
+ * for persistence using Java serialization.
+ * <p>
+ * Before persisting or updating entities, the {@link Grade#validate()} method
+ * is invoked to ensure the entity is in a consistent state.
+ * <p>
+ * Methods catch I/O exceptions internally and degrade gracefully, returning empty
+ * collections or optionals when applicable.
+ *
+ * @see Grade
+ * @see DataStreamHandler
+ * @see ValidationException
  *
  * @author Michał Zawadzki
  */
@@ -43,19 +54,21 @@ class GradeDao extends Dao<Grade> {
 
     @Override
     void save(Grade grade) throws ValidationException {
-        // grade.validate();
+        grade.validate();
         try {
             dataStreamHandler.write(grade);
         } catch (IOException e) {
+            // Silently ignored
         }
     }
 
     @Override
     void update(Grade grade) throws ValidationException {
-        // grade.validate();
+        grade.validate();
         try {
             dataStreamHandler.update(grade);
         } catch (IOException e) {
+            // Silently ignored
         }
     }
 

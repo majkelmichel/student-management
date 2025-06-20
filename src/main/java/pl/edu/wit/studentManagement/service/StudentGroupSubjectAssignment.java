@@ -41,7 +41,9 @@ class StudentGroupSubjectAssignment implements Serializable {
     }
 
     /**
-     * Validates the assignment.
+     * Validates the integrity of this assignment.
+     * <p>
+     * Ensures that both {@code studentGroupId} and {@code subjectId} are not null.
      *
      * @throws ValidationException if any required field is missing
      */

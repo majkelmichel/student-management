@@ -1,5 +1,7 @@
 package pl.edu.wit.studentManagement.service;
 
+import pl.edu.wit.studentManagement.validation.ValidationException;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -9,6 +11,8 @@ import java.util.UUID;
  * This class is serializable for persistence and contains identifiers linking
  * to the subject, grade criterion, and student, along with the grade value.
  * The unique {@code id} identifies the grade instance.
+ * <p>
+ * Use {@link #validate()} to ensure the object is in a consistent state before persisting.
  *
  * @author Michał Zawadzki
  */
@@ -69,5 +73,28 @@ class Grade implements Serializable {
 
     UUID getId() {
         return id;
+    }
+
+    /**
+     * Validates the state of this Grade instance.
+     * <p>
+     * Ensures that the subject, grade criterion, and student IDs are not null,
+     * and that the grade value is within the valid range of 0 to 100.
+     *
+     * @throws ValidationException if any of the fields are invalid
+     */
+    void validate() throws ValidationException {
+        if (subjectId == null) {
+            throw new ValidationException("grade.subject.empty");
+        }
+        if (gradeCriterionId == null) {
+            throw new ValidationException("grade.gradeCriterion.empty");
+        }
+        if (studentId == null) {
+            throw new ValidationException("grade.student.empty");
+        }
+        if (grade < 0 || grade > 100) {
+            throw new ValidationException("grade.value.outOfRange");
+        }
     }
 }
