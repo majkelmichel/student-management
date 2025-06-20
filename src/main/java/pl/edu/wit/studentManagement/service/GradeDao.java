@@ -11,7 +11,6 @@ import java.util.UUID;
  * DAO implementation for {@link Grade} entities.
  * <p>
  * Uses a {@link DataStreamHandler} for persistence of student grades.
- * </p>
  *
  * @author Michał Zawadzki
  */

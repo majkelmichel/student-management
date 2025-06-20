@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.service;
 
+import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.UpdateGradeDto;
 import pl.edu.wit.studentManagement.validation.ValidationException;

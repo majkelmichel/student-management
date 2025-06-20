@@ -1,6 +1,6 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.service.dto.gradeCriterion.CreateCriterionDto;
+import pl.edu.wit.studentManagement.service.dto.gradeCriterion.CreateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.UpdateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
@@ -75,7 +75,7 @@ public class SubjectService {
         return subjectDao.delete(id);
     }
 
-    public GradeCriterionDto addCriterionToSubject(UUID subjectId, CreateCriterionDto createCriterionDto) throws ValidationException {
+    public GradeCriterionDto addCriterionToSubject(UUID subjectId, CreateGradeCriterionDto createCriterionDto) throws ValidationException {
         var subject = subjectDao.get(subjectId).orElseThrow(() -> new ValidationException("subject.notExists"));
 
         var newGradeCriterion = new GradeCriterion(

@@ -12,7 +12,6 @@ import java.util.UUID;
  * <p>
  * This class provides methods to perform CRUD operations on student data,
  * delegating the actual read/write logic to a {@link DataStreamHandler}.
- * </p>
  *
  * @see Student
  * @see DataStreamHandler
