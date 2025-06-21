@@ -1,9 +1,16 @@
 package pl.edu.wit.studentManagement.view.dialogs;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
+import pl.edu.wit.studentManagement.service.ServiceFactory;
+import pl.edu.wit.studentManagement.service.StudentGroupService;
+import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupDto;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class AddGroupDialog {
+    private final StudentGroupService groupService = ServiceFactory.getStudentGroupService();
+
     public static class GroupData {
         public final String code;
         public final String specialization;
@@ -16,7 +23,7 @@ public class AddGroupDialog {
         }
     }
 
-    public GroupData showDialog(Component parent) {
+    public boolean showDialog(Component parent) {
         JTextField codeField = new JTextField();
         JTextField specField = new JTextField();
         JTextField descField = new JTextField();
@@ -51,14 +58,29 @@ public class AddGroupDialog {
         gbc.gridx = 1;
         panel.add(descField, gbc);
 
-        int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj grupę", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            String code = codeField.getText().trim();
-            String spec = specField.getText().trim();
-            String desc = descField.getText().trim();
+        while (true) {
+            int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj grupę", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-            return new GroupData(code, spec, desc);
+            if (result == JOptionPane.OK_OPTION) {
+                String code = codeField.getText().trim();
+                String specialization = specField.getText().trim();
+                String description = descField.getText().trim();
+
+                CreateStudentGroupDto dto = new CreateStudentGroupDto(
+                        code,
+                        specialization,
+                        description
+                );
+
+                try {
+                    groupService.create(dto);
+                    return true;
+                } catch (ValidationException ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                return false;
+            }
         }
-        return null;
     }
 }

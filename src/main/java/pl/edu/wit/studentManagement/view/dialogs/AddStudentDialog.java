@@ -1,9 +1,17 @@
 package pl.edu.wit.studentManagement.view.dialogs;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
+import pl.edu.wit.studentManagement.service.ServiceFactory;
+import pl.edu.wit.studentManagement.service.StudentService;
+import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
+import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class AddStudentDialog {
+    private final StudentService studentService = ServiceFactory.getStudentService();
+
     public static class StudentData {
         public final String firstName;
         public final String lastName;
@@ -16,7 +24,7 @@ public class AddStudentDialog {
         }
     }
 
-    public StudentData showDialog(Component parent) {
+    public boolean showDialog(Component parent) {
         JTextField firstNameField = new JTextField();
         JTextField lastNameField = new JTextField();
         JTextField albumField = new JTextField();
@@ -47,15 +55,27 @@ public class AddStudentDialog {
         gbc.gridx = 1;
         panel.add(albumField, gbc);
 
-        int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj studenta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            String firstName = firstNameField.getText().trim();
-            String lastName = lastNameField.getText().trim();
-            String album = albumField.getText().trim();
-            if (!firstName.isEmpty() && !lastName.isEmpty() && !album.isEmpty()) {
-                return new StudentData(firstName, lastName, album);
+        while(true) {
+            int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj studenta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String firstName = firstNameField.getText().trim();
+                String lastName = lastNameField.getText().trim();
+                String album = albumField.getText().trim();
+
+                try {
+                    studentService.createStudent(new CreateStudentDto(
+                            firstName,
+                            lastName,
+                            album
+                    ));
+                    return true;
+                } catch (ValidationException e) {
+                    JOptionPane.showMessageDialog(parent, e.getMessageKey(), "Błąd walidacji", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                return false;
             }
         }
-        return null;
     }
 }

@@ -99,19 +99,28 @@ public class SubjectsFragment {
 
         renderSubjectNameField(detailsPanel);
         renderCriteriaSection(detailsPanel);
-        renderActionsPanel(detailsPanel);
 
         return detailsPanel;
     }
 
     private void renderSubjectNameField(JPanel panel) {
         panel.add(new JLabel("Nazwa przedmiotu:"));
+
         subjectNameField = new JTextField();
         subjectNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
         subjectNameField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panel.add(subjectNameField);
-        panel.add(Box.createVerticalStrut(12));
+
+        JPanel actionsPanel = new JPanel();
+        actionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        panel.add(actionsPanel);
+
+        JButton saveButton = new JButton("Zapisz zmiany");
+        saveButton.addActionListener(e -> handleSaveSubject());
+        actionsPanel.add(saveButton);
     }
 
     private void renderCriteriaSection(JPanel panel) {
@@ -135,7 +144,9 @@ public class SubjectsFragment {
 
         JPanel criteriaActions = new JPanel();
         criteriaActions.setLayout(new BoxLayout(criteriaActions, BoxLayout.X_AXIS));
+        criteriaActions.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         criteriaActions.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton addCriterionBtn = new JButton("Dodaj kryterium");
         JButton removeCriterionBtn = new JButton("Usuń kryterium");
         JButton studentsGrades = new JButton("Oceny studentów");
@@ -152,24 +163,6 @@ public class SubjectsFragment {
         addCriterionBtn.addActionListener(e -> handleAddCriterion(panel));
         removeCriterionBtn.addActionListener(e -> handleRemoveCriterion());
 
-    }
-
-    private void renderActionsPanel(JPanel panel) {
-        JPanel actionsPanel = new JPanel();
-        actionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-
-        JButton saveButton = new JButton("Zapisz zmiany");
-
-        actionsPanel.add(Box.createHorizontalGlue());
-        actionsPanel.add(Box.createHorizontalStrut(8));
-        actionsPanel.add(saveButton);
-
-        saveButton.addActionListener(e -> handleSaveSubject());
-
-        panel.add(Box.createVerticalStrut(16));
-        panel.add(actionsPanel);
     }
 
     private void updateDetailsPanel() {
@@ -204,17 +197,15 @@ public class SubjectsFragment {
         return panel;
     }
 
-    // --- Handlery przycisków ---
     private void handleAddSubject() {
-        String name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
-        if (name != null && !name.trim().isEmpty()) {
-            try {
-                SubjectDto newSubject = subjectService.createSubject(new CreateSubjectDto(name.trim()));
-                listModel.addElement(newSubject);
-                subjectsList.setSelectedValue(newSubject, true);
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
+        var name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
+
+        try {
+            SubjectDto newSubject = subjectService.createSubject(new CreateSubjectDto(name.trim()));
+            listModel.addElement(newSubject);
+            subjectsList.setSelectedValue(newSubject, true);
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -239,7 +230,7 @@ public class SubjectsFragment {
                 }
             }
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -267,7 +258,7 @@ public class SubjectsFragment {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
             } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -287,7 +278,7 @@ public class SubjectsFragment {
                             criteriaTableModel.removeRow(row);
                         }
                     } catch (ValidationException ex) {
-                        JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }

@@ -14,10 +14,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.*;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class GradesFragment {
     private final JPanel panel;
@@ -25,7 +22,6 @@ public class GradesFragment {
     private final JComboBox<StudentGroupDto> groupComboBox;
     private final JTable gradesTable;
     private final DefaultTableModel tableModel;
-    private JButton setGradeButton;
 
     private final GradeService gradeService = ServiceFactory.getGradeService();
     private final SubjectService subjectService = ServiceFactory.getSubjectService();
@@ -91,7 +87,7 @@ public class GradesFragment {
         JPanel actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
-        setGradeButton = new JButton("Ustaw ocenę");
+        JButton setGradeButton = new JButton("Ustaw ocenę");
         actionsPanel.add(setGradeButton);
         panel.add(actionsPanel, BorderLayout.SOUTH);
 

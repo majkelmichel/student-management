@@ -170,21 +170,9 @@ public class GroupsFragment {
 
     private void handleAddGroup() {
         AddGroupDialog dialog = new AddGroupDialog();
-        AddGroupDialog.GroupData groupData = dialog.showDialog(panel);
-        if (groupData != null) {
-            CreateStudentGroupDto dto = new CreateStudentGroupDto(
-                    groupData.code,
-                    groupData.specialization,
-                    groupData.description
-            );
-
-            try {
-                studentGroupService.create(dto);
-                reloadGroups();
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd walidacji: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        var added = dialog.showDialog(panel);
+        if (added)
+            reloadGroups();
     }
 
     private void handleDeleteGroup() {

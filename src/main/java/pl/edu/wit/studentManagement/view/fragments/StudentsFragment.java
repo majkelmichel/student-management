@@ -107,9 +107,17 @@ public class StudentsFragment {
 
         searchField.addActionListener(e -> handleSearch());
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { handleSearch(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                handleSearch();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                handleSearch();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                handleSearch();
+            }
         });
 
         return searchPanel;
@@ -189,23 +197,12 @@ public class StudentsFragment {
         return panel;
     }
 
-    // --- Handlery przycisków ---
-
     private void handleAddStudentButton(ActionEvent e) {
         AddStudentDialog dialog = new AddStudentDialog();
-        AddStudentDialog.StudentData studentData = dialog.showDialog(panel);
-        if (studentData != null) {
-            try {
-                studentService.createStudent(new CreateStudentDto(
-                        studentData.firstName,
-                        studentData.lastName,
-                        studentData.album
-                ));
-                fetchStudents();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd dodawania studenta: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        var added = dialog.showDialog(panel);
+
+        if (added)
+            fetchStudents();
     }
 
     private void handleRemoveStudentButton(ActionEvent e) {
