@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.DataAccessException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,7 +78,7 @@ class StudentGroupDao extends Dao<StudentGroup> {
         try {
             dataStreamHandler.write(studentGroup);
         } catch (IOException e) {
-            // TODO: Handle exception
+            throw new DataAccessException("studentGroup.save.failed", e);
         }
     }
 
@@ -93,6 +94,7 @@ class StudentGroupDao extends Dao<StudentGroup> {
         try {
             dataStreamHandler.update(studentGroup);
         } catch (IOException e) {
+            throw new DataAccessException("studentGroup.update.failed", e);
         }
     }
 

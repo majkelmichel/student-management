@@ -7,7 +7,7 @@ import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectWithGradeCriteriaDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.Optional;

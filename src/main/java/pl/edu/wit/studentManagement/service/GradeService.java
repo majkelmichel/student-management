@@ -3,7 +3,7 @@ package pl.edu.wit.studentManagement.service;
 import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.UpdateGradeDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.UUID;
 
@@ -95,9 +95,8 @@ public class GradeService {
      *
      * @param gradeId the UUID of the grade to delete
      * @return {@code true} if the grade was successfully deleted, {@code false} otherwise
-     * @throws ValidationException if the deletion process encounters validation issues
      */
-    public boolean deleteGrade(UUID gradeId) throws ValidationException {
+    public boolean deleteGrade(UUID gradeId) {
         return gradeDao.delete(gradeId);
     }
 }

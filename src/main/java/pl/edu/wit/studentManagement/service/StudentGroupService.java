@@ -4,7 +4,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupD
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupWithStudentsDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.Optional;

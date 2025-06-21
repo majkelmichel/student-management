@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.DataAccessException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +35,7 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
                     .filter(a -> a.getId().equals(id))
                     .findFirst();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read assignments", e);
+            return Optional.empty();
         }
     }
 
@@ -43,7 +44,7 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
         try {
             return dataHandler.readAll();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read assignments", e);
+            return List.of();
         }
     }
 
@@ -53,7 +54,7 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
         try {
             dataHandler.write(assignment);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save assignment", e);
+            throw new DataAccessException("studentGroupSubjectAssignment.save.failed", e);
         }
     }
 
@@ -63,7 +64,7 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
         try {
             dataHandler.update(assignment);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to update assignment", e);
+            throw new DataAccessException("studentGroupSubjectAssignment.update.failed", e);
         }
     }
 
@@ -77,35 +78,4 @@ class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment
         }
     }
 
-    /**
-     * Retrieves all assignments associated with the specified student group.
-     *
-     * @param studentGroupId the ID of the student group
-     * @return list of assignments linked to the student group
-     */
-    List<StudentGroupSubjectAssignment> findByStudentGroupId(UUID studentGroupId) {
-        try {
-            return dataHandler.readAll().stream()
-                    .filter(a -> a.getStudentGroupId().equals(studentGroupId))
-                    .toList();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read assignments", e);
-        }
-    }
-
-    /**
-     * Retrieves all assignments associated with the specified subject.
-     *
-     * @param subjectId the ID of the subject
-     * @return list of assignments linked to the subject
-     */
-    List<StudentGroupSubjectAssignment> findBySubjectId(UUID subjectId) {
-        try {
-            return dataHandler.readAll().stream()
-                    .filter(a -> a.getSubjectId().equals(subjectId))
-                    .toList();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read assignments", e);
-        }
-    }
 }

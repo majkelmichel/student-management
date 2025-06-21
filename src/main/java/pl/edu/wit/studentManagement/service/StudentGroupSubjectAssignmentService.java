@@ -1,10 +1,11 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service layer responsible for managing the associations between student groups and subjects.
@@ -89,7 +90,10 @@ class StudentGroupSubjectAssignmentService {
      * @return list of assignments linked to the specified student group
      */
     List<StudentGroupSubjectAssignment> getAssignmentsByStudentGroup(UUID studentGroupId) {
-        return dao.findByStudentGroupId(studentGroupId);
+        return dao.getAll()
+                .stream()
+                .filter(a -> a.getStudentGroupId().equals(studentGroupId))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -99,6 +103,9 @@ class StudentGroupSubjectAssignmentService {
      * @return list of assignments linked to the specified subject
      */
     List<StudentGroupSubjectAssignment> getAssignmentsBySubject(UUID subjectId) {
-        return dao.findBySubjectId(subjectId);
+        return dao.getAll()
+                .stream()
+                .filter(a -> a.getSubjectId().equals(subjectId))
+                .collect(Collectors.toList());
     }
 }
