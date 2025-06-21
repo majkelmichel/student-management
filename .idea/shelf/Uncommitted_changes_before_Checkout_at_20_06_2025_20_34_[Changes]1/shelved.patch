@@ -1,0 +1,97 @@
+Index: src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java b/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java
+deleted file mode 100644
+--- a/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java	(revision 501cd67b9091d3ed8f8273d402150e092cbc3c2c)
++++ /dev/null	(revision 501cd67b9091d3ed8f8273d402150e092cbc3c2c)
+@@ -1,17 +0,0 @@
+-package pl.edu.wit.studentManagement.translations.impl;
+-
+-import pl.edu.wit.studentManagement.entities.fields.StudentField;
+-import pl.edu.wit.studentManagement.translations.interfaces.Translation;
+-
+-public class StudentTranslation implements Translation<StudentField> {
+-
+-    @Override
+-    public String getTranslation(StudentField studentField) {
+-        switch (studentField) {
+-            // TODO: implement translations
+-            default: {
+-                return studentField.getFieldName();
+-            }
+-        }
+-    }
+-}
+Index: src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pl.edu.wit.studentManagement.translations.interfaces;\r\n\r\npublic interface Translation<T> {\r\n    String getTranslation(T t);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+--- a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(revision 501cd67b9091d3ed8f8273d402150e092cbc3c2c)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(date 1750439678244)
+@@ -1,5 +1,7 @@
+ package pl.edu.wit.studentManagement.translations.interfaces;
+ 
++import java.util.Locale;
++
+ public interface Translation<T> {
+-    String getTranslation(T t);
++    String getTranslation(String key, Locale locale);
+ }
+Index: src/main/java/pl/edu/wit/studentManagement/translations/Translation.java
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java b/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java
+new file mode 100644
+--- /dev/null	(date 1750439678273)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java	(date 1750439678273)
+@@ -0,0 +1,22 @@
++package pl.edu.wit.studentManagement.translations;
++
++import java.util.ResourceBundle;
++
++public class Translation {
++    private static Languages language = Languages.ENGLISH;
++    private static ResourceBundle messages = loadBundle();
++
++    private static ResourceBundle loadBundle() {
++        return ResourceBundle.getBundle("messages", language.getLocale());
++    }
++    public static void setLanguage(Languages language) {
++        Translation.language = language;
++        messages = loadBundle();
++    }
++    public static String translate(String key){
++        return messages.getString(key);
++    }
++    public static Languages getCurrentLanguage() {
++        return language;
++    }
++}
+Index: src/main/java/pl/edu/wit/studentManagement/translations/Languages.java
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java b/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java
+new file mode 100644
+--- /dev/null	(date 1750439678263)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java	(date 1750439678263)
+@@ -0,0 +1,15 @@
++package pl.edu.wit.studentManagement.translations;
++
++import java.util.Locale;
++
++public enum Languages {
++    POLISH("pl","PL"),
++    ENGLISH("en","US");
++    private final Locale locale;
++    Languages(String lang, String country){
++        this.locale = new Locale(lang,country);
++    }
++    public Locale getLocale() {
++        return locale;
++    }
++}

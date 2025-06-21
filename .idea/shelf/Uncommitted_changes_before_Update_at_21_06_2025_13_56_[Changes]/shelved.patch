@@ -1,0 +1,71 @@
+Index: src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pl.edu.wit.studentManagement.translations.interfaces;\r\n\r\npublic interface Translation<T> {\r\n    String getTranslation(T t);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+--- a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(revision 54f4f65b043d515ae379e68daa56b67c2d0015ab)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(date 1750446867241)
+@@ -1,5 +1,10 @@
+ package pl.edu.wit.studentManagement.translations.interfaces;
+ 
+-public interface Translation<T> {
+-    String getTranslation(T t);
++import pl.edu.wit.studentManagement.translations.Language;
++
++import java.util.Locale;
++
++public interface Translation<String> {
++    String getTranslation(String key);
++    void setLanguage(Language lang);
+ }
+Index: src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pl.edu.wit.studentManagement.validation;\r\n\r\n\r\nimport java.text.MessageFormat;\r\nimport java.util.Locale;\r\nimport java.util.ResourceBundle;\r\n\r\n/**\r\n * Custom exception for signaling validation errors with localization support.\r\n */\r\npublic class ValidationException extends Exception {\r\n    private final String messageKey;\r\n    private final Object[] messageArgs;\r\n\r\n    public ValidationException(String messageKey, Object... messageArgs) {\r\n        super();\r\n        this.messageKey = messageKey;\r\n        this.messageArgs = messageArgs;\r\n    }\r\n\r\n    public String getMessageKey() {\r\n        return messageKey;\r\n    }\r\n\r\n    public Object[] getMessageArgs() {\r\n        return messageArgs;\r\n    }\r\n\r\n    /**\r\n     * Returns a localized error message based on the default locale.\r\n     */\r\n    @Override\r\n    public String getLocalizedMessage() {\r\n        return getLocalizedMessage(Locale.getDefault());\r\n    }\r\n\r\n    /**\r\n     * Returns a localized error message based on the given locale.\r\n     */\r\n    public String getLocalizedMessage(Locale locale) {\r\n        ResourceBundle bundle = ResourceBundle.getBundle(\"ValidationMessages\", locale);\r\n        String pattern = bundle.getString(messageKey);\r\n        return MessageFormat.format(pattern, messageArgs);\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java b/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java
+--- a/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java	(revision 54f4f65b043d515ae379e68daa56b67c2d0015ab)
++++ b/src/main/java/pl/edu/wit/studentManagement/validation/ValidationException.java	(date 1750506863298)
+@@ -39,7 +39,7 @@
+      */
+     public String getLocalizedMessage(Locale locale) {
+         ResourceBundle bundle = ResourceBundle.getBundle("ValidationMessages", locale);
+-        String pattern = bundle.getString(messageKey);
++        String pattern = Translator.translate(messageKey);
+         return MessageFormat.format(pattern, messageArgs);
+     }
+ }
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>pl.edu.wit.studentManagement</groupId>\r\n    <artifactId>student-management</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>11</maven.compiler.source>\r\n        <maven.compiler.target>11</maven.compiler.target>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n    </properties>\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>org.junit.jupiter</groupId>\r\n            <artifactId>junit-jupiter</artifactId>\r\n            <version>5.7.2</version>\r\n        </dependency>\r\n    </dependencies>\r\n\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 54f4f65b043d515ae379e68daa56b67c2d0015ab)
++++ b/pom.xml	(date 1750453636536)
+@@ -20,5 +20,17 @@
+             <version>5.7.2</version>
+         </dependency>
+     </dependencies>
++    <build>
++        <plugins>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <configuration>
++                    <source>16</source>
++                    <target>16</target>
++                </configuration>
++            </plugin>
++        </plugins>
++    </build>
+ 
+ </project>
+\ No newline at end of file

@@ -1,0 +1,145 @@
+Index: src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java b/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java
+deleted file mode 100644
+--- a/src/main/java/pl/edu/wit/studentManagement/translations/impl/StudentTranslation.java	(revision 20d4e1301b9b62d842c75b02128ae57b793a4cf9)
++++ /dev/null	(revision 20d4e1301b9b62d842c75b02128ae57b793a4cf9)
+@@ -1,62 +0,0 @@
+-package pl.edu.wit.studentManagement.translations.impl;
+-
+-import pl.edu.wit.studentManagement.entities.fields.StudentField;
+-import pl.edu.wit.studentManagement.translations.interfaces.Translation;
+-
+-import java.util.HashMap;
+-import java.util.Locale;
+-import java.util.Map;
+-import java.util.ResourceBundle;
+-
+-/**
+- * Translation implementation for {@link StudentField} values.
+- *
+- * <p>This class provides localized (Polish) string representations for
+- * fields related to a student, such as first name, last name, and album number.
+- * It returns a default message for unknown or null fields.</p>
+- *
+- * @author Michał Pokrzywka
+- */
+-
+-public class StudentTranslation implements Translation<StudentField> {
+-    private final ResourceBundle resourceBundle;
+-
+-    /**
+-     * Constructor initializes the ResourceBundle for the specified locale.
+-     *
+-     * @param locale the locale for which translations should be loaded
+-     */
+-    public StudentTranslation(Locale locale) {
+-        this.resourceBundle = ResourceBundle.getBundle("messages", locale);
+-    }
+-
+-    /**
+-     * Returns the localized translation for a given StudentField.
+-     *
+-     * @param studentField the field to translate
+-     * @return the localized string corresponding to the field, or a default value if null
+-     */
+-    @Override
+-    public String getTranslation(StudentField studentField) {
+-        if (studentField == null) {
+-            return resourceBundle.getString("student.unknown");
+-        }
+-        String key;
+-
+-        switch (studentField) {
+-            case FIRST_NAME:
+-                key = "student.first_name";
+-                break;
+-            case LAST_NAME:
+-                key = "student.last_name";
+-                break;
+-            case ALBUM:
+-                key = "student.album";
+-                break;
+-            default:
+-                key = "student.unknown";
+-                break;
+-        }
+-        return resourceBundle.getString(key);
+-    }
+-}
+Index: src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pl.edu.wit.studentManagement.translations.interfaces;\r\n\r\npublic interface Translation<T> {\r\n    String getTranslation(T t);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java
+--- a/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(revision 20d4e1301b9b62d842c75b02128ae57b793a4cf9)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/interfaces/Translation.java	(date 1750347648905)
+@@ -1,5 +1,7 @@
+ package pl.edu.wit.studentManagement.translations.interfaces;
+ 
++import java.util.Locale;
++
+ public interface Translation<T> {
+-    String getTranslation(T t);
++    String getTranslation(String key, Locale locale);
+ }
+Index: src/main/java/pl/edu/wit/studentManagement/translations/Languages.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java b/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java
+new file mode 100644
+--- /dev/null	(date 1750347862904)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/Languages.java	(date 1750347862904)
+@@ -0,0 +1,15 @@
++package pl.edu.wit.studentManagement.translations;
++
++import java.util.Locale;
++
++public enum Languages {
++    POLISH("pl","PL"),
++    ENGLISH("en","US");
++    private final Locale locale;
++    Languages(String lang, String country){
++        this.locale = new Locale(lang,country);
++    }
++    public Locale getLocale() {
++        return locale;
++    }
++}
+Index: src/main/java/pl/edu/wit/studentManagement/translations/Translation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java b/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java
+new file mode 100644
+--- /dev/null	(date 1750348163085)
++++ b/src/main/java/pl/edu/wit/studentManagement/translations/Translation.java	(date 1750348163085)
+@@ -0,0 +1,22 @@
++package pl.edu.wit.studentManagement.translations;
++
++import java.util.ResourceBundle;
++
++public class Translation {
++    private static Languages language = Languages.ENGLISH;
++    private static ResourceBundle messages = loadBundle();
++
++    private static ResourceBundle loadBundle() {
++        return ResourceBundle.getBundle("messages", language.getLocale());
++    }
++    public static void setLanguage(Languages language) {
++        Translation.language = language;
++        messages = loadBundle();
++    }
++    public static String translate(String key){
++        return messages.getString(key);
++    }
++    public static Languages getCurrentLanguage() {
++        return language;
++    }
++}

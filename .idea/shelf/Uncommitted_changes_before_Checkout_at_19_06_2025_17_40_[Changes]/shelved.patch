@@ -1,0 +1,46 @@
+Index: src/main/resources/messages_pl.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>student.first_name=Imi\\u0119\r\nstudent.last_name=Nazwisko\r\nstudent.album=Numer albumu\r\nstudent.unknown=Nieznane pole
+===================================================================
+diff --git a/src/main/resources/messages_pl.properties b/src/main/resources/messages_pl.properties
+--- a/src/main/resources/messages_pl.properties	(revision 20d4e1301b9b62d842c75b02128ae57b793a4cf9)
++++ b/src/main/resources/messages_pl.properties	(date 1750347596842)
+@@ -1,4 +1,11 @@
+ student.first_name=Imi\u0119
+ student.last_name=Nazwisko
+ student.album=Numer albumu
+-student.unknown=Nieznane pole
+\ No newline at end of file
++subject.name=Nazwa przedmiotu
++subject.grade_criteria=Kryteria oceniania
++student_group.unknown=Nieznane pole
++student_group.code=Kod przedmiotu
++student_group.specialization=Specializacja
++student_group.description=Opis
++student_group.students=Studenci
++student_group.subjects=Przedmioty
+\ No newline at end of file
+Index: src/main/resources/messages_en.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>student.first_name=First name\r\nstudent.last_name=Last name\r\nstudent.album=Student ID\r\nstudent.unknown=Unknown field
+===================================================================
+diff --git a/src/main/resources/messages_en.properties b/src/main/resources/messages_en.properties
+--- a/src/main/resources/messages_en.properties	(revision 20d4e1301b9b62d842c75b02128ae57b793a4cf9)
++++ b/src/main/resources/messages_en.properties	(date 1750347596833)
+@@ -1,4 +1,11 @@
+ student.first_name=First name
+ student.last_name=Last name
+ student.album=Student ID
+-student.unknown=Unknown field
+\ No newline at end of file
++subject.name=Subject name
++subject.grade_criteria=Grade criteria
++student_group.unknown=Unknown field
++student_group.code=Subject code
++student_group.specialization=Specialization
++student_group.description=Description
++student_group.students=Students
++student_group.subjects=Subjects
+\ No newline at end of file
