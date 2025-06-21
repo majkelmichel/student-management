@@ -1,0 +1,79 @@
+package pl.edu.wit.studentManagement.service;
+
+import pl.edu.wit.studentManagement.exceptions.DataAccessException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * Data Access Object (DAO) implementation for {@link Subject} entities.
+ * <p>
+ * Provides CRUD operations using a {@link DataStreamHandler} for persistence.
+ *
+ * @see Subject
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
+ *
+ * @author Michał Zawadzki
+ */
+class SubjectDao extends Dao<Subject> {
+    private final DataStreamHandler<Subject> dataStreamHandler;
+
+    SubjectDao(DataStreamHandler<Subject> dataStreamHandler) {
+        this.dataStreamHandler = dataStreamHandler;
+    }
+
+    @Override
+    Optional<Subject> get(UUID id) {
+        try {
+            return dataStreamHandler.readAll().stream()
+                    .filter(subject -> subject.getId().equals(id))
+                    .findFirst();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    List<Subject> getAll() {
+        try {
+            return dataStreamHandler.readAll();
+        } catch (IOException e) {
+            return List.of();
+        }
+    }
+
+    @Override
+    void save(Subject subject) throws ValidationException {
+        subject.validate();
+        try {
+            dataStreamHandler.write(subject);
+        } catch (IOException e) {
+            throw new DataAccessException("subject.save.failed", e);
+        }
+    }
+
+    @Override
+    void update(Subject subject) throws ValidationException {
+        subject.validate();
+        try {
+            dataStreamHandler.update(subject);
+        } catch (IOException e) {
+            throw new DataAccessException("subject.update.failed", e);
+        }
+    }
+
+    @Override
+    boolean delete(UUID id) {
+        try {
+            dataStreamHandler.deleteById(id);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+}
