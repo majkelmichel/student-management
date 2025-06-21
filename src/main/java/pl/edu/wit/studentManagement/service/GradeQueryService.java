@@ -52,17 +52,17 @@ public class GradeQueryService {
     public GradeMatrixDto getGradeMatrixForSubjectAndGroup(UUID subjectId, UUID groupId) {
         var students = studentDao.getAll()
                 .stream()
-                .filter(s -> s.getStudentGroupId().equals(groupId))
+                .filter(s -> Objects.equals(s.getStudentGroupId(), groupId))
                 .collect(Collectors.toList());
 
         var gradeCriteria = gradeCriterionDao.getAll()
                 .stream()
-                .filter(s -> s.getSubjectId().equals(subjectId))
+                .filter(s -> Objects.equals(s.getSubjectId(), subjectId))
                 .collect(Collectors.toList());
 
         var grades = gradeDao.getAll()
                 .stream()
-                .filter(s -> s.getSubjectId().equals(subjectId))
+                .filter(s -> Objects.equals(s.getSubjectId(), subjectId))
                 .collect(Collectors.toList());
 
         Map<UUID, Integer> criterionIndex = new HashMap<>();
