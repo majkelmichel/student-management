@@ -7,6 +7,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.service.AssignGradeDto;
+import pl.edu.wit.studentManagement.validation.ValidationException;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
 
 import javax.swing.*;
@@ -190,8 +191,8 @@ public class GradesFragment {
                     )
                 );
                 refreshTable();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd ustawiania oceny: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            } catch (ValidationException ex) {
+                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
