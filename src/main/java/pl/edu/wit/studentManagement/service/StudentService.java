@@ -143,9 +143,26 @@ public class StudentService {
      */
     public void assignStudentToGroup(UUID studentId, UUID groupId) throws ValidationException {
         var student = studentDao.get(studentId).orElseThrow();
-        var studentGroup = studentGroupDao.get(groupId).orElseThrow();
+        studentGroupDao.get(groupId).orElseThrow();
 
         student.setStudentGroupId(groupId);
+
+        studentDao.update(student);
+    }
+
+
+    /**
+     * Removes a student from their assigned group.
+     * <p>
+     * Clears the group association for the specified student.
+     *
+     * @param studentId the unique identifier of the student to remove from the group
+     * @throws ValidationException if the student does not exist
+     */
+    public void removeFromGroup(UUID studentId) throws ValidationException {
+        var student = studentDao.get(studentId).orElseThrow(() -> new ValidationException("student.notExists"));
+
+        student.setStudentGroupId(null);
 
         studentDao.update(student);
     }
