@@ -31,7 +31,7 @@ class GradeCriterionDao extends Dao<GradeCriterion> {
     Optional<GradeCriterion> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
-                    .filter(criterion -> criterion.getId() == id)
+                    .filter(criterion -> criterion.getId().equals(id))
                     .findFirst();
         } catch (IOException e) {
             return Optional.empty();
