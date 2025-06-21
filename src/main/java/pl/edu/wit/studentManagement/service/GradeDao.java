@@ -38,7 +38,7 @@ class GradeDao extends Dao<Grade> {
     Optional<Grade> get(UUID id) {
         try {
             return dataStreamHandler.readAll().stream()
-                    .filter(grade -> grade.getStudentId().equals(id)) // May need revision if ID uniqueness differs
+                    .filter(grade -> grade.getId().equals(id))
                     .findFirst();
         } catch (IOException e) {
             return Optional.empty();
