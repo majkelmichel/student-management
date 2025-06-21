@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.DataAccessException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.UUID;
  * <p>
  * This class provides methods to perform CRUD operations on student data,
  * delegating the actual read/write logic to a {@link DataStreamHandler}.
- * </p>
  *
  * @see Student
  * @see DataStreamHandler
@@ -73,7 +73,7 @@ class StudentDao extends Dao<Student> {
         try {
             dataStreamHandler.write(student);
         } catch (IOException e) {
-            // TODO: Handle exception
+            throw new DataAccessException("student.save.failed", e);
         }
     }
 
@@ -89,7 +89,7 @@ class StudentDao extends Dao<Student> {
         try {
             dataStreamHandler.update(student);
         } catch (IOException e) {
-            // TODO: Handle Exception
+            throw new DataAccessException("student.update.failed", e);
         }
     }
 

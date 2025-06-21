@@ -3,7 +3,7 @@ package pl.edu.wit.studentManagement.service;
 import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.student.UpdateStudentDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
  * <p>
  * Supports creating, retrieving, updating, deleting, and searching students.
  * This is the primary public interface for student management functionality.
- * </p>
  */
 public class StudentService {
     private final Dao<Student> studentDao;
     private final Dao<StudentGroup> studentGroupDao;
+    private final Dao<Grade> gradeDao;
 
     /**
      * Constructs a StudentService with the specified data access object.
@@ -28,9 +28,10 @@ public class StudentService {
      * @param studentDao the DAO used for student persistence
      * @param studentGroupDao the DAO used for student group persistence
      */
-    StudentService(Dao<Student> studentDao, Dao<StudentGroup> studentGroupDao) {
+    StudentService(Dao<Student> studentDao, Dao<StudentGroup> studentGroupDao, Dao<Grade> gradeDao) {
         this.studentDao = studentDao;
         this.studentGroupDao = studentGroupDao;
+        this.gradeDao = gradeDao;
     }
 
     /**
@@ -93,28 +94,37 @@ public class StudentService {
         return StudentMapper.toDto(student);
     }
 
+
     /**
-     * Deletes a student by ID.
+     * Deletes a student by their unique identifier.
+     * <p>
+     * The student can only be deleted if they have no associated grades.
      *
-     * @param id the ID of the student to delete
-     * @return true if deletion was successful, false otherwise
+     * @param id the unique identifier of the student to delete
+     * @return {@code true} if the student was successfully deleted, {@code false} if the student did not exist
+     * @throws ValidationException if the student has existing grades and cannot be deleted
      */
-    public boolean deleteStudent(UUID id) {
-        // TODO: add validation like, if student has grades or is assigned to a group
+    public boolean deleteStudent(UUID id) throws ValidationException {
+        var studentGrades = gradeDao.getAll()
+                .stream()
+                .filter(g -> g.getStudentId().equals(id))
+                .collect(Collectors.toList());
+
+        if (!studentGrades.isEmpty()) throw new ValidationException("student.hasGrades");
+
         return studentDao.delete(id);
     }
+
 
     /**
      Searches for students matching the specified query.
      * <p>
      * The search checks if the query string (case-insensitive) is contained in any of the following:
      * <ul>
-     * <li>Full name (first name + last name)</li>
-     * <li>First name</li>
-     * <li>Last name</li>
-     * <li>Album number</li>
-     * </ul>
-     * </p>
+     * <li>Full name (first name + last name)
+     * <li>First name
+     * <li>Last name
+     * <li>Album number
      *
      * @param query the search string
      * @return a list of matching students
@@ -146,8 +156,26 @@ public class StudentService {
      */
     public void assignStudentToGroup(UUID studentId, UUID groupId) throws ValidationException {
         var student = studentDao.get(studentId).orElseThrow();
+        studentGroupDao.get(groupId).orElseThrow();
 
         student.setStudentGroupId(groupId);
+
+        studentDao.update(student);
+    }
+
+
+    /**
+     * Removes a student from their assigned group.
+     * <p>
+     * Clears the group association for the specified student.
+     *
+     * @param studentId the unique identifier of the student to remove from the group
+     * @throws ValidationException if the student does not exist
+     */
+    public void removeFromGroup(UUID studentId) throws ValidationException {
+        var student = studentDao.get(studentId).orElseThrow(() -> new ValidationException("student.notExists"));
+
+        student.setStudentGroupId(null);
 
         studentDao.update(student);
     }

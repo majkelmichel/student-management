@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.service;
 
-import pl.edu.wit.studentManagement.validation.ValidationException;
+import pl.edu.wit.studentManagement.exceptions.DataAccessException;
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +12,11 @@ import java.util.UUID;
  * Data Access Object (DAO) implementation for {@link Subject} entities.
  * <p>
  * Provides CRUD operations using a {@link DataStreamHandler} for persistence.
- * </p>
+ *
+ * @see Subject
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
  *
  * @author Michał Zawadzki
  */
@@ -44,19 +49,21 @@ class SubjectDao extends Dao<Subject> {
 
     @Override
     void save(Subject subject) throws ValidationException {
-        // subject.validate();
+        subject.validate();
         try {
             dataStreamHandler.write(subject);
         } catch (IOException e) {
+            throw new DataAccessException("subject.save.failed", e);
         }
     }
 
     @Override
     void update(Subject subject) throws ValidationException {
-        // subject.validate();
+        subject.validate();
         try {
             dataStreamHandler.update(subject);
         } catch (IOException e) {
+            throw new DataAccessException("subject.update.failed", e);
         }
     }
 
