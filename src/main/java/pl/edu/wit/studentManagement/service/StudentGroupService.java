@@ -7,6 +7,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupD
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class StudentGroupService {
         var studentGroup = studentGroupDao.get(id);
         var students = studentDao.getAll()
                 .stream()
-                .filter(student -> student.getStudentGroupId().equals(id))
+                .filter(student -> Objects.equals(id, student.getStudentGroupId()))
                 .collect(Collectors.toList());
 
         return studentGroup.map(g -> StudentGroupMapper.toWithStudentsDto(g, students));
@@ -111,7 +112,7 @@ public class StudentGroupService {
      */
     public boolean delete(UUID id) throws ValidationException {
         var studentsInGroup = studentDao.getAll().stream()
-                .filter(student -> student.getStudentGroupId().equals(id))
+                .filter(student -> Objects.equals(id, student.getStudentGroupId()))
                 .collect(Collectors.toList());
 
         if (!studentsInGroup.isEmpty()) throw new ValidationException("studentGroup.delete.notEmpty");

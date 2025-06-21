@@ -21,6 +21,7 @@ import java.util.UUID;
  * collections or optionals when applicable.
  *
  * @see Grade
+ * @see Dao
  * @see DataStreamHandler
  * @see ValidationException
  *

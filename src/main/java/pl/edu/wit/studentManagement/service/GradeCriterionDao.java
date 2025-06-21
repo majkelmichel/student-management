@@ -13,6 +13,11 @@ import java.util.UUID;
  * <p>
  * Provides CRUD operations using a {@link DataStreamHandler}.
  *
+ * @see GradeCriterion
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
+ *
  * @author Michał Zawadzki
  */
 class GradeCriterionDao extends Dao<GradeCriterion> {

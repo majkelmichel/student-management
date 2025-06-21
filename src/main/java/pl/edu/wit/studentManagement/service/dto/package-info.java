@@ -10,6 +10,7 @@
  *   <li>{@code gradeMatrix} - DTOs for grade matrix representations
  *   <li>{@code student} - DTOs related to students
  *   <li>{@code studentGroup} - DTOs related to student groups
+ *   <li>{@code studentGroupSubjectAssignment} - DTOs related to student group to subject assignment
  *   <li>{@code subject} - DTOs related to subjects
  * </ul>
  * <p>

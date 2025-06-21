@@ -21,6 +21,7 @@ public class ServiceFactory {
     private static SubjectService subjectService;
     private static GradeService gradeService;
     private static GradeQueryService gradeQueryService;
+    private static StudentGroupSubjectAssignmentService studentGroupSubjectAssignmentService;
 
     // Data stream handlers
     private static final StudentDataStreamHandler studentDataStreamHandler =
@@ -33,6 +34,8 @@ public class ServiceFactory {
             new GradeCriterionDataStreamHandler("gradecriterion.dat");
     private static final GradeDataStreamHandler gradeDataStreamHandler =
             new GradeDataStreamHandler("grade.dat");
+    private static final StudentGroupSubjectAssignmentDataStreamHandler studentGroupSubjectAssignmentDataStreamHandler =
+            new StudentGroupSubjectAssignmentDataStreamHandler("studentgroupsubject.dat");
 
     // DAOs
     private static final Dao<Student> studentDao = new StudentDao(studentDataStreamHandler);
@@ -40,6 +43,8 @@ public class ServiceFactory {
     private static final Dao<Subject> subjectDao = new SubjectDao(subjectDataStreamHandler);
     private static final Dao<GradeCriterion> gradeCriterionDao = new GradeCriterionDao(gradeCriterionDataStreamHandler);
     private static final Dao<Grade> gradeDao = new GradeDao(gradeDataStreamHandler);
+    private static final Dao<StudentGroupSubjectAssignment> studentGroupSubjectAssignmentDao =
+            new StudentGroupSubjectAssignmentDao(studentGroupSubjectAssignmentDataStreamHandler);
 
     /**
      * Returns a singleton instance of {@link StudentService}.
@@ -48,7 +53,7 @@ public class ServiceFactory {
      */
     public static StudentService getStudentService() {
         if (studentService == null) {
-            studentService = new StudentService(studentDao, studentGroupDao);
+            studentService = new StudentService(studentDao, studentGroupDao, gradeDao);
         }
         return studentService;
     }
@@ -99,5 +104,17 @@ public class ServiceFactory {
             gradeQueryService = new GradeQueryService(gradeDao, studentDao, gradeCriterionDao);
         }
         return gradeQueryService;
+    }
+
+    /**
+     * Returns a singleton instance of {@link StudentGroupSubjectAssignmentService}.
+     *
+     * @return student group to subject assignment service
+     */
+    public static StudentGroupSubjectAssignmentService getStudentGroupSubjectAssignmentService() {
+        if (studentGroupSubjectAssignmentService == null) {
+            studentGroupSubjectAssignmentService = new StudentGroupSubjectAssignmentService(studentGroupSubjectAssignmentDao);
+        }
+        return studentGroupSubjectAssignmentService;
     }
 }

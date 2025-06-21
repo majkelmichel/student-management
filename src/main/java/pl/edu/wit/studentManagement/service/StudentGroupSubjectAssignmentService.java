@@ -1,6 +1,8 @@
 package pl.edu.wit.studentManagement.service;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
+import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.CreateStudentGroupSubjectAssignmentDto;
+import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,34 +12,33 @@ import java.util.stream.Collectors;
 /**
  * Service layer responsible for managing the associations between student groups and subjects.
  * <p>
- * Provides methods for creating, retrieving, updating, and deleting assignments,
+ * Provides methods for creating, retrieving, and deleting assignments,
  * as well as querying assignments by student group or subject.
  * Encapsulates business logic and validation before delegating persistence operations to the DAO.
  *
  * @author Michał Zawadzki
  */
-class StudentGroupSubjectAssignmentService {
-    private final StudentGroupSubjectAssignmentDao dao;
+public class StudentGroupSubjectAssignmentService {
+    private final Dao<StudentGroupSubjectAssignment> dao;
 
     /**
-     * Constructs the service with the specified data file path.
+     * Constructs a StudentService with the specified data access object.
      *
-     * @param filePath the path to the file used for assignment persistence
+     * @param dao the DAO used for student group to subject assignment persistence
      */
-    StudentGroupSubjectAssignmentService(String filePath) {
-        this.dao = new StudentGroupSubjectAssignmentDao(filePath);
+    StudentGroupSubjectAssignmentService(Dao<StudentGroupSubjectAssignment> dao) {
+        this.dao = dao;
     }
 
     /**
      * Creates and persists a new assignment linking a student group with a subject.
      * Validates the assignment before saving.
      *
-     * @param studentGroupId the UUID of the student group
-     * @param subjectId      the UUID of the subject
+     * @param dto DTO containing UUIDs of student group and subject used to create a new assignment
      * @throws ValidationException if validation fails due to invalid or missing data
      */
-    void createAssignment(UUID studentGroupId, UUID subjectId) throws ValidationException {
-        StudentGroupSubjectAssignment assignment = new StudentGroupSubjectAssignment(studentGroupId, subjectId);
+    public void createAssignment(CreateStudentGroupSubjectAssignmentDto dto) throws ValidationException {
+        StudentGroupSubjectAssignment assignment = new StudentGroupSubjectAssignment(dto.getStudentGroupId(), dto.getSubjectId());
         assignment.validate();
         dao.save(assignment);
     }
@@ -48,8 +49,8 @@ class StudentGroupSubjectAssignmentService {
      * @param id the UUID of the assignment
      * @return an Optional containing the assignment if found, or empty if not found
      */
-    Optional<StudentGroupSubjectAssignment> getAssignment(UUID id) {
-        return dao.get(id);
+    public Optional<StudentGroupSubjectAssignmentDto> getAssignment(UUID id) {
+        return dao.get(id).map(StudentGroupSubjectAssignmentMapper::toDto);
     }
 
     /**
@@ -57,20 +58,11 @@ class StudentGroupSubjectAssignmentService {
      *
      * @return a list of all student group-subject assignments
      */
-    List<StudentGroupSubjectAssignment> getAllAssignments() {
-        return dao.getAll();
-    }
-
-    /**
-     * Updates an existing assignment.
-     * Validates the updated data before persisting changes.
-     *
-     * @param assignment the assignment entity with updated data
-     * @throws ValidationException if validation fails
-     */
-    void updateAssignment(StudentGroupSubjectAssignment assignment) throws ValidationException {
-        assignment.validate();
-        dao.update(assignment);
+    public List<StudentGroupSubjectAssignmentDto> getAllAssignments() {
+        return dao.getAll()
+                .stream()
+                .map(StudentGroupSubjectAssignmentMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -79,7 +71,7 @@ class StudentGroupSubjectAssignmentService {
      * @param id the UUID of the assignment to delete
      * @return {@code true} if the assignment was successfully deleted, {@code false} otherwise
      */
-    boolean deleteAssignment(UUID id) {
+    public boolean deleteAssignment(UUID id) {
         return dao.delete(id);
     }
 
@@ -89,10 +81,11 @@ class StudentGroupSubjectAssignmentService {
      * @param studentGroupId the UUID of the student group
      * @return list of assignments linked to the specified student group
      */
-    List<StudentGroupSubjectAssignment> getAssignmentsByStudentGroup(UUID studentGroupId) {
+    public List<StudentGroupSubjectAssignmentDto> getAssignmentsByStudentGroup(UUID studentGroupId) {
         return dao.getAll()
                 .stream()
                 .filter(a -> a.getStudentGroupId().equals(studentGroupId))
+                .map(StudentGroupSubjectAssignmentMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -102,10 +95,11 @@ class StudentGroupSubjectAssignmentService {
      * @param subjectId the UUID of the subject
      * @return list of assignments linked to the specified subject
      */
-    List<StudentGroupSubjectAssignment> getAssignmentsBySubject(UUID subjectId) {
+    public List<StudentGroupSubjectAssignmentDto> getAssignmentsBySubject(UUID subjectId) {
         return dao.getAll()
                 .stream()
                 .filter(a -> a.getSubjectId().equals(subjectId))
+                .map(StudentGroupSubjectAssignmentMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

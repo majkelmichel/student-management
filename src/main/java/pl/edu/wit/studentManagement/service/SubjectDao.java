@@ -13,6 +13,11 @@ import java.util.UUID;
  * <p>
  * Provides CRUD operations using a {@link DataStreamHandler} for persistence.
  *
+ * @see Subject
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
+ *
  * @author Michał Zawadzki
  */
 class SubjectDao extends Dao<Subject> {

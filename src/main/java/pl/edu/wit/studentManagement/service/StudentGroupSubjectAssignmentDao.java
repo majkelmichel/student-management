@@ -14,18 +14,18 @@ import java.util.UUID;
  * Provides basic CRUD operations and additional query methods to find assignments by student group or subject IDs.
  * Uses a {@link DataStreamHandler} implementation for file-based storage.
  *
+ * @see StudentGroupSubjectAssignment
+ * @see DataStreamHandler
+ * @see Dao
+ * @see ValidationException
+ *
  * @author Michał Zawadzki
  */
 class StudentGroupSubjectAssignmentDao extends Dao<StudentGroupSubjectAssignment> {
     private final DataStreamHandler<StudentGroupSubjectAssignment> dataHandler;
 
-    /**
-     * Constructs the DAO with the specified file path for persistence.
-     *
-     * @param filePath path to the file used for storing assignments
-     */
-    StudentGroupSubjectAssignmentDao(String filePath) {
-        this.dataHandler = new StudentGroupSubjectAssignmentDataStreamHandler(filePath);
+    StudentGroupSubjectAssignmentDao(StudentGroupSubjectAssignmentDataStreamHandler dataHandler) {
+        this.dataHandler = dataHandler;
     }
 
     @Override
