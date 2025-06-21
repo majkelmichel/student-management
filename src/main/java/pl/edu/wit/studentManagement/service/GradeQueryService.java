@@ -55,7 +55,7 @@ public class GradeQueryService {
             rows.add(new GradeMatrixRowDto(
                     student.getId(),
                     student.getFirstName() + " " + student.getLastName(),
-                    List.of(gradesArray)
+                    Arrays.asList(gradesArray)
             ));
         }
 

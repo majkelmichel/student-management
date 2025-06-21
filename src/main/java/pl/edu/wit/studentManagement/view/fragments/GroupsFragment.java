@@ -16,8 +16,7 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class GroupsFragment
-{
+public class GroupsFragment {
     private final JPanel panel;
     private final JTable groupsTable;
     private final GroupsTableModel groupsTableModel;
@@ -32,7 +31,7 @@ public class GroupsFragment
     private List<StudentDto> groupStudents;
 
     private final StudentGroupService studentGroupService = ServiceFactory.getStudentGroupService();
-    private  final StudentService studentService = ServiceFactory.getStudentService();
+    private final StudentService studentService = ServiceFactory.getStudentService();
 
     private final List<StudentGroupDto> groups;
 
@@ -56,7 +55,7 @@ public class GroupsFragment
 
         var actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
         JButton addButton = new JButton("Dodaj grupę");
         JButton removeButton = new JButton("Usuń grupę");
@@ -66,7 +65,7 @@ public class GroupsFragment
         actionsPanel.add(removeButton);
 
         addButton.addActionListener(e -> handleAddGroup());
-        removeButton.addActionListener(e -> handleRemoveGroup());
+        removeButton.addActionListener(e -> handleDeleteGroup());
         groupsTable.getSelectionModel().addListSelectionListener(e -> handleGroupSelected());
         saveButton.addActionListener(e -> handleSaveGroup());
 
@@ -111,7 +110,7 @@ public class GroupsFragment
 
         detailsPanel.add(Box.createVerticalStrut(8));
 
-        saveButton = new JButton("Zapisz");
+        saveButton = new JButton("Zapisz zmiany");
         saveButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsPanel.add(saveButton);
 
@@ -129,7 +128,7 @@ public class GroupsFragment
 
         var actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         actionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         var assignStudentButton = new JButton("Przypisz studentów do grupy");
@@ -188,17 +187,30 @@ public class GroupsFragment
         }
     }
 
-    private void handleRemoveGroup() {
+    private void handleDeleteGroup() {
         int selectedRow = groupsTable.getSelectedRow();
-        if (selectedRow != -1) {
-            StudentGroupDto group = groups.get(selectedRow);
-            try {
-                studentGroupService.delete(group.getId());
-                reloadGroups();
-                clearDetails();
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, "Nie można usunąć grupy: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
+        if (selectedRow == -1)
+            return;
+
+        var group = groups.get(selectedRow);
+
+        int result = JOptionPane.showConfirmDialog(
+                panel,
+                "Czy na pewno usunąć grupę?",
+                "Potwierdzenie usunięcia",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (result != JOptionPane.YES_OPTION)
+            return;
+
+        try {
+            studentGroupService.delete(group.getId());
+            reloadGroups();
+            clearDetails();
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, getTranslation(ex.getMessageKey()), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -217,10 +229,10 @@ public class GroupsFragment
     }
 
     private void reloadGroupStudents(java.util.UUID groupId) {
-       var groupWithStudents = studentGroupService.getWithStudentsById(groupId);
+        var groupWithStudents = studentGroupService.getWithStudentsById(groupId);
         groupStudents.clear();
 
-        if(groupWithStudents.isEmpty()) {
+        if (groupWithStudents.isEmpty()) {
             groupStudentsTableModel.fireTableDataChanged();
             return;
         }
@@ -233,35 +245,25 @@ public class GroupsFragment
     private void handleSaveGroup() {
         int selectedRow = groupsTable.getSelectedRow();
 
-        if (selectedRow != -1) {
-            StudentGroupDto group = groups.get(selectedRow);
-            UpdateStudentGroupDto dto = new UpdateStudentGroupDto();
-            dto.setCode(codeField.getText());
-            dto.setSpecialization(specializationField.getText());
-            dto.setDescription(descriptionArea.getText());
+        if (selectedRow == -1)
+            return;
 
-            try {
-                studentGroupService.update(group.getId(), dto);
-                reloadGroups();
+        StudentGroupDto group = groups.get(selectedRow);
+        UpdateStudentGroupDto dto = new UpdateStudentGroupDto();
+        dto.setCode(codeField.getText());
+        dto.setSpecialization(specializationField.getText());
+        dto.setDescription(descriptionArea.getText());
 
-                // Przywrócenie zaznaczenia i szczegółów po zapisie
-                if (groups.size() > 0) {
-                    // Szukamy zaktualizowanej grupy po id
-                    int newIndex = -1;
-                    for (int i = 0; i < groups.size(); i++) {
-                        if (groups.get(i).getId().equals(group.getId())) {
-                            newIndex = i;
-                            break;
-                        }
-                    }
-                    if (newIndex != -1) {
-                        groupsTable.setRowSelectionInterval(newIndex, newIndex);
-                        handleGroupSelected();
-                    }
-                }
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd walidacji: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
+        try {
+            studentGroupService.update(group.getId(), dto);
+            reloadGroups();
+
+            groupsTable.setRowSelectionInterval(selectedRow, selectedRow);
+            handleGroupSelected();
+
+            JOptionPane.showMessageDialog(panel, "Grupa została zaktualizowana.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, getTranslation(ex.getMessageKey()), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -289,11 +291,24 @@ public class GroupsFragment
 
     private void handleRemoveStudentFromGroup() {
         int selectedStudentRow = groupStudentsTable.getSelectedRow();
+
         if (selectedStudentRow == -1) {
             JOptionPane.showMessageDialog(panel, "Wybierz studenta do usunięcia z grupy.", "Błąd", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
         var student = groupStudents.get(selectedStudentRow);
+
+        var result = JOptionPane.showConfirmDialog(
+                panel,
+                "Czy na pewno usunąć studenta z grupy?",
+                "Potwierdzenie usunięcia",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (result != JOptionPane.YES_OPTION)
+            return;
 
         try {
             studentService.assignStudentToGroup(student.getId(), null);
@@ -312,6 +327,10 @@ public class GroupsFragment
         groups.clear();
         groups.addAll(studentGroupService.getAll());
         groupsTableModel.fireTableDataChanged();
+    }
+
+    private String getTranslation(String key) {
+        return key;
     }
 
     private static class GroupsTableModel extends AbstractTableModel {
@@ -341,10 +360,14 @@ public class GroupsFragment
         public Object getValueAt(int rowIndex, int columnIndex) {
             StudentGroupDto group = groups.get(rowIndex);
             switch (columnIndex) {
-                case 0: return group.getCode();
-                case 1: return group.getSpecialization();
-                case 2: return group.getDescription();
-                default: return "";
+                case 0:
+                    return group.getCode();
+                case 1:
+                    return group.getSpecialization();
+                case 2:
+                    return group.getDescription();
+                default:
+                    return "";
             }
         }
 
@@ -377,10 +400,14 @@ public class GroupsFragment
         public Object getValueAt(int row, int col) {
             var s = students.get(row);
             switch (col) {
-                case 0: return s.getFirstName();
-                case 1: return s.getLastName();
-                case 2: return s.getAlbum();
-                default: return "";
+                case 0:
+                    return s.getFirstName();
+                case 1:
+                    return s.getLastName();
+                case 2:
+                    return s.getAlbum();
+                default:
+                    return "";
             }
         }
 

@@ -33,17 +33,20 @@ public class AddGroupDialog {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         panel.add(new JLabel("Kod grupy:"), gbc);
         gbc.gridx = 1;
         panel.add(codeField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panel.add(new JLabel("Specjalizacja:"), gbc);
         gbc.gridx = 1;
         panel.add(specField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         panel.add(new JLabel("Opis:"), gbc);
         gbc.gridx = 1;
         panel.add(descField, gbc);
@@ -53,9 +56,8 @@ public class AddGroupDialog {
             String code = codeField.getText().trim();
             String spec = specField.getText().trim();
             String desc = descField.getText().trim();
-            if (!code.isEmpty() && !spec.isEmpty() && !desc.isEmpty()) {
-                return new GroupData(code, spec, desc);
-            }
+
+            return new GroupData(code, spec, desc);
         }
         return null;
     }

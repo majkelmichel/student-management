@@ -1,10 +1,7 @@
 package pl.edu.wit.studentManagement.view;
 
-import pl.edu.wit.studentManagement.view.fragments.DashboardFragment;
-import pl.edu.wit.studentManagement.view.fragments.GroupsFragment;
-import pl.edu.wit.studentManagement.view.fragments.StudentsFragment;
+import pl.edu.wit.studentManagement.view.fragments.*;
 import com.formdev.flatlaf.FlatLightLaf;
-import pl.edu.wit.studentManagement.view.fragments.SubjectsFragment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +15,8 @@ public final class AppWindow {
 
     public AppWindow() {
         try {
-            // Ustaw FlatLaf jako domyślny motyw
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception e) {
-            // Jeśli FlatLaf niedostępny, spróbuj Nimbus
             try {
                 for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                     if ("Nimbus".equals(info.getName())) {
@@ -30,7 +25,6 @@ public final class AppWindow {
                     }
                 }
             } catch (Exception ex) {
-                // Jeśli Nimbus niedostępny, zostanie domyślny
             }
         }
 
@@ -137,6 +131,12 @@ public final class AppWindow {
     public static void navigateToSubjects() {
         setContent(new SubjectsFragment().getPanel());
         setTitle("Przedmioty");
+        setBackButtonAction(AppWindow::navigateToDashboard);
+    }
+
+    public static void navigateToGrades() {
+        setContent(new GradesFragment().getPanel());
+        setTitle("Oceny");
         setBackButtonAction(AppWindow::navigateToDashboard);
     }
 }

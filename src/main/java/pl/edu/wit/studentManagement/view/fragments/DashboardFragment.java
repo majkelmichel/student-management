@@ -12,6 +12,7 @@ public class DashboardFragment {
     private static final Color studentColor = Color.decode("#8fc2f2");
     private static final Color groupColor = Color.decode("#f2d68f");
     private static final Color subjectColor = Color.decode("#8ff29b");
+    private static final Color gradeColor = Color.decode("#d0a6e3");
     private static final Font bigButtonFont = new Font("SansSerif", Font.BOLD, 24);
 
 
@@ -45,6 +46,14 @@ public class DashboardFragment {
                 e -> AppWindow.navigateToSubjects()
         );
         buttonsPanel.add(subjectButton);
+
+        JButton gradesButton = addBigButton(
+                "Oceny",
+                gradeColor,
+                loadIcon("icons/grade.png"),
+                e -> AppWindow.navigateToGrades()
+        );
+        buttonsPanel.add(gradesButton);
 
         panel.add(buttonsPanel, BorderLayout.CENTER);
     }
