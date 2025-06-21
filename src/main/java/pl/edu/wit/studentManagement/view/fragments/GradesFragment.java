@@ -1,13 +1,13 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.*;
+import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixRowDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
-import pl.edu.wit.studentManagement.service.AssignGradeDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
 
 import javax.swing.*;

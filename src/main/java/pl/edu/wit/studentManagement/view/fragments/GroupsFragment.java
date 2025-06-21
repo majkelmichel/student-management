@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentGroupService;
 import pl.edu.wit.studentManagement.service.StudentService;
@@ -9,7 +10,6 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupD
 import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
-import pl.edu.wit.studentManagement.validation.ValidationException;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

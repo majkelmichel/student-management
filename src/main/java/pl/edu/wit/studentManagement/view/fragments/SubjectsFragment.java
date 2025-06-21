@@ -1,14 +1,14 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.SubjectService;
-import pl.edu.wit.studentManagement.service.dto.gradeCriterion.CreateCriterionDto;
+import pl.edu.wit.studentManagement.service.dto.gradeCriterion.CreateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectWithGradeCriteriaDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
-import pl.edu.wit.studentManagement.validation.ValidationException;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
 
 import javax.swing.*;
@@ -161,14 +161,11 @@ public class SubjectsFragment {
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
         JButton saveButton = new JButton("Zapisz zmiany");
-        JButton editButton = new JButton("Edytuj przedmiot");
 
         actionsPanel.add(Box.createHorizontalGlue());
-        actionsPanel.add(editButton);
         actionsPanel.add(Box.createHorizontalStrut(8));
         actionsPanel.add(saveButton);
 
-        editButton.addActionListener(e -> handleEditSubject());
         saveButton.addActionListener(e -> handleSaveSubject());
 
         panel.add(Box.createVerticalStrut(16));
@@ -264,7 +261,7 @@ public class SubjectsFragment {
                 int pts = Integer.parseInt(ptsStr);
                 var newCriterion = subjectService.addCriterionToSubject(
                         selected.getId(),
-                        new CreateCriterionDto(name, (byte) pts)
+                        new CreateGradeCriterionDto(name, (byte) pts)
                 );
                 criteriaTableModel.addRow(new Object[]{newCriterion.getName(), (int) newCriterion.getMaxPoints()});
             } catch (NumberFormatException ex) {
@@ -318,10 +315,12 @@ public class SubjectsFragment {
                     int idx = subjectsList.getSelectedIndex();
                     listModel.set(idx, updated);
                     subjectsList.setSelectedIndex(idx);
+                    return;
                 } catch (ValidationException ex) {
                     JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
                 }
             }
+
             setDetailsEditable(false);
         }
     }

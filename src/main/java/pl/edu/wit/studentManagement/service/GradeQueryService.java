@@ -25,9 +25,9 @@ public class GradeQueryService {
     /**
      * Constructs a new instance of {@code GradeQueryService}.
      *
-     * @param gradeDao           DAO for accessing grade records
-     * @param studentDao         DAO for accessing student records
-     * @param gradeCriterionDao  DAO for accessing grading criteria
+     * @param gradeDao          DAO for accessing grade records
+     * @param studentDao        DAO for accessing student records
+     * @param gradeCriterionDao DAO for accessing grading criteria
      */
     GradeQueryService(Dao<Grade> gradeDao, Dao<Student> studentDao, Dao<GradeCriterion> gradeCriterionDao) {
         this.gradeDao = gradeDao;

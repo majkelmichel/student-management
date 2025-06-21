@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
+import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
@@ -219,8 +220,12 @@ public class StudentsFragment {
             );
             if (result == JOptionPane.YES_OPTION) {
                 UUID id = currentStudents.get(selectedRow).getId();
-                studentService.deleteStudent(id);
-                fetchStudents();
+                try {
+                    studentService.deleteStudent(id);
+                    fetchStudents();
+                } catch (ValidationException ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
