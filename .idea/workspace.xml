@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Oceny WIP">
+    <list default="true" id="a3c673b5-1adf-44ca-b8f8-21f1611bd521" name="Changes" comment="Naprawienie po mergu">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GradesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GradesFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/GroupsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/StudentsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/view/fragments/SubjectsFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +60,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "wb/ui",
@@ -206,6 +202,18 @@
     <MESSAGE value="UI" />
     <MESSAGE value="Studenci i grupy OK" />
     <MESSAGE value="Oceny WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Oceny WIP" />
+    <MESSAGE value="Naprawienie po mergu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Naprawienie po mergu" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/pl/edu/wit/studentManagement/service/GradeCriterionDao.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
