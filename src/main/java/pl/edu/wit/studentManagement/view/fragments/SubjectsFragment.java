@@ -134,6 +134,11 @@ public class SubjectsFragment {
         String[] colNames = {"Nazwa kryterium", "Maks. liczba punktów"};
         criteriaTableModel = new DefaultTableModel(colNames, 0) {
             @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
             public Class<?> getColumnClass(int columnIndex) {
                 return columnIndex == 1 ? Integer.class : String.class;
             }
