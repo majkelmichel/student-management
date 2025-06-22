@@ -209,7 +209,7 @@ public class SubjectsFragment {
         var name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
 
         if (name == null) {
-            return; // User canceled the input dialog
+            return;
         }
         try {
             SubjectDto newSubject = subjectService.createSubject(new CreateSubjectDto(name.trim()));

@@ -21,11 +21,6 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Fragment for managing student groups in the application
- *
- * @author Wojciech Berdowski
- */
 public class GroupsFragment {
     private final JPanel panel;
     private final JTable groupsTable;
@@ -131,50 +126,55 @@ public class GroupsFragment {
         detailsPanel.add(saveButton);
 
         detailsPanel.add(Box.createVerticalStrut(16));
-        detailsPanel.add(new JLabel("Studenci w grupie:"));
+
+        JPanel splitVerticalPanel = new JPanel(new GridLayout(2, 1, 0, 8));
+        splitVerticalPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel studentsPanel = new JPanel();
+        studentsPanel.setLayout(new BoxLayout(studentsPanel, BoxLayout.Y_AXIS));
+        studentsPanel.add(new JLabel("Studenci w grupie:"));
         groupStudents = new java.util.ArrayList<>();
         groupStudentsTableModel = new GroupStudentsTableModel(groupStudents);
         groupStudentsTable = new JTable(groupStudentsTableModel);
         groupStudentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         groupStudentsTable.setRowHeight(24);
         JScrollPane studentsScroll = new JScrollPane(groupStudentsTable);
-        studentsScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
         studentsScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
-        detailsPanel.add(studentsScroll);
+        studentsPanel.add(studentsScroll);
 
-        var actionsPanel = new JPanel();
-        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        actionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        var studentsActionsPanel = new JPanel();
+        studentsActionsPanel.setLayout(new BoxLayout(studentsActionsPanel, BoxLayout.X_AXIS));
+        studentsActionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        studentsActionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         var assignStudentButton = new JButton("Przypisz studentów do grupy");
         assignStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         assignStudentButton.addActionListener(e -> handleAssignStudentsToGroup());
-        actionsPanel.add(assignStudentButton);
+        studentsActionsPanel.add(assignStudentButton);
 
-        actionsPanel.add(Box.createHorizontalStrut(8));
+        studentsActionsPanel.add(Box.createHorizontalStrut(8));
 
         var removeStudentButton = new JButton("Usuń z grupy");
         removeStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         removeStudentButton.addActionListener(e -> handleRemoveStudentFromGroup());
-        actionsPanel.add(removeStudentButton);
+        studentsActionsPanel.add(removeStudentButton);
 
-        detailsPanel.add(actionsPanel);
+        studentsPanel.add(studentsActionsPanel);
 
-        detailsPanel.add(Box.createVerticalStrut(16));
-        detailsPanel.add(new JLabel("Przypisane przedmioty:"));
+        JPanel subjectsPanel = new JPanel();
+        subjectsPanel.setLayout(new BoxLayout(subjectsPanel, BoxLayout.Y_AXIS));
+        subjectsPanel.add(new JLabel("Przypisane przedmioty:"));
         groupSubjects = new java.util.ArrayList<>();
         groupSubjectsListModel = new DefaultListModel<>();
         groupSubjectsList = new JList<>(groupSubjectsListModel);
         groupSubjectsList.setVisibleRowCount(5);
         JScrollPane subjectsScroll = new JScrollPane(groupSubjectsList);
-        subjectsScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         subjectsScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
-        detailsPanel.add(subjectsScroll);
+        subjectsPanel.add(subjectsScroll);
 
         var subjectActionsPanel = new JPanel();
         subjectActionsPanel.setLayout(new BoxLayout(subjectActionsPanel, BoxLayout.X_AXIS));
-        subjectActionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        subjectActionsPanel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
         subjectActionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         var assignSubjectButton = new JButton("Przypisz przedmiot");
@@ -189,7 +189,12 @@ public class GroupsFragment {
         removeSubjectButton.addActionListener(e -> handleRemoveSubjectFromGroup());
         subjectActionsPanel.add(removeSubjectButton);
 
-        detailsPanel.add(subjectActionsPanel);
+        subjectsPanel.add(subjectActionsPanel);
+
+        splitVerticalPanel.add(studentsPanel);
+        splitVerticalPanel.add(subjectsPanel);
+
+        detailsPanel.add(splitVerticalPanel);
 
         return detailsPanel;
     }
