@@ -2,7 +2,6 @@
  * Fragment for managing student groups in the application
  * @author Wojciech Berdowski
  */
-
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;

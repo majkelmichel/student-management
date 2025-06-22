@@ -2,7 +2,6 @@
  * Fragment for displaying the dashboard in the application
  * @author Wojciech Berdowski
  */
-
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.view.AppWindow;

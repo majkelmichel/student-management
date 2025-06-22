@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Dialog for assigning a subject to a student group.
+ * @author Wojciech Berdowski
+ */
 public class AssignSubjectToGroupDialog {
     public static SubjectDto showDialog(Component parent, List<SubjectDto> subjects) {
         JComboBox<SubjectDto> subjectComboBox = new JComboBox<>(subjects.toArray(new SubjectDto[0]));
