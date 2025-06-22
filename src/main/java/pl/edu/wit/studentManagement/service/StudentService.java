@@ -125,6 +125,7 @@ public class StudentService {
      * <li>First name
      * <li>Last name
      * <li>Album number
+     * </ul>
      *
      * @param query the search string
      * @return a list of matching students
