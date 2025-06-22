@@ -97,7 +97,7 @@ class SubjectDaoTest {
     }
 
     @Test
-    @DisplayName("Given existing valid existing subject, when update called, then update subject")
+    @DisplayName("Given existing valid subject, when update called, then update subject")
     void givenExistingValidSubject_whenUpdateCalled_thenUpdateSubject() throws IOException, ValidationException {
         // Arrange
         Subject subject = spy(new Subject("Analiza Matematyczna"));
