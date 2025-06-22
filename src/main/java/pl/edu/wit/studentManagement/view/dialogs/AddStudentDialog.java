@@ -14,18 +14,6 @@ import java.awt.*;
 public class AddStudentDialog {
     private final StudentService studentService = ServiceFactory.getStudentService();
 
-    public static class StudentData {
-        public final String firstName;
-        public final String lastName;
-        public final String album;
-
-        public StudentData(String firstName, String lastName, String album) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.album = album;
-        }
-    }
-
     public boolean showDialog(Component parent) {
         JTextField firstNameField = new JTextField();
         JTextField lastNameField = new JTextField();

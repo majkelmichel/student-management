@@ -14,18 +14,6 @@ import java.awt.*;
 public class AddGroupDialog {
     private final StudentGroupService groupService = ServiceFactory.getStudentGroupService();
 
-    public static class GroupData {
-        public final String code;
-        public final String specialization;
-        public final String description;
-
-        public GroupData(String code, String specialization, String description) {
-            this.code = code;
-            this.specialization = specialization;
-            this.description = description;
-        }
-    }
-
     public boolean showDialog(Component parent) {
         JTextField codeField = new JTextField();
         JTextField specField = new JTextField();
