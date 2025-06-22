@@ -1,3 +1,12 @@
+/**
+ * Provides support for application language selection and locale management.
+ *
+ * <p>
+ * Includes the Language enum defining supported locales
+ * and utilities for switching between them.
+ *
+ * @author Michał Pokrzywka
+ */
 package pl.edu.wit.studentManagement.translations;
 
 import java.util.Locale;

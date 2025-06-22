@@ -1,3 +1,14 @@
+/**
+ * Handles translation and localization for the student management application.
+ *
+ * <p>
+ * Provides the Translator utility for retrieving localized messages
+ * and the Language enum for managing supported locales.
+ *
+ * Resource bundles (e.g., messages_en.properties, messages_pl.properties) are selected based on the current language.
+ *
+ * @author Michał Pokrzywka
+ */
 package pl.edu.wit.studentManagement.translations;
 
 import java.util.ResourceBundle;
