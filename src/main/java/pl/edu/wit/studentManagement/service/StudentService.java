@@ -44,6 +44,15 @@ public class StudentService {
     }
 
     /**
+     * Returns all students not assigned to any group.
+     * @return a list of students
+     */
+    public List<StudentDto> getStudentsNotAssignedToAnyGroup() {
+        return studentDao.getAll().stream().filter(x-> x.getStudentGroupId() == null)
+                .map(StudentMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
      * Retrieves a student by their unique identifier.
      *
      * @param id the unique ID of the student
