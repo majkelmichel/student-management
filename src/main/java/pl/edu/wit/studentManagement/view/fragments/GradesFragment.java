@@ -1,3 +1,9 @@
+/**
+ * Fragment for managing grades in the application
+ *
+ * @author Wojciech Berdowski
+ */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -83,7 +89,6 @@ public class GradesFragment {
         gradesTable.setRowHeight(28);
         panel.add(new JScrollPane(gradesTable), BorderLayout.CENTER);
 
-        // Dodaj pasek z przyciskiem na dole
         JPanel actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
@@ -93,9 +98,9 @@ public class GradesFragment {
 
         setGradeButton.addActionListener(e -> handleSetGrade());
 
-        // Dwuklik w tabeli
         gradesTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                // Double click to set grade
                 if (e.getClickCount() == 2 && gradesTable.getSelectedRow() != -1) {
                     handleSetGrade();
                 }
@@ -154,7 +159,6 @@ public class GradesFragment {
             return;
         }
 
-        // Pobierz kryteria ocen z SubjectService
         var subjectWithCriteriaOpt = subjectService.getSubjectWithGradeCriteriaById(selectedSubject.getId());
         if (subjectWithCriteriaOpt.isEmpty()) {
             JOptionPane.showMessageDialog(panel, "Nie znaleziono kryteriów ocen dla przedmiotu.", "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -172,19 +176,18 @@ public class GradesFragment {
         GradeMatrixRowDto studentRow = matrix.getRows().get(selectedRow);
         String studentName = studentRow.getStudentName();
 
-        // Użycie nowego dialogu
         AssignGradeDialog dialog = new AssignGradeDialog(studentName, criteria);
 
         boolean ok = dialog.showDialog(panel);
         if (ok) {
             try {
                 gradeService.assignGrade(
-                    new AssignGradeDto(
-                        selectedSubject.getId(),
-                        dialog.getSelectedCriterion().getId(),
-                        studentRow.getStudentId(),
-                        dialog.getGrade()
-                    )
+                        new AssignGradeDto(
+                                selectedSubject.getId(),
+                                dialog.getSelectedCriterion().getId(),
+                                studentRow.getStudentId(),
+                                dialog.getGrade()
+                        )
                 );
                 refreshTable();
             } catch (ValidationException ex) {

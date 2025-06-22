@@ -1,3 +1,7 @@
+/**
+ * Dialog for adding a new grade criterion with a name and maximum points.
+ * @author Wojciech Berdowski
+ */
 package pl.edu.wit.studentManagement.view.dialogs;
 
 import javax.swing.*;

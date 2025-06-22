@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.ArrayList;
 
+/**
+ * Dialog for assigning one or more students to a group.
+ * @author Wojciech Berdowski
+ */
 public class AssignStudentToGroupDialog {
     private final JDialog dialog;
     private final JTable studentsTable;

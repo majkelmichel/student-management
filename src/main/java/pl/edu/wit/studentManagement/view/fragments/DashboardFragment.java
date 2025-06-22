@@ -1,3 +1,8 @@
+/**
+ * Fragment for displaying the dashboard in the application
+ * @author Wojciech Berdowski
+ */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.view.AppWindow;
@@ -20,7 +25,6 @@ public class DashboardFragment {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Panel z dużymi przyciskami
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
 
         JButton studentButton = addBigButton(

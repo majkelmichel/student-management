@@ -6,6 +6,10 @@ import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Main application window for the student management system.
+ * @author Wojciech Berdowski
+ */
 public final class AppWindow {
     private static JFrame frame;
     private static JPanel contentPanel;
@@ -49,7 +53,6 @@ public final class AppWindow {
     }
 
     private JPanel createTopBar(){
-        // Pasek górny
         var topBar = new JPanel(new BorderLayout());
 
         var leftPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -64,17 +67,14 @@ public final class AppWindow {
 
         topBar.add(leftPanel, BorderLayout.WEST);
 
-        // Panel na przyciski po prawej
         var rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
-        // Przycisk zmiany języka (toggle)
         var langButton = new JButton("PL");
         langButton.addActionListener(e -> {
 
         });
         rightButtonsPanel.add(langButton);
 
-        // Przycisk "O programie"
         var aboutButton = new JButton("O programie");
         aboutButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(frame,

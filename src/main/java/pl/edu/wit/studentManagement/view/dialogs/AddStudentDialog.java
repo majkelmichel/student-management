@@ -4,11 +4,13 @@ import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
-import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * Dialog for adding a new student with first name, last name, and album number.
+ * @author Wojciech Berdowski
+ */
 public class AddStudentDialog {
     private final StudentService studentService = ServiceFactory.getStudentService();
 

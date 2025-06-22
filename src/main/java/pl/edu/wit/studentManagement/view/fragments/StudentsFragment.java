@@ -1,10 +1,14 @@
+/**
+ * Fragment for managing students in the application
+ * @author Wojciech Berdowski
+ */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
-import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
 import pl.edu.wit.studentManagement.service.dto.student.UpdateStudentDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddStudentDialog;
 

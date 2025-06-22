@@ -7,7 +7,10 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupD
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * Dialog for creating a new student group with code, specialization, and description.
+ * @author Wojciech Berdowski
+ */
 public class AddGroupDialog {
     private final StudentGroupService groupService = ServiceFactory.getStudentGroupService();
 
