@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.service;
 
+import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixRowDto;
 
@@ -74,14 +75,14 @@ public class GradeQueryService {
 
         List<GradeMatrixRowDto> rows = new ArrayList<>();
         for (Student student : students) {
-            var gradesArray = new Byte[gradeCriteria.size()];
+            var gradesArray = new GradeDto[gradeCriteria.size()];
             Arrays.fill(gradesArray, null);
 
             for (Grade grade : grades) {
                 if (grade.getStudentId().equals(student.getId())) {
                     var index = criterionIndex.get(grade.getGradeCriterionId());
                     if (index != null) {
-                        gradesArray[index] = grade.getGrade();
+                        gradesArray[index] = GradeMapper.toDto(grade);
                     }
                 }
             }
