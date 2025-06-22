@@ -4,11 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AddGradeCriterionDialog {
-    /**
-     * Wyświetla dialog do dodania kryterium oceniania.
-     * @param parent komponent nadrzędny
-     * @return tablica [nazwa, punkty] lub null jeśli anulowano
-     */
     public static String[] showDialog(Component parent) {
         JTextField nameField = new JTextField();
         JTextField pointsField = new JTextField();
