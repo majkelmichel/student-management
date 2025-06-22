@@ -197,6 +197,9 @@ public class SubjectsFragment {
     private void handleAddSubject() {
         var name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
 
+        if (name == null) {
+            return; // User canceled the input dialog
+        }
         try {
             SubjectDto newSubject = subjectService.createSubject(new CreateSubjectDto(name.trim()));
             listModel.addElement(newSubject);
@@ -303,7 +306,7 @@ public class SubjectsFragment {
 
                     return;
                 } catch (ValidationException ex) {
-                    JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
