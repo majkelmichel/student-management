@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 /**
  * Dialog for assigning a grade to a student for a selected criterion.
- * Author: Wojciech Berdowski
+ * @author Wojciech Berdowski
  */
 public class AssignGradeDialog {
     private final String studentName;
