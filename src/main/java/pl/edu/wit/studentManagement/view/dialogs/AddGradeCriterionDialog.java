@@ -1,12 +1,13 @@
-/**
- * Dialog for adding a new grade criterion with a name and maximum points.
- * @author Wojciech Berdowski
- */
 package pl.edu.wit.studentManagement.view.dialogs;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Dialog for adding a new grade criterion with a name and maximum points.
+ *
+ * @author Wojciech Berdowski
+ */
 public class AddGradeCriterionDialog {
     public static String[] showDialog(Component parent) {
         JTextField nameField = new JTextField();

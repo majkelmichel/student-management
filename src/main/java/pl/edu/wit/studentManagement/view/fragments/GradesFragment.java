@@ -1,7 +1,4 @@
-/**
- * Fragment for managing grades in the application
- * @author Wojciech Berdowski
- */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -22,6 +19,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * Fragment for managing grades in the application
+ *
+ * @author Wojciech Berdowski
+ */
 public class GradesFragment {
     private final JPanel panel;
     private final JComboBox<SubjectDto> subjectComboBox;
@@ -209,8 +211,8 @@ public class GradesFragment {
                     GradeCriterionDto criterion = dialog.getSelectedCriterion();
 
                     var gradeToDelete = studentRow.getGrades().stream()
-                        .filter(g -> g != null && g.getGradeCriterionId().equals(criterion.getId()))
-                        .findFirst();
+                            .filter(g -> g != null && g.getGradeCriterionId().equals(criterion.getId()))
+                            .findFirst();
 
                     if (gradeToDelete.isPresent()) {
                         gradeService.deleteGrade(gradeToDelete.get().getId());

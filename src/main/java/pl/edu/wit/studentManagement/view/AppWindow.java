@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * Main application window for the student management system.
+ *
  * @author Wojciech Berdowski
  */
 public final class AppWindow {

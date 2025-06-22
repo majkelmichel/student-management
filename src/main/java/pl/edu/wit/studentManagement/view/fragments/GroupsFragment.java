@@ -1,7 +1,3 @@
-/**
- * Fragment for managing student groups in the application
- * @author Wojciech Berdowski
- */
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -25,6 +21,11 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Fragment for managing student groups in the application
+ *
+ * @author Wojciech Berdowski
+ */
 public class GroupsFragment {
     private final JPanel panel;
     private final JTable groupsTable;

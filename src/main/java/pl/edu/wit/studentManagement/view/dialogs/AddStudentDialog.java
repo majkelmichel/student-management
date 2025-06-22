@@ -7,8 +7,10 @@ import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
 
 import javax.swing.*;
 import java.awt.*;
+
 /**
  * Dialog for adding a new student with first name, last name, and album number.
+ *
  * @author Wojciech Berdowski
  */
 public class AddStudentDialog {
@@ -30,22 +32,25 @@ public class AddStudentDialog {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         panel.add(new JLabel("Imię:"), gbc);
         gbc.gridx = 1;
         panel.add(firstNameField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panel.add(new JLabel("Nazwisko:"), gbc);
         gbc.gridx = 1;
         panel.add(lastNameField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         panel.add(new JLabel("Nr albumu:"), gbc);
         gbc.gridx = 1;
         panel.add(albumField, gbc);
 
-        while(true) {
+        while (true) {
             int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj studenta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {

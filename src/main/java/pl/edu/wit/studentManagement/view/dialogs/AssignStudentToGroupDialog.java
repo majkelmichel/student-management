@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 /**
  * Dialog for assigning one or more students to a group.
+ *
  * @author Wojciech Berdowski
  */
 public class AssignStudentToGroupDialog {
@@ -23,6 +24,7 @@ public class AssignStudentToGroupDialog {
 
     public static class Result {
         public final List<UUID> studentIds;
+
         public Result(List<UUID> studentIds) {
             this.studentIds = studentIds;
         }
@@ -82,17 +84,38 @@ public class AssignStudentToGroupDialog {
     private static class StudentsTableModel extends AbstractTableModel {
         private final String[] columns = {"Imię", "Nazwisko", "Album"};
         private final List<StudentDto> students;
-        public StudentsTableModel(List<StudentDto> students) { this.students = students; }
-        @Override public int getRowCount() { return students.size(); }
-        @Override public int getColumnCount() { return columns.length; }
-        @Override public String getColumnName(int col) { return columns[col]; }
-        @Override public Object getValueAt(int row, int col) {
+
+        public StudentsTableModel(List<StudentDto> students) {
+            this.students = students;
+        }
+
+        @Override
+        public int getRowCount() {
+            return students.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columns.length;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return columns[col];
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
             StudentDto s = students.get(row);
             switch (col) {
-                case 0: return s.getFirstName();
-                case 1: return s.getLastName();
-                case 2: return s.getAlbum();
-                default: return "";
+                case 0:
+                    return s.getFirstName();
+                case 1:
+                    return s.getLastName();
+                case 2:
+                    return s.getAlbum();
+                default:
+                    return "";
             }
         }
     }

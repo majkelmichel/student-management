@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Dialog for assigning a subject to a student group.
+ *
  * @author Wojciech Berdowski
  */
 public class AssignSubjectToGroupDialog {

@@ -1,7 +1,4 @@
-/**
- * Fragment for managing students in the application
- * @author Wojciech Berdowski
- */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -18,6 +15,11 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import java.util.UUID;
 
+/**
+ * Fragment for managing students in the application
+ *
+ * @author Wojciech Berdowski
+ */
 public class StudentsFragment {
     private final JPanel panel;
     private JTable studentsTable;

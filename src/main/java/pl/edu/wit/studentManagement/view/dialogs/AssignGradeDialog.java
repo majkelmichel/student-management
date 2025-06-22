@@ -5,8 +5,10 @@ import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+
 /**
  * Dialog for assigning a grade to a student for a selected criterion.
+ *
  * @author Wojciech Berdowski
  */
 public class AssignGradeDialog {

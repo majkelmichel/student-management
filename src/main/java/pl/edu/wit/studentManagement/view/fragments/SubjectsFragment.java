@@ -1,7 +1,4 @@
-/**
- * Fragment for managing subjects in the application
- * @author Wojciech Berdowski
- */
+
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -21,6 +18,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Fragment for managing subjects in the application
+ *
+ * @author Wojciech Berdowski
+ */
 public class SubjectsFragment {
     private final JPanel panel;
     private JList<SubjectDto> subjectsList;

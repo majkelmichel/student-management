@@ -1,7 +1,3 @@
-/**
- * Fragment for displaying the dashboard in the application
- * @author Wojciech Berdowski
- */
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.view.AppWindow;
@@ -10,6 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Fragment for displaying the dashboard in the application
+ *
+ * @author Wojciech Berdowski
+ */
 public class DashboardFragment {
     private final JPanel panel;
 
