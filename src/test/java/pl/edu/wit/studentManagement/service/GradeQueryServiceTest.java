@@ -18,25 +18,6 @@ import static org.mockito.Mockito.*;
  * Unit test suite for {@link GradeQueryService}, verifying the generation of grade matrices
  * for a given subject and student group.
  *
- * <p>This test class uses the Arrange–Act–Assert structure and follows the
- * Given–When–Then naming convention for clarity and consistency. Mockito is used
- * to mock dependencies: {@link StudentDao}, {@link GradeDao}, and {@link GradeCriterionDao}.
- *
- * <p>Test cases include:
- * <ul>
- *     <li>Correct matrix is returned when valid students, criteria, and grades exist</li>
- *     <li>Empty result rows are returned when no students are present for the group</li>
- *     <li>Matrix with no columns and empty grades when no criteria exist for the subject</li>
- * </ul>
- *
- * <p>Additional helper methods are used to inject IDs into domain objects via reflection
- * to mimic persisted entities.
- *
- * @see GradeQueryService
- * @see GradeMatrixDto
- * @see GradeMatrixRowDto
- * @see GradeDto
- *
  * @author Michał Zawadzki
  */
 class GradeQueryServiceTest {
@@ -54,25 +35,22 @@ class GradeQueryServiceTest {
         gradeQueryService = new GradeQueryService(gradeDao, studentDao, gradeCriterionDao);
     }
 
-    @DisplayName("Given valid subject and group, when getGradeMatrixForSubjectAndGroup is called, then return correct matrix")
     @Test
+    @DisplayName("Given valid subject and group, when getGradeMatrixForSubjectAndGroup is called, then return correct matrix")
     void givenValidSubjectAndGroup_whenGetGradeMatrixForSubjectAndGroup_thenReturnCorrectMatrix() {
         // Arrange
         UUID subjectId = UUID.randomUUID();
         UUID groupId = UUID.randomUUID();
-        UUID studentId = UUID.randomUUID();
-        UUID criterionId = UUID.randomUUID();
-        UUID gradeId = UUID.randomUUID();
 
         Student student = new Student("Alice", "Smith", "A0001");
         student.setStudentGroupId(groupId);
-        setPrivateField(student, "id", studentId);
+        UUID studentId = student.getId();
 
         GradeCriterion criterion = new GradeCriterion("Midterm", (byte) 100, subjectId);
-        setPrivateField(criterion, "id", criterionId);
+        UUID criterionId = criterion.getId();
 
         Grade grade = new Grade(subjectId, criterionId, studentId, (byte) 85);
-        setPrivateField(grade, "id", gradeId);
+        UUID gradeId = grade.getId();
 
         when(studentDao.getAll()).thenReturn(List.of(student));
         when(gradeCriterionDao.getAll()).thenReturn(List.of(criterion));
@@ -112,7 +90,6 @@ class GradeQueryServiceTest {
         UUID groupId = UUID.randomUUID();
 
         GradeCriterion criterion = new GradeCriterion("Exam", (byte) 100, subjectId);
-        setPrivateField(criterion, "id", UUID.randomUUID());
 
         when(studentDao.getAll()).thenReturn(List.of());
         when(gradeCriterionDao.getAll()).thenReturn(List.of(criterion));
@@ -130,17 +107,16 @@ class GradeQueryServiceTest {
         verify(gradeDao).getAll();
     }
 
-    @DisplayName("Given no criteria for subject, when getGradeMatrixForSubjectAndGroup is called, then return empty criteria and grades")
     @Test
+    @DisplayName("Given no criteria for subject, when getGradeMatrixForSubjectAndGroup is called, then return empty criteria and grades")
     void givenNoCriteriaForSubject_whenGetGradeMatrixForSubjectAndGroup_thenReturnEmptyCriteriaAndGrades() {
         // Arrange
         UUID subjectId = UUID.randomUUID();
         UUID groupId = UUID.randomUUID();
 
-        UUID studentId = UUID.randomUUID();
         Student student = new Student("John", "Doe", "X1234");
         student.setStudentGroupId(groupId);
-        setPrivateField(student, "id", studentId);
+        UUID studentId = student.getId();
 
         when(studentDao.getAll()).thenReturn(List.of(student));
         when(gradeCriterionDao.getAll()).thenReturn(List.of());
@@ -161,16 +137,5 @@ class GradeQueryServiceTest {
         verify(studentDao).getAll();
         verify(gradeCriterionDao).getAll();
         verify(gradeDao).getAll();
-    }
-
-    // Utility method to set private final field via reflection
-    private void setPrivateField(Object target, String fieldName, Object value) {
-        try {
-            var field = target.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(target, value);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
