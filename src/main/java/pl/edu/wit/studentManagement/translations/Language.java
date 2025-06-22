@@ -1,3 +1,6 @@
+package pl.edu.wit.studentManagement.translations;
+
+import java.util.Locale;
 /**
  * Provides support for application language selection and locale management.
  *
@@ -7,10 +10,6 @@
  *
  * @author Michał Pokrzywka
  */
-package pl.edu.wit.studentManagement.translations;
-
-import java.util.Locale;
-
 public enum Language {
     POLISH("pl","PL"),
     ENGLISH("en","US");

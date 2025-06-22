@@ -1,3 +1,6 @@
+package pl.edu.wit.studentManagement.translations;
+
+import java.util.ResourceBundle;
 /**
  * Handles translation and localization for the student management application.
  *
@@ -9,10 +12,6 @@
  *
  * @author Michał Pokrzywka
  */
-package pl.edu.wit.studentManagement.translations;
-
-import java.util.ResourceBundle;
-
 public final class Translator {
     private static Language language = Language.ENGLISH;
     private static ResourceBundle bundle = loadBundle();

@@ -1,3 +1,9 @@
+package pl.edu.wit.studentManagement.translations;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for the Translator class, which handles loading and retrieving
  * localized messages based on the selected Language.
@@ -16,13 +22,6 @@
  *
  * @author Michał Pokrzywka
  */
-package pl.edu.wit.studentManagement.translations;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class TranslatorTest {
     @AfterEach
     void resetLanguageToDefault() {
