@@ -5,9 +5,11 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Main application window for the student management system.
+ *
  * @author Wojciech Berdowski
  */
 public final class AppWindow {
@@ -29,6 +31,7 @@ public final class AppWindow {
                     }
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -47,12 +50,19 @@ public final class AppWindow {
         frame.setContentPane(mainPanel);
     }
 
+    private static void showAboutDialog(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame,
+                "Program do zarządzania studentami\nWersja 1.0\nAutorzy: ...",
+                "O programie",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void show() {
         navigateToDashboard();
         frame.setVisible(true);
     }
 
-    private JPanel createTopBar(){
+    private JPanel createTopBar() {
         var topBar = new JPanel(new BorderLayout());
 
         var leftPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -76,12 +86,7 @@ public final class AppWindow {
         rightButtonsPanel.add(langButton);
 
         var aboutButton = new JButton("O programie");
-        aboutButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame,
-                    "Program do zarządzania studentami\nWersja 1.0\nAutorzy: ...",
-                    "O programie",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
+        aboutButton.addActionListener(AppWindow::showAboutDialog);
         rightButtonsPanel.add(aboutButton);
 
         topBar.add(rightButtonsPanel, BorderLayout.EAST);
@@ -96,12 +101,12 @@ public final class AppWindow {
         contentPanel.repaint();
     }
 
-    private  static void setTitle(String title) {
+    private static void setTitle(String title) {
         topBarHeader.setText(title);
     }
 
-    private static void setBackButtonAction(Runnable action){
-        if(action != null) {
+    private static void setBackButtonAction(Runnable action) {
+        if (action != null) {
             backButtonAction = action;
             backButton.setVisible(true);
             return;
