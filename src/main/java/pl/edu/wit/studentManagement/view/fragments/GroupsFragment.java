@@ -7,7 +7,6 @@ import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupDto;
-import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
 

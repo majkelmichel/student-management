@@ -282,11 +282,6 @@ public class SubjectsFragment {
         }
     }
 
-    private void handleEditSubject() {
-        setDetailsEditable(true);
-        subjectNameField.requestFocus();
-    }
-
     private void handleSaveSubject() {
         SubjectDto selected = subjectsList.getSelectedValue();
 

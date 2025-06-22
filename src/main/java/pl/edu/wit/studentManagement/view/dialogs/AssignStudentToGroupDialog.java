@@ -17,9 +17,6 @@ public class AssignStudentToGroupDialog {
     private final List<StudentDto> selectedStudents = new ArrayList<>();
     private boolean confirmed = false;
 
-
-    private final StudentService studentService = ServiceFactory.getStudentService();
-
     public static class Result {
         public final List<UUID> studentIds;
         public Result(List<UUID> studentIds) {
@@ -33,6 +30,7 @@ public class AssignStudentToGroupDialog {
         dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(null);
 
+        StudentService studentService = ServiceFactory.getStudentService();
         var students = studentService.getStudentsNotAssignedToAnyGroup();
 
         studentsTable = new JTable(new StudentsTableModel(students));
