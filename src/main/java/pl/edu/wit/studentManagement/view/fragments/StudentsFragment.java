@@ -245,8 +245,8 @@ public class StudentsFragment {
                 updateDetailsPanel();
 
                 JOptionPane.showMessageDialog(panel, "Zmiany zostały zapisane.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd zapisu: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            } catch (ValidationException ex) {
+                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
