@@ -9,6 +9,7 @@ package pl.edu.wit.studentManagement.view.fragments;
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.*;
 import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
+import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixRowDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
@@ -162,9 +163,9 @@ public class GradesFragment {
         for (GradeMatrixRowDto row : matrix.getRows()) {
             Object[] rowData = new Object[columns.length];
             rowData[0] = row.getStudentName();
-            List<Byte> grades = row.getGrades();
+            List<GradeDto> grades = row.getGrades();
             for (int i = 0; i < grades.size(); i++) {
-                rowData[i + 1] = grades.get(i) != null ? grades.get(i) : "";
+                rowData[i + 1] = grades.get(i) != null ? grades.get(i).getGrade() : "";
             }
             tableModel.addRow(rowData);
         }
@@ -206,15 +207,30 @@ public class GradesFragment {
         boolean ok = dialog.showDialog(panel);
         if (ok) {
             try {
-                gradeService.assignGrade(
-                        new AssignGradeDto(
-                                selectedSubject.getId(),
-                                dialog.getSelectedCriterion().getId(),
-                                studentRow.getStudentId(),
-                                dialog.getGrade()
-                        )
-                );
-                refreshTable();
+                if (dialog.isNoGradeSelected()) {
+                    GradeCriterionDto criterion = dialog.getSelectedCriterion();
+
+                    var gradeToDelete = studentRow.getGrades().stream()
+                        .filter(g -> g != null && g.getGradeCriterionId().equals(criterion.getId()))
+                        .findFirst();
+
+                    if (gradeToDelete.isPresent()) {
+                        gradeService.deleteGrade(gradeToDelete.get().getId());
+                        refreshTable();
+                    } else {
+                        JOptionPane.showMessageDialog(panel, "Brak oceny do usunięcia.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    gradeService.assignGrade(
+                            new AssignGradeDto(
+                                    selectedSubject.getId(),
+                                    dialog.getSelectedCriterion().getId(),
+                                    studentRow.getStudentId(),
+                                    dialog.getGrade()
+                            )
+                    );
+                    refreshTable();
+                }
             } catch (ValidationException ex) {
                 JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }

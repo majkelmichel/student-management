@@ -14,6 +14,7 @@ public class AssignGradeDialog {
     private final List<GradeCriterionDto> criteria;
     private byte grade;
     private GradeCriterionDto selectedCriterion;
+    private boolean noGradeSelected = false;
 
     public AssignGradeDialog(String studentName, List<GradeCriterionDto> criteria) {
         this.studentName = studentName;
@@ -26,6 +27,10 @@ public class AssignGradeDialog {
 
     public GradeCriterionDto getSelectedCriterion() {
         return selectedCriterion;
+    }
+
+    public boolean isNoGradeSelected() {
+        return noGradeSelected;
     }
 
     public boolean showDialog(Component parent) {
@@ -86,7 +91,22 @@ public class AssignGradeDialog {
 
         JTextField gradeField = new JTextField();
         gradeField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JCheckBox noGradeCheckBox = new JCheckBox("Bez oceny");
+        noGradeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        noGradeCheckBox.addActionListener(e -> {
+            boolean selected = noGradeCheckBox.isSelected();
+            gradeField.setEnabled(!selected);
+
+            if (selected) {
+                gradeField.setText("");
+            }
+        });
+
         dialogPanel.add(gradeField);
+        dialogPanel.add(Box.createVerticalStrut(4));
+        dialogPanel.add(noGradeCheckBox);
 
         while (true) {
             int result = JOptionPane.showConfirmDialog(parent, dialogPanel, "Ustaw ocenę", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -94,10 +114,16 @@ public class AssignGradeDialog {
                 return false;
             }
             GradeCriterionDto selected = (GradeCriterionDto) criteriaCombo.getSelectedItem();
+            boolean noGrade = noGradeCheckBox.isSelected();
             String gradeText = gradeField.getText().trim();
             if (selected == null) {
                 JOptionPane.showMessageDialog(parent, "Wybierz kryterium.", "Błąd", JOptionPane.ERROR_MESSAGE);
                 continue;
+            }
+            if (noGrade) {
+                this.noGradeSelected = true;
+                this.selectedCriterion = selected;
+                return true;
             }
             if (gradeText.isEmpty()) {
                 JOptionPane.showMessageDialog(parent, "Podaj ocenę.", "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -111,6 +137,7 @@ public class AssignGradeDialog {
                 }
                 this.grade = parsedGrade;
                 this.selectedCriterion = selected;
+                this.noGradeSelected = false;
                 return true;
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(parent, "Ocena musi być liczbą.", "Błąd", JOptionPane.ERROR_MESSAGE);
