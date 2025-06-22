@@ -299,15 +299,15 @@ public class GroupsFragment {
             return;
 
         try {
-            studentService.assignStudentToGroup(student.getId(), null);
+            studentService.removeFromGroup(student.getId());
 
             int selectedGroupRow = groupsTable.getSelectedRow();
             if (selectedGroupRow != -1) {
                 StudentGroupDto group = groups.get(selectedGroupRow);
                 reloadGroupStudents(group.getId());
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(panel, "Błąd usuwania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 

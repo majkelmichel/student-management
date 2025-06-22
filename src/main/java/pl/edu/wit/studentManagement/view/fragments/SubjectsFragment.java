@@ -149,13 +149,10 @@ public class SubjectsFragment {
 
         JButton addCriterionBtn = new JButton("Dodaj kryterium");
         JButton removeCriterionBtn = new JButton("Usuń kryterium");
-        JButton studentsGrades = new JButton("Oceny studentów");
 
         criteriaActions.add(addCriterionBtn);
         criteriaActions.add(Box.createHorizontalStrut(8));
         criteriaActions.add(removeCriterionBtn);
-        criteriaActions.add(Box.createHorizontalStrut(8));
-        criteriaActions.add(studentsGrades);
 
         panel.add(Box.createVerticalStrut(8));
         panel.add(criteriaActions);
@@ -306,6 +303,9 @@ public class SubjectsFragment {
                     int idx = subjectsList.getSelectedIndex();
                     listModel.set(idx, updated);
                     subjectsList.setSelectedIndex(idx);
+
+                    JOptionPane.showMessageDialog(panel, "Przedmiot został zaktualizowany.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
+
                     return;
                 } catch (ValidationException ex) {
                     JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);

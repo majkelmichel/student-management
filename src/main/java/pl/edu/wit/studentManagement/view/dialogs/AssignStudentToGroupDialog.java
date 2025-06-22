@@ -33,7 +33,7 @@ public class AssignStudentToGroupDialog {
         dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(null);
 
-        var students = studentService.getAllStudents();
+        var students = studentService.getStudentsNotAssignedToAnyGroup();
 
         studentsTable = new JTable(new StudentsTableModel(students));
         studentsTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
