@@ -12,6 +12,10 @@ public final class Translator {
         return ResourceBundle.getBundle("messages",language.getLocale());
     }
 
+    public static Language getLanguage() {
+        return language;
+    }
+
     public static void setLanguage(Language lang) {
         language = lang;
         bundle = loadBundle();
