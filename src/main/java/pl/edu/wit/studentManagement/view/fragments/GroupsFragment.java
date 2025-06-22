@@ -9,11 +9,17 @@ import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentGroupService;
 import pl.edu.wit.studentManagement.service.StudentService;
+import pl.edu.wit.studentManagement.service.StudentGroupSubjectAssignmentService;
+import pl.edu.wit.studentManagement.service.SubjectService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupDto;
+import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.CreateStudentGroupSubjectAssignmentDto;
+import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
+import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
+import pl.edu.wit.studentManagement.view.dialogs.AssignSubjectToGroupDialog;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -34,8 +40,14 @@ public class GroupsFragment {
     private GroupStudentsTableModel groupStudentsTableModel;
     private List<StudentDto> groupStudents;
 
+    private JList<String> groupSubjectsList;
+    private DefaultListModel<String> groupSubjectsListModel;
+    private List<SubjectDto> groupSubjects;
+
     private final StudentGroupService studentGroupService = ServiceFactory.getStudentGroupService();
     private final StudentService studentService = ServiceFactory.getStudentService();
+    private final StudentGroupSubjectAssignmentService groupSubjectAssignmentService = ServiceFactory.getStudentGroupSubjectAssignmentService();
+    private final SubjectService subjectService = ServiceFactory.getSubjectService();
 
     private final List<StudentGroupDto> groups;
 
@@ -149,6 +161,36 @@ public class GroupsFragment {
 
         detailsPanel.add(actionsPanel);
 
+        detailsPanel.add(Box.createVerticalStrut(16));
+        detailsPanel.add(new JLabel("Przypisane przedmioty:"));
+        groupSubjects = new java.util.ArrayList<>();
+        groupSubjectsListModel = new DefaultListModel<>();
+        groupSubjectsList = new JList<>(groupSubjectsListModel);
+        groupSubjectsList.setVisibleRowCount(5);
+        JScrollPane subjectsScroll = new JScrollPane(groupSubjectsList);
+        subjectsScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+        subjectsScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+        detailsPanel.add(subjectsScroll);
+
+        var subjectActionsPanel = new JPanel();
+        subjectActionsPanel.setLayout(new BoxLayout(subjectActionsPanel, BoxLayout.X_AXIS));
+        subjectActionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        subjectActionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        var assignSubjectButton = new JButton("Przypisz przedmiot");
+        assignSubjectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        assignSubjectButton.addActionListener(e -> handleAssignSubjectToGroup());
+        subjectActionsPanel.add(assignSubjectButton);
+
+        subjectActionsPanel.add(Box.createHorizontalStrut(8));
+
+        var removeSubjectButton = new JButton("Usuń przypisanie");
+        removeSubjectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        removeSubjectButton.addActionListener(e -> handleRemoveSubjectFromGroup());
+        subjectActionsPanel.add(removeSubjectButton);
+
+        detailsPanel.add(subjectActionsPanel);
+
         return detailsPanel;
     }
 
@@ -158,7 +200,9 @@ public class GroupsFragment {
         descriptionArea.setText("");
         setDetailsEditable(false);
         groupStudents.clear();
+        groupSubjects.clear();
         if (groupStudentsTableModel != null) groupStudentsTableModel.fireTableDataChanged();
+        if (groupSubjectsListModel != null) groupSubjectsListModel.clear();
     }
 
     private void setDetailsEditable(boolean editable) {
@@ -215,6 +259,7 @@ public class GroupsFragment {
             descriptionArea.setText(group.getDescription());
             setDetailsEditable(true);
             reloadGroupStudents(group.getId());
+            reloadGroupSubjects(group.getId());
         } else {
             clearDetails();
         }
@@ -232,6 +277,22 @@ public class GroupsFragment {
         groupStudents.addAll(groupWithStudents.get().getStudents());
 
         groupStudentsTableModel.fireTableDataChanged();
+    }
+
+    private void reloadGroupSubjects(java.util.UUID groupId) {
+        groupSubjects.clear();
+        groupSubjectsListModel.clear();
+        List<StudentGroupSubjectAssignmentDto> assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(groupId);
+        List<SubjectDto> allSubjects = subjectService.getAllSubjects();
+        for (StudentGroupSubjectAssignmentDto assignment : assignments) {
+            for (SubjectDto subject : allSubjects) {
+                if (subject.getId().equals(assignment.getSubjectId())) {
+                    groupSubjects.add(subject);
+                    groupSubjectsListModel.addElement(subject.getName());
+                    break;
+                }
+            }
+        }
     }
 
     private void handleSaveGroup() {
@@ -315,6 +376,73 @@ public class GroupsFragment {
         }
     }
 
+    private void handleAssignSubjectToGroup() {
+        int selectedGroupRow = groupsTable.getSelectedRow();
+        if (selectedGroupRow == -1) {
+            JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var group = groups.get(selectedGroupRow);
+
+        var allSubjects = subjectService.getAllSubjects();
+        allSubjects.removeIf(subject -> groupSubjects.stream().anyMatch(s -> s.getId().equals(subject.getId())));
+
+        if (allSubjects.isEmpty()) {
+            JOptionPane.showMessageDialog(panel, "Brak dostępnych przedmiotów do przypisania.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        SubjectDto selectedSubject = AssignSubjectToGroupDialog.showDialog(panel, allSubjects);
+        if (selectedSubject != null) {
+            try {
+                var dto = new CreateStudentGroupSubjectAssignmentDto(
+                        group.getId(), selectedSubject.getId()
+                );
+                groupSubjectAssignmentService.createAssignment(dto);
+                reloadGroupSubjects(group.getId());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Błąd przypisywania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void handleRemoveSubjectFromGroup() {
+        int selectedGroupRow = groupsTable.getSelectedRow();
+        int selectedSubjectIndex = groupSubjectsList.getSelectedIndex();
+
+        if (selectedGroupRow == -1) {
+            JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (selectedSubjectIndex == -1) {
+            JOptionPane.showMessageDialog(panel, "Wybierz przedmiot do usunięcia z grupy.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        var group = groups.get(selectedGroupRow);
+        var subject = groupSubjects.get(selectedSubjectIndex);
+
+        var assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(group.getId());
+        var assignment = assignments.stream()
+                .filter(a -> a.getSubjectId().equals(subject.getId()))
+                .findFirst();
+
+        if (assignment.isPresent()) {
+            int result = JOptionPane.showConfirmDialog(
+                    panel,
+                    "Czy na pewno usunąć przypisanie przedmiotu?",
+                    "Potwierdzenie usunięcia",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+            if (result != JOptionPane.YES_OPTION)
+                return;
+
+            groupSubjectAssignmentService.deleteAssignment(assignment.get().getId());
+            reloadGroupSubjects(group.getId());
+        }
+    }
+
     private void reloadGroups() {
         groups.clear();
         groups.addAll(studentGroupService.getAll());
@@ -367,9 +495,9 @@ public class GroupsFragment {
 
     private static class GroupStudentsTableModel extends AbstractTableModel {
         private final String[] columns = {"Imię", "Nazwisko", "Album"};
-        private final List<pl.edu.wit.studentManagement.service.dto.student.StudentDto> students;
+        private final List<StudentDto> students;
 
-        public GroupStudentsTableModel(List<pl.edu.wit.studentManagement.service.dto.student.StudentDto> students) {
+        public GroupStudentsTableModel(List<StudentDto> students) {
             this.students = students;
         }
 

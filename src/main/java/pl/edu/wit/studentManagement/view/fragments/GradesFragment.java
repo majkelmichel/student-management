@@ -12,6 +12,7 @@ import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixRowDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
+import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
@@ -33,6 +34,7 @@ public class GradesFragment {
     private final SubjectService subjectService = ServiceFactory.getSubjectService();
     private final StudentGroupService studentGroupService = ServiceFactory.getStudentGroupService();
     private final GradeQueryService gradeQueryService = ServiceFactory.getGradeQueryService();
+    private final StudentGroupSubjectAssignmentService groupSubjectAssignmentService = ServiceFactory.getStudentGroupSubjectAssignmentService();
 
     public JPanel getPanel() {
         return panel;
@@ -42,22 +44,8 @@ public class GradesFragment {
         panel = new JPanel(new BorderLayout());
 
         JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        subjectComboBox = new JComboBox<>(subjectService.getAllSubjects().toArray(new SubjectDto[0]));
-        groupComboBox = new JComboBox<>(studentGroupService.getAll().toArray(new StudentGroupDto[0]));
 
-        subjectComboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof SubjectDto) {
-                    var subject = (SubjectDto) value;
-                    setText(subject.getName());
-                } else {
-                    setText("");
-                }
-                return this;
-            }
-        });
+        groupComboBox = new JComboBox<>(studentGroupService.getAll().toArray(new StudentGroupDto[0]));
         groupComboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -72,10 +60,25 @@ public class GradesFragment {
             }
         });
 
-        selectionPanel.add(new JLabel("Przedmiot:"));
-        selectionPanel.add(subjectComboBox);
+        subjectComboBox = new JComboBox<>();
+        subjectComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof SubjectDto) {
+                    var subject = (SubjectDto) value;
+                    setText(subject.getName());
+                } else {
+                    setText("");
+                }
+                return this;
+            }
+        });
+
         selectionPanel.add(new JLabel("Grupa:"));
         selectionPanel.add(groupComboBox);
+        selectionPanel.add(new JLabel("Przedmiot:"));
+        selectionPanel.add(subjectComboBox);
         panel.add(selectionPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel() {
@@ -108,9 +111,31 @@ public class GradesFragment {
         });
 
         subjectComboBox.addActionListener(e -> refreshTable());
-        groupComboBox.addActionListener(e -> refreshTable());
+        groupComboBox.addActionListener(e -> {
+            updateSubjectsForSelectedGroup();
+            refreshTable();
+        });
 
+        updateSubjectsForSelectedGroup();
         refreshTable();
+    }
+
+    private void updateSubjectsForSelectedGroup() {
+        var selectedGroup = (StudentGroupDto) groupComboBox.getSelectedItem();
+        subjectComboBox.removeAllItems();
+        if (selectedGroup == null) return;
+
+        var assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(
+                selectedGroup.getId());
+        var allSubjects = subjectService.getAllSubjects();
+
+        for (StudentGroupSubjectAssignmentDto assignment : assignments) {
+            for (SubjectDto subject : allSubjects) {
+                if (subject.getId().equals(assignment.getSubjectId())) {
+                    subjectComboBox.addItem(subject);
+                }
+            }
+        }
     }
 
     private void refreshTable() {
