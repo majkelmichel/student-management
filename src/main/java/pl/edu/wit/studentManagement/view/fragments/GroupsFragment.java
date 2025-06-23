@@ -16,13 +16,14 @@ import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignSubjectToGroupDialog;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class GroupsFragment {
+public class GroupsFragment implements Fragment {
     private final JPanel panel;
     private final JTable groupsTable;
     private final GroupsTableModel groupsTableModel;
@@ -108,7 +109,7 @@ public class GroupsFragment {
 
         detailsPanel.add(Box.createVerticalStrut(8));
 
-        detailsPanel.add(new JLabel(Translator.translate("studentGroup.details") + ":"));
+        detailsPanel.add(new JLabel(Translator.translate("description") + ":"));
         descriptionArea = new JTextArea(3, 20);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
@@ -446,7 +447,7 @@ public class GroupsFragment {
         private final String[] columnNames = {
                 Translator.translate("studentGroup.code"),
                 Translator.translate("studentGroup.specialization"),
-                Translator.translate("studentGroup.description")
+                Translator.translate("description")
         };
         private final List<StudentGroupDto> groups;
 

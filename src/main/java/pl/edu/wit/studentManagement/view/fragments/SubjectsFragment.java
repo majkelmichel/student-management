@@ -12,6 +12,7 @@ import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
 import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
 import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * @author Wojciech Berdowski
  */
-public class SubjectsFragment {
+public class SubjectsFragment implements Fragment {
     private final JPanel panel;
     private JList<SubjectDto> subjectsList;
     private DefaultListModel<SubjectDto> listModel;

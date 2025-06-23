@@ -1,8 +1,10 @@
 package pl.edu.wit.studentManagement.view;
 
+import pl.edu.wit.studentManagement.translations.Language;
 import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.fragments.*;
 import com.formdev.flatlaf.FlatLightLaf;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,9 @@ public final class AppWindow {
     private static JLabel topBarHeader;
     private static JButton backButton;
     private static Runnable backButtonAction;
+    private static Class<? extends Fragment> currentFragment;
+    private JButton langButton;
+    private JButton aboutButton;
 
     public AppWindow() {
         try {
@@ -40,7 +45,6 @@ public final class AppWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1280, 720);
         frame.setLocationRelativeTo(null);
-
 
         var mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createTopBar(), BorderLayout.NORTH);
@@ -80,13 +84,12 @@ public final class AppWindow {
 
         var rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
-        var langButton = new JButton("PL");
-        langButton.addActionListener(e -> {
-
-        });
+        var selectedLanguage = Translator.getLanguage().name();
+        langButton = new JButton(selectedLanguage);
+        langButton.addActionListener(e -> switchLanguage());
         rightButtonsPanel.add(langButton);
 
-        var aboutButton = new JButton(Translator.translate("about"));
+        aboutButton = new JButton(Translator.translate("about"));
         aboutButton.addActionListener(AppWindow::showAboutDialog);
         rightButtonsPanel.add(aboutButton);
 
@@ -95,11 +98,38 @@ public final class AppWindow {
         return topBar;
     }
 
-    private static void setContent(JComponent newContent) {
-        contentPanel.removeAll();
-        contentPanel.add(newContent, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
+    private void updateTexts() {
+        frame.setTitle(Translator.translate("app.title"));
+        backButton.setText(Translator.translate("back"));
+        aboutButton.setText(Translator.translate("about"));
+        langButton.setText(Translator.getLanguage().name());
+    }
+
+    private void switchLanguage() {
+        var selectedLanguage = Translator.getLanguage();
+        var newLanguage = selectedLanguage == Language.ENGLISH ? Language.POLISH : Language.ENGLISH;
+        Translator.setLanguage(newLanguage);
+        updateTexts();
+
+        if( currentFragment != null) {
+            setFragment(currentFragment);
+        }
+    }
+
+    private static void setFragment(Class<? extends Fragment> fragment) {
+        if (fragment == null) {
+            return;
+        }
+        try {
+            var newContent = fragment.getDeclaredConstructor().newInstance().getPanel();
+            contentPanel.removeAll();
+            contentPanel.add(newContent, BorderLayout.CENTER);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+            currentFragment = fragment;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void setTitle(String title) {
@@ -117,31 +147,31 @@ public final class AppWindow {
     }
 
     public static void navigateToDashboard() {
-        setContent(new DashboardFragment().getPanel());
+        setFragment(DashboardFragment.class);
         setTitle(Translator.translate("home.panel"));
         setBackButtonAction(null);
     }
 
     public static void navigateToStudents() {
-        setContent(new StudentsFragment().getPanel());
+        setFragment(StudentsFragment.class);
         setTitle(Translator.translate("students"));
         setBackButtonAction(AppWindow::navigateToDashboard);
     }
 
     public static void navigateToGroups() {
-        setContent(new GroupsFragment().getPanel());
+        setFragment(GroupsFragment.class);
         setTitle(Translator.translate("groups"));
         setBackButtonAction(AppWindow::navigateToDashboard);
     }
 
     public static void navigateToSubjects() {
-        setContent(new SubjectsFragment().getPanel());
+        setFragment(SubjectsFragment.class);
         setTitle(Translator.translate("subjects"));
         setBackButtonAction(AppWindow::navigateToDashboard);
     }
 
     public static void navigateToGrades() {
-        setContent(new GradesFragment().getPanel());
+        setFragment(GradesFragment.class);
         setTitle(Translator.translate("grades"));
         setBackButtonAction(AppWindow::navigateToDashboard);
     }

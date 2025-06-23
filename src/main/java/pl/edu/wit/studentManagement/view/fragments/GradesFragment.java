@@ -12,6 +12,7 @@ import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @author Wojciech Berdowski
  */
-public class GradesFragment {
+public class GradesFragment  implements Fragment {
     private final JPanel panel;
     private final JComboBox<SubjectDto> subjectComboBox;
     private final JComboBox<StudentGroupDto> groupComboBox;

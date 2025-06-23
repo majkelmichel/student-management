@@ -7,6 +7,7 @@ import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.student.UpdateStudentDto;
 import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AddStudentDialog;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,7 @@ import java.util.UUID;
  *
  * @author Wojciech Berdowski
  */
-public class StudentsFragment {
+public class StudentsFragment implements Fragment {
     private final JPanel panel;
     private JTable studentsTable;
     private JTextField firstNameField, lastNameField, albumField;

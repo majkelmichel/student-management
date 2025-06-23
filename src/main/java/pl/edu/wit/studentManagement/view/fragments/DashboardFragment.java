@@ -2,6 +2,7 @@ package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.AppWindow;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ import java.awt.event.ActionListener;
  *
  * @author Wojciech Berdowski
  */
-public class DashboardFragment {
+public class DashboardFragment implements Fragment {
     private final JPanel panel;
 
     private static final Color studentColor = Color.decode("#8fc2f2");

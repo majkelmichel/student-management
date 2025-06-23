@@ -42,7 +42,7 @@ public class AddGroupDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel(Translator.translate("studenGroup.specialization") + ":"), gbc);
+        panel.add(new JLabel(Translator.translate("studentGroup.specialization") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(specField, gbc);
 
