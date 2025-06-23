@@ -104,7 +104,6 @@ public class GradesFragment {
 
         gradesTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // Double click to set grade
                 if (e.getClickCount() == 2 && gradesTable.getSelectedRow() != -1) {
                     handleSetGrade();
                 }

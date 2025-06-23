@@ -16,6 +16,8 @@ import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,9 +178,9 @@ public class SubjectsFragment {
         editCriterionBtn.addActionListener(e -> handleEditCriterion(panel));
         removeCriterionBtn.addActionListener(e -> handleRemoveCriterion());
 
-        criteriaTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2 && criteriaTable.getSelectedRow() != -1) {
+        criteriaTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && criteriaTable.getSelectedRow() != -1) {
                     handleEditCriterion(panel);
                 }
             }
