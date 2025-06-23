@@ -43,8 +43,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.11.2</version>
                 <configuration>
-                    <show>package</show>
-                    <sourcepath>${basedir}/src/main/java/pl/edu/wit/studentManagement/service</sourcepath>
+                    <show>private</show>
+                    <sourcepath>${basedir}/src/main/java/pl/edu/wit/studentManagement</sourcepath>
                 </configuration>
             </plugin>
         </plugins>

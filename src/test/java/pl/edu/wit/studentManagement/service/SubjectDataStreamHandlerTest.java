@@ -84,7 +84,7 @@ class SubjectDataStreamHandlerTest {
 
         // Act & Assert
         IOException exception = assertThrows(IOException.class, () -> handler.update(subject));
-        assertTrue(exception.getMessage().contains("Subject not found"));
+        assertTrue(exception.getMessage().contains("Object not found with ID: "));
     }
 
     @Test
@@ -110,6 +110,6 @@ class SubjectDataStreamHandlerTest {
 
         // Act & Assert
         IOException exception = assertThrows(IOException.class, () -> handler.deleteById(randomId));
-        assertTrue(exception.getMessage().contains("Subject not found"));
+        assertTrue(exception.getMessage().contains("Object not found with ID: "));
     }
 }

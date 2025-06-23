@@ -18,8 +18,13 @@ import java.util.stream.Collectors;
  * This is the primary public interface for student management functionality.
  */
 public class StudentService {
+    /** Data access object for student operations */
     private final Dao<Student> studentDao;
+    
+    /** Data access object for student group operations */
     private final Dao<StudentGroup> studentGroupDao;
+    
+    /** Data access object for grade operations */
     private final Dao<Grade> gradeDao;
 
     /**

@@ -15,7 +15,7 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class Student implements Serializable {
+class Student extends Entity {
     private final UUID id;
     private String firstName;
     private String lastName;
@@ -35,6 +35,14 @@ class Student implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.album = album;
+    }
+
+    Student(UUID id, String firstName, String lastName, String album, UUID studentGroupId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.album = album;
+        this.studentGroupId = studentGroupId;
     }
 
     UUID getId() {

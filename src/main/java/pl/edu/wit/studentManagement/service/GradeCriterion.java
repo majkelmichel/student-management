@@ -13,10 +13,17 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class GradeCriterion implements Serializable {
+class GradeCriterion extends Entity {
+    /** The unique identifier of this grade criterion */
     private final UUID id;
+    
+    /** The name of the grade criterion */
     private String name;
+    
+    /** The maximum number of points that can be awarded for this criterion */
     private byte maxPoints;
+    
+    /** The unique identifier of the subject this criterion belongs to */
     private UUID subjectId;
 
     /**
@@ -33,6 +40,13 @@ class GradeCriterion implements Serializable {
         this.maxPoints = maxPoints;
     }
 
+    GradeCriterion(UUID id, String name, byte maxPoints, UUID subjectId) {
+        this.id = id;
+        this.name = name;
+        this.maxPoints = maxPoints;
+        this.subjectId = subjectId;
+    }
+
     UUID getId() {
         return id;
     }
@@ -47,7 +61,7 @@ class GradeCriterion implements Serializable {
 
     byte getMaxPoints() {
         return maxPoints;
-    }
+}
 
     void setMaxPoints(byte maxPoints) {
         this.maxPoints = maxPoints;

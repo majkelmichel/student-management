@@ -29,9 +29,9 @@ class GradeQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        studentDao = mock(StudentDao.class);
-        gradeDao = mock(GradeDao.class);
-        gradeCriterionDao = mock(GradeCriterionDao.class);
+        studentDao = (Dao<Student>) mock(Dao.class);
+        gradeDao = (Dao<Grade>) mock(Dao.class);
+        gradeCriterionDao = (Dao<GradeCriterion>) mock(Dao.class);
         gradeQueryService = new GradeQueryService(gradeDao, studentDao, gradeCriterionDao);
     }
 

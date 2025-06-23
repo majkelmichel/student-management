@@ -14,7 +14,7 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class StudentGroup implements Serializable {
+class StudentGroup extends Entity {
     private final UUID id;
     private String code;
     private String specialization;
@@ -30,6 +30,13 @@ class StudentGroup implements Serializable {
      */
     StudentGroup(String code, String specialization, String description) {
         this.id = UUID.randomUUID();
+        this.code = code;
+        this.specialization = specialization;
+        this.description = description;
+    }
+
+    public StudentGroup(UUID id, String code, String specialization, String description) {
+        this.id = id;
         this.code = code;
         this.specialization = specialization;
         this.description = description;

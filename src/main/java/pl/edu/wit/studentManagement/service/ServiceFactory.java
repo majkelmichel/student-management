@@ -38,13 +38,13 @@ public class ServiceFactory {
             new StudentGroupSubjectAssignmentDataStreamHandler("studentgroupsubject.dat");
 
     // DAOs
-    private static final Dao<Student> studentDao = new StudentDao(studentDataStreamHandler);
-    private static final Dao<StudentGroup> studentGroupDao = new StudentGroupDao(studentGroupDataStreamHandler);
-    private static final Dao<Subject> subjectDao = new SubjectDao(subjectDataStreamHandler);
-    private static final Dao<GradeCriterion> gradeCriterionDao = new GradeCriterionDao(gradeCriterionDataStreamHandler);
-    private static final Dao<Grade> gradeDao = new GradeDao(gradeDataStreamHandler);
+    private static final Dao<Student> studentDao = new Dao<>(studentDataStreamHandler);
+    private static final Dao<StudentGroup> studentGroupDao = new Dao<>(studentGroupDataStreamHandler);
+    private static final Dao<Subject> subjectDao = new Dao<>(subjectDataStreamHandler);
+    private static final Dao<GradeCriterion> gradeCriterionDao = new Dao<>(gradeCriterionDataStreamHandler);
+    private static final Dao<Grade> gradeDao = new Dao<>(gradeDataStreamHandler);
     private static final Dao<StudentGroupSubjectAssignment> studentGroupSubjectAssignmentDao =
-            new StudentGroupSubjectAssignmentDao(studentGroupSubjectAssignmentDataStreamHandler);
+            new Dao<>(studentGroupSubjectAssignmentDataStreamHandler);
 
     /**
      * Returns a singleton instance of {@link StudentService}.

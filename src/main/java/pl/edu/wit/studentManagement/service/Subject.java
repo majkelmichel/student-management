@@ -12,9 +12,14 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class Subject implements Serializable {
+class Subject extends Entity {
     private final UUID id;
     private String name;
+
+    public Subject(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     /**
      * Constructs a new {@code Subject} with the specified name.
