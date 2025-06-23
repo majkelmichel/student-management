@@ -78,6 +78,11 @@ public class StudentGroupService {
      * @throws ValidationException if validation fails during creation
      */
     public StudentGroupDto create(CreateStudentGroupDto studentGroupDto) throws ValidationException {
+        var studentGroups = studentGroupDao.getAll();
+
+        if (studentGroups.stream().anyMatch(g -> Objects.equals(g.getCode(), studentGroupDto.getCode())))
+            throw new ValidationException("studentGroup.create.codeExists");
+
         var newGroup = new StudentGroup(
                 studentGroupDto.getCode(),
                 studentGroupDto.getSpecialization(),

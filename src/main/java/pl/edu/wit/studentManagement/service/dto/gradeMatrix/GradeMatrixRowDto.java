@@ -12,8 +12,17 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class GradeMatrixRowDto {
+    /**
+     * The unique identifier of the student.
+     */
     private final UUID studentId;
+    /**
+     * The full name of the student.
+     */
     private final String studentName;
+    /**
+     * The list of grades for each criterion, can contain nulls for missing grades.
+     */
     private final List<GradeDto> grades;
 
     /**

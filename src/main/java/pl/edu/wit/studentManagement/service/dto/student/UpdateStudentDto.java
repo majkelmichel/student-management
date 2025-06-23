@@ -7,8 +7,17 @@ package pl.edu.wit.studentManagement.service.dto.student;
  * @author Michał Zawadzki
  */
 public class UpdateStudentDto {
+    /**
+     * Student's first name
+     */
     private String firstName;
+    /**
+     * Student's last name
+     */
     private String lastName;
+    /**
+     * Student's album
+     */
     private String album;
 
     /**
