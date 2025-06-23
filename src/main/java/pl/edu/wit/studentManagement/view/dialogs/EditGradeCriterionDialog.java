@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Dialog do edycji istniejącego kryterium oceniania (nazwa i maksymalna liczba punktów).
+ * Dialog for editing a grade criterion.
  *
  * @author Wojciech Berdowski
  */
