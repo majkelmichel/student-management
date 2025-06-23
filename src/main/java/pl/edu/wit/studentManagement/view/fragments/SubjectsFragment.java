@@ -57,17 +57,19 @@ public class SubjectsFragment implements Fragment {
     private void reloadSubjects() {
         AppWindow.threadPool.submit(() -> {
             List<SubjectDto> subjects = subjectService.getAllSubjects();
-            if (subjects == null) {
-                subjects = new ArrayList<>();
-            }
-
-            final List<SubjectDto> finalSubjects = subjects;
 
             SwingUtilities.invokeLater(() -> {
                 listModel.clear();
-                for (SubjectDto s : finalSubjects) {
+
+                if (subjects == null || subjects.isEmpty()) {
+                    subjectsList.setSelectedIndex(-1);
+                    return;
+                }
+
+                for (SubjectDto s : subjects) {
                     listModel.addElement(s);
                 }
+
                 if (!listModel.isEmpty()) {
                     subjectsList.setSelectedIndex(0);
                 }
