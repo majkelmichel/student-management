@@ -11,6 +11,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.St
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
 import pl.edu.wit.studentManagement.translations.Translator;
+import pl.edu.wit.studentManagement.view.AppWindow;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
 import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * @author Wojciech Berdowski
  */
-public class GradesFragment  implements Fragment {
+public class GradesFragment implements Fragment {
     private final JPanel panel;
     private final JComboBox<SubjectDto> subjectComboBox;
     private final JComboBox<StudentGroupDto> groupComboBox;
@@ -47,7 +48,7 @@ public class GradesFragment  implements Fragment {
 
         JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        groupComboBox = new JComboBox<>(studentGroupService.getAll().toArray(new StudentGroupDto[0]));
+        groupComboBox = new JComboBox<>();
         groupComboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -113,30 +114,54 @@ public class GradesFragment  implements Fragment {
 
         subjectComboBox.addActionListener(e -> refreshTable());
         groupComboBox.addActionListener(e -> {
-            updateSubjectsForSelectedGroup();
+            updateSubjectsComboBox();
             refreshTable();
         });
 
-        updateSubjectsForSelectedGroup();
+        updateGroupsComboBox();
+        updateSubjectsComboBox();
+
         refreshTable();
     }
 
-    private void updateSubjectsForSelectedGroup() {
+    private void updateGroupsComboBox() {
+        groupComboBox.removeAllItems();
+
+        AppWindow.threadPool.submit(() -> {
+            var groups = studentGroupService.getAll();
+
+            SwingUtilities.invokeLater(() -> {
+                for (StudentGroupDto group : groups) {
+                    groupComboBox.addItem(group);
+                }
+                if (!groups.isEmpty()) {
+                    groupComboBox.setSelectedIndex(0);
+                }
+            });
+        });
+    }
+
+    private void updateSubjectsComboBox() {
         var selectedGroup = (StudentGroupDto) groupComboBox.getSelectedItem();
+
         subjectComboBox.removeAllItems();
         if (selectedGroup == null) return;
 
-        var assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(
-                selectedGroup.getId());
-        var allSubjects = subjectService.getAllSubjects();
+        AppWindow.threadPool.submit(() -> {
+            var assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(
+                    selectedGroup.getId());
+            var allSubjects = subjectService.getAllSubjects();
 
-        for (StudentGroupSubjectAssignmentDto assignment : assignments) {
-            for (SubjectDto subject : allSubjects) {
-                if (subject.getId().equals(assignment.getSubjectId())) {
-                    subjectComboBox.addItem(subject);
+            SwingUtilities.invokeLater(() -> {
+                for (StudentGroupSubjectAssignmentDto assignment : assignments) {
+                    for (SubjectDto subject : allSubjects) {
+                        if (subject.getId().equals(assignment.getSubjectId())) {
+                            subjectComboBox.addItem(subject);
+                        }
+                    }
                 }
-            }
-        }
+            });
+        });
     }
 
     private void refreshTable() {
@@ -148,27 +173,32 @@ public class GradesFragment  implements Fragment {
             return;
         }
 
-        GradeMatrixDto matrix = gradeQueryService.getGradeMatrixForSubjectAndGroup(
-                selectedSubject.getId(), selectedGroup.getId());
+        AppWindow.threadPool.submit(() -> {
+            GradeMatrixDto matrix = gradeQueryService.getGradeMatrixForSubjectAndGroup(
+                    selectedSubject.getId(), selectedGroup.getId());
 
-        String[] columns = new String[1 + matrix.getCriteriaNames().size()];
-        columns[0] = Translator.translate("student");
-        for (int i = 0; i < matrix.getCriteriaNames().size(); i++) {
-            columns[i + 1] = matrix.getCriteriaNames().get(i);
-        }
-        tableModel.setColumnIdentifiers(columns);
-
-        tableModel.setRowCount(0);
-
-        for (GradeMatrixRowDto row : matrix.getRows()) {
-            Object[] rowData = new Object[columns.length];
-            rowData[0] = row.getStudentName();
-            List<GradeDto> grades = row.getGrades();
-            for (int i = 0; i < grades.size(); i++) {
-                rowData[i + 1] = grades.get(i) != null ? grades.get(i).getGrade() : "";
+            String[] columns = new String[1 + matrix.getCriteriaNames().size()];
+            columns[0] = Translator.translate("student");
+            for (int i = 0; i < matrix.getCriteriaNames().size(); i++) {
+                columns[i + 1] = matrix.getCriteriaNames().get(i);
             }
-            tableModel.addRow(rowData);
-        }
+
+            SwingUtilities.invokeLater(() -> {
+                tableModel.setColumnIdentifiers(columns);
+
+                tableModel.setRowCount(0);
+
+                for (GradeMatrixRowDto row : matrix.getRows()) {
+                    Object[] rowData = new Object[columns.length];
+                    rowData[0] = row.getStudentName();
+                    List<GradeDto> grades = row.getGrades();
+                    for (int i = 0; i < grades.size(); i++) {
+                        rowData[i + 1] = grades.get(i) != null ? grades.get(i).getGrade() : "";
+                    }
+                    tableModel.addRow(rowData);
+                }
+            });
+        });
     }
 
     private void handleSetGrade() {
@@ -181,7 +211,7 @@ public class GradesFragment  implements Fragment {
         SubjectDto selectedSubject = (SubjectDto) subjectComboBox.getSelectedItem();
         StudentGroupDto selectedGroup = (StudentGroupDto) groupComboBox.getSelectedItem();
 
-        if( selectedSubject == null) {
+        if (selectedSubject == null) {
             JOptionPane.showMessageDialog(panel, Translator.translate("subject.notSelected"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }

@@ -9,6 +9,8 @@ import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Main application window for the student management system.
@@ -25,6 +27,7 @@ public final class AppWindow {
     private static String currentFragmentTitleKey;
     private JButton langButton;
     private JButton aboutButton;
+    public static ExecutorService threadPool = Executors.newFixedThreadPool(4);
 
     public AppWindow() {
         try {
