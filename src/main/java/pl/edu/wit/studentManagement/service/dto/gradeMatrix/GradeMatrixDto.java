@@ -11,7 +11,13 @@ import java.util.List;
  * @author Michał Zawadzki
  */
 public class GradeMatrixDto {
+    /**
+     * The list of grade criteria names that serve as column headers in the matrix.
+     */
     private final List<String> criteriaNames;
+    /**
+     * The list of matrix rows, where each row contains a student's grades for each criterion.
+     */
     private final List<GradeMatrixRowDto> rows;
 
     /**

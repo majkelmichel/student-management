@@ -9,9 +9,21 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class StudentDto {
+    /**
+     * Unique identifier of the student
+     */
     private final UUID id;
+    /**
+     * Student's first name
+     */
     private final String firstName;
+    /**
+     * Student's last name
+     */
     private final String lastName;
+    /**
+     * Student's album number (student ID)
+     */
     private final String album;
 
     /**

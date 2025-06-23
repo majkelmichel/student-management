@@ -28,8 +28,17 @@ import java.util.stream.Collectors;
  * @author Michał Zawadzki
  */
 public class SubjectService {
+    /**
+     * Data access object for managing Subject entities.
+     */
     private final Dao<Subject> subjectDao;
+    /**
+     * Data access object for managing GradeCriterion entities.
+     */
     private final Dao<GradeCriterion> gradeCriterionDao;
+    /**
+     * Data access object for managing Grade entities.
+     */
     private final Dao<Grade> gradeDao;
 
     /**

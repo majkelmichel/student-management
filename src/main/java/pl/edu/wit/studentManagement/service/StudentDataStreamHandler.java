@@ -1,18 +1,16 @@
 package pl.edu.wit.studentManagement.service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
- * A file-based implementation of {@link DataStreamHandler} for the {@link Student} entity.
+ * Implementation of {@link Student} for the {@link Student} entity.
  * <p>
- * This class handles reading, writing, updating, and deleting {@link Student} objects
- * by serializing them to and deserializing them from a file on disk.
+ * This class manages the persistence of {@link Student} objects by serializing
+ * and deserializing a list of them to a file.
  * <p>
- * The file format used is Java's built-in object serialization.
- * All {@link Student} objects must implement {@link Serializable}.
+ * It supports CRUD operations by loading all objects into memory, modifying the list,
+ * and writing it back to ensure data consistency.
  * <p>
  * The file is created if it does not exist upon instantiation and initialized with an empty list.
  * <p>
@@ -26,121 +24,51 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 class StudentDataStreamHandler extends DataStreamHandler<Student> {
-    private final File file;
 
     /**
-     * Constructs a new handler for the given file path.
-     * Creates the file if it does not exist and initializes it with an empty list.
+     * Constructs a new StudentDataStreamHandler with the specified file path.
      *
-     * @param filePath path to the file used for persistence
-     * @throws RuntimeException if the file cannot be created or initialized
+     * @param filePath the path to the file where grade data will be stored
      */
     StudentDataStreamHandler(String filePath) {
-        this.file = new File(filePath);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                writeAll(new ArrayList<>()); // initialize with empty list
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize file", e);
-            }
-        }
+        super(filePath);
     }
 
     /**
-     * Reads and deserializes all {@link Student} objects from the file.
+     * Reads a Student object from the input stream.
      *
-     * @return list of students, empty if file is empty
-     * @throws IOException if the file cannot be read or contains invalid data
+     * @param in the input stream to read from
+     * @return the Student object read from the stream, or null if end of file is reached
+     * @throws IOException if an I/O error occurs while reading from the stream
      */
-    @SuppressWarnings("unchecked")
-    private List<Student> readAllInternal() throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return (List<Student>) ois.readObject();
+    @Override
+    Student readObject(DataInputStream in) throws IOException {
+        try {
+            UUID id = readUuid(in);
+            String firstName = in.readUTF();
+            String lastName = in.readUTF();
+            String album = in.readUTF();
+            UUID studentGroupId = readUuid(in);
+
+            return new Student(id, firstName, lastName, album, studentGroupId);
         } catch (EOFException e) {
-            return new ArrayList<>();
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Data format error", e);
+            return null;
         }
     }
 
     /**
-     * Serializes and writes the entire list of students to the file.
+     * Writes a Student object to the output stream.
      *
-     * @param students list of students to write
-     * @throws IOException if the write operation fails
-     */
-    private void writeAll(List<Student> students) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(students);
-        }
-    }
-
-    /**
-     * Returns a copy of all students stored in the file.
-     *
-     * @return list of students
-     * @throws IOException if the file cannot be read
+     * @param out   the output stream to write to
+     * @param student the Grade object to write
+     * @throws IOException if an I/O error occurs while writing to the stream
      */
     @Override
-    List<Student> readAll() throws IOException {
-        return new ArrayList<>(readAllInternal());
-    }
-
-    /**
-     * Writes a new student to the file.
-     *
-     * @param student the student to write
-     * @throws IOException if the write operation fails
-     */
-    @Override
-    void write(Student student) throws IOException {
-        List<Student> students = readAllInternal();
-        students.add(student);
-        writeAll(students);
-    }
-
-    /**
-     * Updates an existing student in the file by matching its ID.
-     *
-     * @param student the updated student object
-     * @throws IOException if the student does not exist or writing fails
-     */
-    @Override
-    void update(Student student) throws IOException {
-        List<Student> students = readAllInternal();
-        boolean updated = false;
-
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getId().equals(student.getId())) {
-                students.set(i, student);
-                updated = true;
-                break;
-            }
-        }
-
-        if (!updated) {
-            throw new IOException("Student with ID " + student.getId() + " not found.");
-        }
-
-        writeAll(students);
-    }
-
-    /**
-     * Deletes a student from the file by its ID.
-     *
-     * @param id UUID of the student to delete
-     * @throws IOException if the student does not exist or writing fails
-     */
-    @Override
-    void deleteById(UUID id) throws IOException {
-        List<Student> students = readAllInternal();
-        boolean removed = students.removeIf(s -> s.getId().equals(id));
-
-        if (!removed) {
-            throw new IOException("Student with ID " + id + " not found.");
-        }
-
-        writeAll(students);
+    void writeObject(DataOutputStream out, Student student) throws IOException {
+        writeUuid(student.getId(), out);
+        out.writeUTF(student.getFirstName());
+        out.writeUTF(student.getLastName());
+        out.writeUTF(student.getAlbum());
+        writeUuid(student.getStudentGroupId(), out);
     }
 }

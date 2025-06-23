@@ -7,8 +7,17 @@ package pl.edu.wit.studentManagement.service.dto.student;
  * @author Michał Zawadzki
  */
 public class CreateStudentDto {
+    /**
+     * The student's first name.
+     */
     private final String firstName;
+    /**
+     * The student's last name.
+     */
     private final String lastName;
+    /**
+     * The student's album number (student ID).
+     */
     private final String album;
 
     /**

@@ -16,11 +16,20 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class Grade implements Serializable {
+class Grade extends Entity {
+    /** The unique identifier for this grade instance */
     private final UUID id;
+    
+    /** The identifier of the subject this grade is associated with */
     private UUID subjectId;
+    
+    /** The identifier of the grading criterion used for this grade */
     private UUID gradeCriterionId;
+    
+    /** The identifier of the student who received this grade */
     private UUID studentId;
+    
+    /** The numerical grade value (0-100) */
     private byte grade;
 
     /**
@@ -33,6 +42,23 @@ class Grade implements Serializable {
      */
     Grade(UUID subjectId, UUID gradeCriterionId, UUID studentId, byte grade) {
         this.id = UUID.randomUUID();
+        this.subjectId = subjectId;
+        this.gradeCriterionId = gradeCriterionId;
+        this.studentId = studentId;
+        this.grade = grade;
+    }
+
+    /**
+     * Constructs a Grade with specified ID and all required fields.
+     *
+     * @param id               the UUID to use as this grade's identifier
+     * @param subjectId        the UUID of the subject
+     * @param gradeCriterionId the UUID of the grade criterion
+     * @param studentId        the UUID of the student
+     * @param grade            the grade value
+     */
+    Grade(UUID id, UUID subjectId, UUID gradeCriterionId, UUID studentId, byte grade) {
+        this.id = id;
         this.subjectId = subjectId;
         this.gradeCriterionId = gradeCriterionId;
         this.studentId = studentId;
