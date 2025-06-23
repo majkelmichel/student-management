@@ -12,8 +12,17 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class SubjectWithGradeCriteriaDto {
+    /**
+     * Unique identifier of the subject
+     */
     private final UUID id;
+    /**
+     * Name of the subject
+     */
     private final String name;
+    /**
+     * List of grade criteria for the subject
+     */
     private final List<GradeCriterionDto> gradeCriteria;
 
     /**

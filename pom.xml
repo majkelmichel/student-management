@@ -29,6 +29,11 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.14.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.4</version>
+        </dependency>
     </dependencies>
 
     <reporting>
@@ -38,8 +43,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.11.2</version>
                 <configuration>
-                    <show>package</show>
-                    <sourcepath>${basedir}/src/main/java/pl/edu/wit/studentManagement/service</sourcepath>
+                    <show>private</show>
+                    <sourcepath>${basedir}/src/main/java/pl/edu/wit/studentManagement</sourcepath>
                 </configuration>
             </plugin>
         </plugins>

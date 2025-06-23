@@ -7,6 +7,9 @@ package pl.edu.wit.studentManagement.service.dto.subject;
  * @author Michał Zawadzki
  */
 public class CreateSubjectDto {
+    /**
+     * Name of the subject
+     */
     private final String name;
 
     /**

@@ -7,8 +7,17 @@ package pl.edu.wit.studentManagement.service.dto.studentGroup;
  * @author Michał Zawadzki
  */
 public class UpdateStudentGroupDto {
+    /**
+     * Code representing the student group (e.g., "IZ06IO1")
+     */
     private String code;
+    /**
+     * Specialization for this group
+     */
     private String specialization;
+    /**
+     * Description of the student group
+     */
     private String description;
 
     /**

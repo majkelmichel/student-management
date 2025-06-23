@@ -6,98 +6,66 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * File-based data stream handler for persisting {@link StudentGroupSubjectAssignment} entities using Java serialization.
+ * Implementation of {@link StudentGroupSubjectAssignment} for the {@link StudentGroupSubjectAssignment} entity.
  * <p>
- * Manages all student group-subject assignments within a single file.
- * Supports reading all assignments, writing new assignments, updating existing ones, and deleting by ID.
- * Ensures the data file is initialized if it does not exist.
+ * This class manages the persistence of {@link StudentGroupSubjectAssignment} objects by serializing
+ * and deserializing a list of them to a file.
+ * <p>
+ * It supports CRUD operations by loading all objects into memory, modifying the list,
+ * and writing it back to ensure data consistency.
+ * <p>
+ * The file is created if it does not exist upon instantiation and initialized with an empty list.
+ * <p>
+ * Usage example:
+ * <pre>{@code
+ * DataStreamHandler<StudentGroupSubjectAssignment> handler = new StudentGroupDataStreamHandler("assignment.dat");
+ * handler.write(new StudentGroupSubjectAssignment(...));
+ * List<StudentGroupSubjectAssignment> all = handler.readAll();
+ * }</pre>
  *
  * @author Michał Zawadzki
  */
 class StudentGroupSubjectAssignmentDataStreamHandler extends DataStreamHandler<StudentGroupSubjectAssignment> {
-    private final File file;
-
     /**
-     * Constructs a data stream handler for the specified file path.
-     * Creates the file and initializes it with an empty list if it does not exist.
+     * Constructs a new StudentGroupSubjectAssignmentDataStreamHandler with the specified file path.
      *
-     * @param filePath the file path to persist assignments
-     * @throws RuntimeException if the file cannot be created or initialized
+     * @param filePath the path to the file where grade data will be stored
      */
     StudentGroupSubjectAssignmentDataStreamHandler(String filePath) {
-        this.file = new File(filePath);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                writeAll(new ArrayList<>());
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize file", e);
-            }
-        }
+        super(filePath);
     }
 
     /**
-     * Reads all assignments from the file.
-     * Returns an empty list if the file is empty.
+     * Reads a StudentGroupSubjectAssignment object from the input stream.
      *
-     * @return list of all {@link StudentGroupSubjectAssignment} stored
-     * @throws IOException if reading the file or data deserialization fails
+     * @param in the input stream to read from
+     * @return the StudentGroupSubjectAssignment object read from the stream, or null if end of file is reached
+     * @throws IOException if an I/O error occurs while reading from the stream
      */
-    @SuppressWarnings("unchecked")
-    private List<StudentGroupSubjectAssignment> readAllInternal() throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return (List<StudentGroupSubjectAssignment>) ois.readObject();
+    @Override
+    StudentGroupSubjectAssignment readObject(DataInputStream in) throws IOException {
+        try {
+            UUID id = readUuid(in);
+            UUID studentGroupId = readUuid(in);
+            UUID subjectId = readUuid(in);
+
+            return new StudentGroupSubjectAssignment(id, studentGroupId, subjectId);
         } catch (EOFException e) {
-            return new ArrayList<>();
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Data format error", e);
+            return null;
         }
     }
 
     /**
-     * Writes the entire list of assignments to the file, replacing existing content.
+     * Writes a StudentGroupSubjectAssignment object to the output stream.
      *
-     * @param assignments list of assignments to persist
-     * @throws IOException if writing to the file fails
+     * @param out   the output stream to write to
+     * @param assignment the StudentGroupSubjectAssignment object to write
+     * @throws IOException if an I/O error occurs while writing to the stream
      */
-    private void writeAll(List<StudentGroupSubjectAssignment> assignments) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(assignments);
-        }
-    }
-
     @Override
-    List<StudentGroupSubjectAssignment> readAll() throws IOException {
-        return new ArrayList<>(readAllInternal());
-    }
-
-    @Override
-    void write(StudentGroupSubjectAssignment assignment) throws IOException {
-        List<StudentGroupSubjectAssignment> assignments = readAllInternal();
-        assignments.add(assignment);
-        writeAll(assignments);
-    }
-
-    @Override
-    void update(StudentGroupSubjectAssignment assignment) throws IOException {
-        List<StudentGroupSubjectAssignment> assignments = readAllInternal();
-        boolean updated = false;
-        for (int i = 0; i < assignments.size(); i++) {
-            if (assignments.get(i).getId().equals(assignment.getId())) {
-                assignments.set(i, assignment);
-                updated = true;
-                break;
-            }
-        }
-        if (!updated) throw new IOException("Assignment not found: " + assignment.getId());
-        writeAll(assignments);
-    }
-
-    @Override
-    void deleteById(UUID id) throws IOException {
-        List<StudentGroupSubjectAssignment> assignments = readAllInternal();
-        boolean removed = assignments.removeIf(a -> a.getId().equals(id));
-        if (!removed) throw new IOException("Assignment not found: " + id);
-        writeAll(assignments);
+    void writeObject(DataOutputStream out, StudentGroupSubjectAssignment assignment) throws IOException {
+        writeUuid(assignment.getId(), out);
+        writeUuid(assignment.getStudentGroupId(), out);
+        writeUuid(assignment.getSubjectId(), out);
     }
 }

@@ -7,6 +7,9 @@ package pl.edu.wit.studentManagement.service.dto.subject;
  * @author Michał Zawadzki
  */
 public class UpdateSubjectDto {
+    /**
+     * Name of the subject
+     */
     private String name;
 
     /**

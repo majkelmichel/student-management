@@ -19,9 +19,21 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class GradeService {
+    /**
+     * Data access object for managing Grade entities
+     */
     private final Dao<Grade> gradeDao;
+    /**
+     * Data access object for managing Student entities
+     */
     private final Dao<Student> studentDao;
+    /**
+     * Data access object for managing GradeCriterion entities
+     */
     private final Dao<GradeCriterion> gradeCriterionDao;
+    /**
+     * Data access object for managing Subject entities
+     */
     private final Dao<Subject> subjectDao;
 
     /**

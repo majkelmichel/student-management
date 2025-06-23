@@ -11,9 +11,18 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class StudentGroupSubjectAssignment implements Serializable {
+class StudentGroupSubjectAssignment extends Entity {
+    /**
+     * The unique identifier for this assignment
+     */
     private final UUID id;
+    /**
+     * The identifier of the student group in this assignment
+     */
     private final UUID studentGroupId;
+    /**
+     * The identifier of the subject in this assignment
+     */
     private final UUID subjectId;
 
     /**
@@ -24,6 +33,12 @@ class StudentGroupSubjectAssignment implements Serializable {
      */
     StudentGroupSubjectAssignment(UUID studentGroupId, UUID subjectId) {
         this.id = UUID.randomUUID();
+        this.studentGroupId = studentGroupId;
+        this.subjectId = subjectId;
+    }
+
+    public StudentGroupSubjectAssignment(UUID id, UUID studentGroupId, UUID subjectId) {
+        this.id = id;
         this.studentGroupId = studentGroupId;
         this.subjectId = subjectId;
     }

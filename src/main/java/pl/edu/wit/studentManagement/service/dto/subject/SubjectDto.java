@@ -9,7 +9,13 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class SubjectDto {
+    /**
+     * Unique identifier of the subject
+     */
     private final UUID id;
+    /**
+     * Name of the subject
+     */
     private final String name;
 
     /**

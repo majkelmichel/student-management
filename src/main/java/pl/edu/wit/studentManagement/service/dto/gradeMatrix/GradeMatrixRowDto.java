@@ -1,5 +1,7 @@
 package pl.edu.wit.studentManagement.service.dto.gradeMatrix;
 
+import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -10,9 +12,18 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class GradeMatrixRowDto {
+    /**
+     * The unique identifier of the student.
+     */
     private final UUID studentId;
+    /**
+     * The full name of the student.
+     */
     private final String studentName;
-    private final List<Byte> grades;
+    /**
+     * The list of grades for each criterion, can contain nulls for missing grades.
+     */
+    private final List<GradeDto> grades;
 
     /**
      * Constructs a GradeMatrixRowDto.
@@ -21,7 +32,7 @@ public class GradeMatrixRowDto {
      * @param studentName the full name of the student
      * @param grades the list of grades aligned with the criteria names; can contain nulls for missing grades
      */
-    public GradeMatrixRowDto(UUID studentId, String studentName, List<Byte> grades) {
+    public GradeMatrixRowDto(UUID studentId, String studentName, List<GradeDto> grades) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.grades = grades;
@@ -49,9 +60,9 @@ public class GradeMatrixRowDto {
      * Returns the list of grades for the student, aligned by criterion.
      * May contain null values for missing grades.
      *
-     * @return list of grades (Byte), possibly containing nulls
+     * @return list of grades ({@link GradeDto}), possibly containing nulls
      */
-    public List<Byte> getGrades() {
+    public List<GradeDto> getGrades() {
         return grades;
     }
 }

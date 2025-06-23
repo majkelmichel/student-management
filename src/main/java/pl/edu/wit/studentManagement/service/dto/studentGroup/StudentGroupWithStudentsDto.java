@@ -12,10 +12,25 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class StudentGroupWithStudentsDto {
+    /**
+     * Unique identifier of the student group
+     */
     private final UUID id;
+    /**
+     * Code representing the student group (e.g., "IZ06IO1")
+     */
     private final String code;
+    /**
+     * Specialization for this group
+     */
     private final String specialization;
+    /**
+     * Description of the student group
+     */
     private final String description;
+    /**
+     * List of students belonging to this group
+     */
     private final List<StudentDto> students;
 
     /**

@@ -14,22 +14,41 @@ import java.util.UUID;
  *
  * @author Michał Zawadzki
  */
-class StudentGroup implements Serializable {
+class StudentGroup extends Entity {
+    /**
+     * Unique identifier for the student group
+     */
     private final UUID id;
+    /**
+     * Code representing the student group (e.g., "CS2023")
+     */
     private String code;
+    /**
+     * Field of study or specialization for this group
+     */
     private String specialization;
+    /**
+     * Optional description providing additional information about the group
+     */
     private String description;
 
     /**
      * Constructs a new {@code StudentGroup} with the specified code, specialization, and description.
      * A unique UUID is generated automatically.
      *
-     * @param code           the group code (e.g., "CS2023")
-     * @param specialization the group's specialization (e.g., "Computer Science")
+     * @param code           the group code (e.g., "IZ06IO1")
+     * @param specialization the group's specialization (e.g., "Inżynieria Oprogramowania")
      * @param description    additional description about the group
      */
     StudentGroup(String code, String specialization, String description) {
         this.id = UUID.randomUUID();
+        this.code = code;
+        this.specialization = specialization;
+        this.description = description;
+    }
+
+    public StudentGroup(UUID id, String code, String specialization, String description) {
+        this.id = id;
         this.code = code;
         this.specialization = specialization;
         this.description = description;

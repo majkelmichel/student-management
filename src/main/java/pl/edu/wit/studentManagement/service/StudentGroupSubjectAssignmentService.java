@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
  * @author Michał Zawadzki
  */
 public class StudentGroupSubjectAssignmentService {
+    /**
+     * The data access object used for persisting student group to subject assignments.
+     */
     private final Dao<StudentGroupSubjectAssignment> dao;
 
     /**

@@ -18,8 +18,13 @@ import java.util.stream.Collectors;
  * This is the primary public interface for student management functionality.
  */
 public class StudentService {
+    /** Data access object for student operations */
     private final Dao<Student> studentDao;
+    
+    /** Data access object for student group operations */
     private final Dao<StudentGroup> studentGroupDao;
+    
+    /** Data access object for grade operations */
     private final Dao<Grade> gradeDao;
 
     /**
@@ -41,6 +46,15 @@ public class StudentService {
      */
     public List<StudentDto> getAllStudents() {
         return studentDao.getAll().stream().map(StudentMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns all students not assigned to any group.
+     * @return a list of students
+     */
+    public List<StudentDto> getStudentsNotAssignedToAnyGroup() {
+        return studentDao.getAll().stream().filter(x-> x.getStudentGroupId() == null)
+                .map(StudentMapper::toDto).collect(Collectors.toList());
     }
 
     /**

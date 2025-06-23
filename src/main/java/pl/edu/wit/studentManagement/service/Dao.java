@@ -7,14 +7,28 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Abstract Data Access Object (DAO) defining the contract for basic CRUD operations
- * on entities of type T identified by UUID.
+ * Generic Data Access Object (DAO) class that provides CRUD operations for entities.
+ * This class handles basic database operations using a DataStreamHandler for persistence.
  *
- * @param <T> the type of entity this DAO manages
+ * @param <T> the type of entity this DAO manages, must extend Entity class
  *
  * @author Michał Zawadzki
  */
-abstract class Dao<T> {
+class Dao<T extends Entity> {
+    /**
+     * Handler responsible for reading and writing entity data to persistent storage.
+     * This field manages all data stream operations for the specific entity type.
+     */
+    DataStreamHandler<T> dataStreamHandler;
+
+    /**
+     * Constructs a new DAO with the specified data stream handler.
+     *
+     * @param dataStreamHandler the handler responsible for entity persistence operations
+     */
+    Dao(DataStreamHandler<T> dataStreamHandler) {
+        this.dataStreamHandler = dataStreamHandler;
+    }
 
     /**
      * Retrieves an entity by its unique identifier.
@@ -22,14 +36,28 @@ abstract class Dao<T> {
      * @param id UUID of the entity
      * @return Optional containing the entity if found, or empty if not found
      */
-    abstract Optional<T> get(UUID id);
+    Optional<T> get(UUID id) {
+        try {
+            return dataStreamHandler.readAll().stream()
+                    .filter(e -> e.getId().equals(id))
+                    .findFirst();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
     /**
      * Retrieves all entities.
      *
      * @return List of all entities
      */
-    abstract List<T> getAll();
+    List<T> getAll() {
+        try {
+            return dataStreamHandler.readAll();
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
 
     /**
      * Saves a new entity.
@@ -37,7 +65,14 @@ abstract class Dao<T> {
      * @param t the entity to save
      * @throws ValidationException if the entity fails validation
      */
-    abstract void save(T t) throws ValidationException;
+    void save(T t) throws ValidationException {
+        t.validate();
+        try {
+            dataStreamHandler.write(t);
+        } catch (Exception e) {
+            throw new ValidationException(String.format("%s.save.failed", t.getClass().getName()), e);
+        }
+    }
 
     /**
      * Updates an existing entity.
@@ -45,7 +80,14 @@ abstract class Dao<T> {
      * @param t the entity with updated data
      * @throws ValidationException if the entity fails validation
      */
-    abstract void update(T t) throws ValidationException;
+    void update(T t) throws ValidationException {
+        t.validate();
+        try {
+            dataStreamHandler.update(t);
+        } catch (Exception e) {
+            throw new ValidationException(String.format("%s.update.failed", t.getClass().getName()), e);
+        }
+    }
 
     /**
      * Deletes an entity by its unique identifier.
@@ -53,5 +95,12 @@ abstract class Dao<T> {
      * @param id UUID of the entity to delete
      * @return true if the entity was deleted, false if no entity was found with the given id
      */
-    abstract boolean delete(UUID id);
+    boolean delete(UUID id) {
+        try {
+            dataStreamHandler.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

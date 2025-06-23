@@ -12,7 +12,13 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 public class CreateStudentGroupSubjectAssignmentDto {
+    /**
+     * ID of the student group in the assignment
+     */
     private final UUID studentGroupId;
+    /**
+     * ID of the subject in the assignment
+     */
     private final UUID subjectId;
 
     /**

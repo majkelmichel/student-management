@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.service;
 
+import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixDto;
 import pl.edu.wit.studentManagement.service.dto.gradeMatrix.GradeMatrixRowDto;
 
@@ -18,16 +19,25 @@ import java.util.stream.Collectors;
  * @author Michał Zawadzki
  */
 public class GradeQueryService {
+    /**
+     * Data access object for managing Grade entities.
+     */
     private final Dao<Grade> gradeDao;
+    /**
+     * Data access object for managing Student entities.
+     */
     private final Dao<Student> studentDao;
+    /**
+     * Data access object for managing GradeCriterion entities.
+     */
     private final Dao<GradeCriterion> gradeCriterionDao;
 
     /**
      * Constructs a new instance of {@code GradeQueryService}.
      *
-     * @param gradeDao           DAO for accessing grade records
-     * @param studentDao         DAO for accessing student records
-     * @param gradeCriterionDao  DAO for accessing grading criteria
+     * @param gradeDao          DAO for accessing grade records
+     * @param studentDao        DAO for accessing student records
+     * @param gradeCriterionDao DAO for accessing grading criteria
      */
     GradeQueryService(Dao<Grade> gradeDao, Dao<Student> studentDao, Dao<GradeCriterion> gradeCriterionDao) {
         this.gradeDao = gradeDao;
@@ -74,14 +84,14 @@ public class GradeQueryService {
 
         List<GradeMatrixRowDto> rows = new ArrayList<>();
         for (Student student : students) {
-            var gradesArray = new Byte[gradeCriteria.size()];
+            var gradesArray = new GradeDto[gradeCriteria.size()];
             Arrays.fill(gradesArray, null);
 
             for (Grade grade : grades) {
                 if (grade.getStudentId().equals(student.getId())) {
                     var index = criterionIndex.get(grade.getGradeCriterionId());
                     if (index != null) {
-                        gradesArray[index] = grade.getGrade();
+                        gradesArray[index] = GradeMapper.toDto(grade);
                     }
                 }
             }

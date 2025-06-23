@@ -7,8 +7,17 @@ package pl.edu.wit.studentManagement.service.dto.studentGroup;
  * @author Michał Zawadzki
  */
 public class CreateStudentGroupDto {
+    /**
+     * The unique code identifying the student group
+     */
     private final String code;
+    /**
+     * The field of specialization for the student group
+     */
     private final String specialization;
+    /**
+     * Additional information about the student group
+     */
     private final String description;
 
     /**
