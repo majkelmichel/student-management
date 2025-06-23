@@ -6,14 +6,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Dialog for adding a new grade criterion with a name and maximum points.
+ * Dialog for editing a grade criterion.
  *
  * @author Wojciech Berdowski
  */
-public class AddGradeCriterionDialog {
-    public static String[] showDialog(Component parent) {
-        JTextField nameField = new JTextField();
-        JTextField pointsField = new JTextField();
+public class EditGradeCriterionDialog {
+    public static String[] showDialog(Component parent, String currentName, String currentPoints) {
+        JTextField nameField = new JTextField(currentName);
+        JTextField pointsField = new JTextField(currentPoints);
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel(Translator.translate("gradeCriterion.name") + ":"));
@@ -24,7 +24,7 @@ public class AddGradeCriterionDialog {
         int result = JOptionPane.showConfirmDialog(
                 parent,
                 panel,
-                Translator.translate("gradeCriterion.add"),
+                Translator.translate("gradeCriterion.edit"),
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );
@@ -37,3 +37,4 @@ public class AddGradeCriterionDialog {
         return null;
     }
 }
+

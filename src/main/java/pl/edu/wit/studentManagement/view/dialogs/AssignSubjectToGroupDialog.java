@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.view.dialogs;
 
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,13 +27,13 @@ public class AssignSubjectToGroupDialog {
         });
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.add(new JLabel("Wybierz przedmiot:"));
+        panel.add(new JLabel(Translator.translate("subject.name") + ":"));
         panel.add(subjectComboBox);
 
         int result = JOptionPane.showConfirmDialog(
                 parent,
                 panel,
-                "Przypisz przedmiot do grupy",
+                Translator.translate("subject.assignToGroup"),
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );

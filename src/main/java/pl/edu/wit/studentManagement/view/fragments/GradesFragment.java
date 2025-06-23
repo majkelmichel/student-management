@@ -1,4 +1,3 @@
-
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -11,7 +10,9 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AssignGradeDialog;
+import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @author Wojciech Berdowski
  */
-public class GradesFragment {
+public class GradesFragment  implements Fragment {
     private final JPanel panel;
     private final JComboBox<SubjectDto> subjectComboBox;
     private final JComboBox<StudentGroupDto> groupComboBox;
@@ -76,9 +77,9 @@ public class GradesFragment {
             }
         });
 
-        selectionPanel.add(new JLabel("Grupa:"));
+        selectionPanel.add(new JLabel(Translator.translate("group") + ":"));
         selectionPanel.add(groupComboBox);
-        selectionPanel.add(new JLabel("Przedmiot:"));
+        selectionPanel.add(new JLabel(Translator.translate("subject") + ":"));
         selectionPanel.add(subjectComboBox);
         panel.add(selectionPanel, BorderLayout.NORTH);
 
@@ -96,7 +97,7 @@ public class GradesFragment {
         JPanel actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
-        JButton setGradeButton = new JButton("Ustaw ocenę");
+        JButton setGradeButton = new JButton(Translator.translate("grade.set"));
         actionsPanel.add(setGradeButton);
         panel.add(actionsPanel, BorderLayout.SOUTH);
 
@@ -104,7 +105,6 @@ public class GradesFragment {
 
         gradesTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // Double click to set grade
                 if (e.getClickCount() == 2 && gradesTable.getSelectedRow() != -1) {
                     handleSetGrade();
                 }
@@ -152,7 +152,7 @@ public class GradesFragment {
                 selectedSubject.getId(), selectedGroup.getId());
 
         String[] columns = new String[1 + matrix.getCriteriaNames().size()];
-        columns[0] = "Nazwa studenta";
+        columns[0] = Translator.translate("student");
         for (int i = 0; i < matrix.getCriteriaNames().size(); i++) {
             columns[i + 1] = matrix.getCriteriaNames().get(i);
         }
@@ -174,25 +174,32 @@ public class GradesFragment {
     private void handleSetGrade() {
         int selectedRow = gradesTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(panel, "Wybierz studenta z listy.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("student.notSelected"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         SubjectDto selectedSubject = (SubjectDto) subjectComboBox.getSelectedItem();
         StudentGroupDto selectedGroup = (StudentGroupDto) groupComboBox.getSelectedItem();
-        if (selectedSubject == null || selectedGroup == null) {
-            JOptionPane.showMessageDialog(panel, "Wybierz przedmiot i grupę.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+
+        if( selectedSubject == null) {
+            JOptionPane.showMessageDialog(panel, Translator.translate("subject.notSelected"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (selectedGroup == null) {
+            JOptionPane.showMessageDialog(panel, Translator.translate("studentGroup.notSelected"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         var subjectWithCriteriaOpt = subjectService.getSubjectWithGradeCriteriaById(selectedSubject.getId());
+
         if (subjectWithCriteriaOpt.isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "Nie znaleziono kryteriów ocen dla przedmiotu.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("gradeCriterion.notExists"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         List<GradeCriterionDto> criteria = subjectWithCriteriaOpt.get().getGradeCriteria();
         if (criteria.isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "Brak kryteriów ocen dla tego przedmiotu.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("subject.hasNoGradeCriteria"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -205,35 +212,36 @@ public class GradesFragment {
         AssignGradeDialog dialog = new AssignGradeDialog(studentName, criteria);
 
         boolean ok = dialog.showDialog(panel);
-        if (ok) {
-            try {
-                if (dialog.isNoGradeSelected()) {
-                    GradeCriterionDto criterion = dialog.getSelectedCriterion();
+        if (!ok)
+            return;
 
-                    var gradeToDelete = studentRow.getGrades().stream()
-                            .filter(g -> g != null && g.getGradeCriterionId().equals(criterion.getId()))
-                            .findFirst();
+        try {
+            if (dialog.isNoGradeSelected()) {
+                GradeCriterionDto criterion = dialog.getSelectedCriterion();
 
-                    if (gradeToDelete.isPresent()) {
-                        gradeService.deleteGrade(gradeToDelete.get().getId());
-                        refreshTable();
-                    } else {
-                        JOptionPane.showMessageDialog(panel, "Brak oceny do usunięcia.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    gradeService.assignGrade(
-                            new AssignGradeDto(
-                                    selectedSubject.getId(),
-                                    dialog.getSelectedCriterion().getId(),
-                                    studentRow.getStudentId(),
-                                    dialog.getGrade()
-                            )
-                    );
+                var gradeToDelete = studentRow.getGrades().stream()
+                        .filter(g -> g != null && g.getGradeCriterionId().equals(criterion.getId()))
+                        .findFirst();
+
+                if (gradeToDelete.isPresent()) {
+                    gradeService.deleteGrade(gradeToDelete.get().getId());
                     refreshTable();
+                } else {
+                    JOptionPane.showMessageDialog(panel, Translator.translate("grade.noGradeToDelete"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
                 }
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            } else {
+                gradeService.assignGrade(
+                        new AssignGradeDto(
+                                selectedSubject.getId(),
+                                dialog.getSelectedCriterion().getId(),
+                                studentRow.getStudentId(),
+                                dialog.getGrade()
+                        )
+                );
+                refreshTable();
             }
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 }

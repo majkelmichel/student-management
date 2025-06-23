@@ -3,6 +3,7 @@ package pl.edu.wit.studentManagement.view.dialogs;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -31,7 +32,7 @@ public class AssignStudentToGroupDialog {
     }
 
     public AssignStudentToGroupDialog() {
-        dialog = new JDialog((Frame) null, "Przypisz studentów do grupy", true);
+        dialog = new JDialog((Frame) null, "studentGroup.assignStudents", true);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(null);
@@ -43,9 +44,9 @@ public class AssignStudentToGroupDialog {
         studentsTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         studentsTable.setRowHeight(24);
         JScrollPane studentsScroll = new JScrollPane(studentsTable);
-        studentsScroll.setBorder(BorderFactory.createTitledBorder("Studenci"));
+        studentsScroll.setBorder(BorderFactory.createTitledBorder(Translator.translate("students")));
 
-        JButton assignButton = new JButton("Przypisz");
+        JButton assignButton = new JButton(Translator.translate("studentGroup.assignStudentToGroup"));
         assignButton.addActionListener(e -> {
             int[] selectedRows = studentsTable.getSelectedRows();
             if (selectedRows.length > 0) {
@@ -56,7 +57,7 @@ public class AssignStudentToGroupDialog {
                 confirmed = true;
                 dialog.dispose();
             } else {
-                JOptionPane.showMessageDialog(dialog, "Wybierz co najmniej jednego studenta.", "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, Translator.translate("student.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -82,7 +83,11 @@ public class AssignStudentToGroupDialog {
     }
 
     private static class StudentsTableModel extends AbstractTableModel {
-        private final String[] columns = {"Imię", "Nazwisko", "Album"};
+        private final String[] columns = {
+                Translator.translate("firstName"),
+                Translator.translate("lastName"),
+                Translator.translate("album")
+        };
         private final List<StudentDto> students;
 
         public StudentsTableModel(List<StudentDto> students) {
