@@ -3,7 +3,7 @@ package pl.edu.wit.studentManagement.view.interfaces;
 import javax.swing.*;
 
 /**
- * Interface representing a fragment of the application.
+ * Interface for UI fragments in the student management application.
  *
  * @author Wojciech Berdowski
  */
