@@ -32,7 +32,7 @@ public class AssignStudentToGroupDialog {
     }
 
     public AssignStudentToGroupDialog() {
-        dialog = new JDialog((Frame) null, "studentGroup.assignStudents", true);
+        dialog = new JDialog((Frame) null, Translator.translate("studentGroup.assignStudents"), true);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(null);
