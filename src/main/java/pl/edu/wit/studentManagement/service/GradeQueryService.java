@@ -19,8 +19,17 @@ import java.util.stream.Collectors;
  * @author Michał Zawadzki
  */
 public class GradeQueryService {
+    /**
+     * Data access object for managing Grade entities.
+     */
     private final Dao<Grade> gradeDao;
+    /**
+     * Data access object for managing Student entities.
+     */
     private final Dao<Student> studentDao;
+    /**
+     * Data access object for managing GradeCriterion entities.
+     */
     private final Dao<GradeCriterion> gradeCriterionDao;
 
     /**

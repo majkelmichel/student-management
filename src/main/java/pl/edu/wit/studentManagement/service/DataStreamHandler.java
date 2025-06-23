@@ -5,9 +5,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Abstract base class for handling persistent storage of entities using data streams.
+ * <p>
+ * This class provides CRUD (Create, Read, Update, Delete) operations for entities
+ * by serializing them to and from a file using DataInputStream and DataOutputStream.
+ * <p>
+ * Implementing classes must provide specific logic for reading and writing their
+ * respective entity types by implementing the abstract methods.
+ *
+ * @param <T> the type of entity this handler manages, must extend Entity
+ * @author Michał Zawadzki
+ */
 abstract class DataStreamHandler<T extends Entity> {
+    /**
+     * The file path where the data will be persisted.
+     */
     private final String filePath;
-    
+
+    /**
+     * Constructs a new DataStreamHandler with the specified file path.
+     *
+     * @param filePath the path to the file where data will be stored and retrieved from
+     */
     protected DataStreamHandler(String filePath) {
         this.filePath = filePath;
     }

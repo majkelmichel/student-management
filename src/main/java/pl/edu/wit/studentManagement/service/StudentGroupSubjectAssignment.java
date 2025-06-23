@@ -12,8 +12,17 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 class StudentGroupSubjectAssignment extends Entity {
+    /**
+     * The unique identifier for this assignment
+     */
     private final UUID id;
+    /**
+     * The identifier of the student group in this assignment
+     */
     private final UUID studentGroupId;
+    /**
+     * The identifier of the subject in this assignment
+     */
     private final UUID subjectId;
 
     /**

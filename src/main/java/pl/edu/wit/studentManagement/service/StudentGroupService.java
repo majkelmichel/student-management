@@ -23,7 +23,13 @@ import java.util.stream.Collectors;
  * @author Michał Zawadzki
  */
 public class StudentGroupService {
+    /**
+     * Data access object for managing StudentGroup entities.
+     */
     private final Dao<StudentGroup> studentGroupDao;
+    /**
+     * Data access object for managing Student entities.
+     */
     private final Dao<Student> studentDao;
 
     /**

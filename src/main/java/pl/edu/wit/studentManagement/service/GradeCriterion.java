@@ -40,6 +40,15 @@ class GradeCriterion extends Entity {
         this.maxPoints = maxPoints;
     }
 
+    /**
+     * Constructs a GradeCriterion with all fields specified, including a predefined ID.
+     * This constructor is primarily used when reconstructing objects from persistent storage.
+     *
+     * @param id        the unique identifier for this criterion
+     * @param name      the name of the criterion
+     * @param maxPoints the maximum achievable points for this criterion
+     * @param subjectId the UUID of the subject this criterion belongs to
+     */
     GradeCriterion(UUID id, String name, byte maxPoints, UUID subjectId) {
         this.id = id;
         this.name = name;
@@ -78,6 +87,9 @@ class GradeCriterion extends Entity {
         }
         if (maxPoints <= 0) {
             throw new ValidationException("criterion.maxPoints.invalid");
+        }
+        if (subjectId == null) {
+            throw new ValidationException("criterion.subject.empty");
         }
     }
 

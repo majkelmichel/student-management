@@ -1,12 +1,10 @@
 package pl.edu.wit.studentManagement.service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
- * A file-based implementation of {@link DataStreamHandler} for the {@link GradeCriterion} entity.
+ * Implementation of {@link DataStreamHandler} for the {@link GradeCriterion} entity.
  * <p>
  * This class manages the persistence of {@link GradeCriterion} objects by serializing
  * and deserializing a list of them to a file.
@@ -26,10 +24,22 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 class GradeCriterionDataStreamHandler extends DataStreamHandler<GradeCriterion> {
+    /**
+     * Constructs a new GradeCriterionDataStreamHandler with the specified file path.
+     *
+     * @param filePath the path to the file where grade criteria will be stored
+     */
     GradeCriterionDataStreamHandler(String filePath) {
         super(filePath);
     }
 
+    /**
+     * Reads a GradeCriterion object from the input stream.
+     *
+     * @param in the input stream to read from
+     * @return the GradeCriterion object read from the stream, or null if end of file is reached
+     * @throws IOException if an I/O error occurs while reading from the stream
+     */
     @Override
     GradeCriterion readObject(DataInputStream in) throws IOException {
         try {
@@ -44,6 +54,13 @@ class GradeCriterionDataStreamHandler extends DataStreamHandler<GradeCriterion> 
         }
     }
 
+    /**
+     * Writes a GradeCriterion object to the output stream.
+     *
+     * @param out            the output stream to write to
+     * @param gradeCriterion the GradeCriterion object to write
+     * @throws IOException if an I/O error occurs while writing to the stream
+     */
     @Override
     void writeObject(DataOutputStream out, GradeCriterion gradeCriterion) throws IOException {
         writeUuid(gradeCriterion.getId(), out);

@@ -16,10 +16,25 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 class Student extends Entity {
+    /**
+     * Unique identifier of the student
+     */
     private final UUID id;
+    /**
+     * First name of the student
+     */
     private String firstName;
+    /**
+     * Last name of the student
+     */
     private String lastName;
+    /**
+     * Album number of the student
+     */
     private String album;
+    /**
+     * ID of the student group
+     */
     private UUID studentGroupId;
 
     /**

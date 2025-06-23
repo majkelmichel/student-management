@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * A file-based implementation of {@link DataStreamHandler} for the {@link Subject} entity.
+ * Implementation of {@link Subject} for the {@link Subject} entity.
  * <p>
  * This class manages the persistence of {@link Subject} objects by serializing
- * and deserializing them to and from a file on disk.
+ * and deserializing a list of them to a file.
+ * <p>
+ * It supports CRUD operations by loading all objects into memory, modifying the list,
+ * and writing it back to ensure data consistency.
  * <p>
  * The file is created if it does not exist upon instantiation and initialized with an empty list.
  * <p>
@@ -23,10 +26,23 @@ import java.util.UUID;
  * @author Michał Zawadzki
  */
 class SubjectDataStreamHandler extends DataStreamHandler<Subject> {
+
+    /**
+     * Constructs a new SubjectDataStreamHandler with the specified file path.
+     *
+     * @param filePath the path to the file where grade data will be stored
+     */
     SubjectDataStreamHandler(String filePath) {
         super(filePath);
     }
 
+    /**
+     * Reads a Subject object from the input stream.
+     *
+     * @param in the input stream to read from
+     * @return the Subject object read from the stream, or null if end of file is reached
+     * @throws IOException if an I/O error occurs while reading from the stream
+     */
     @Override
     Subject readObject(DataInputStream in) throws IOException {
         try {
@@ -39,9 +55,16 @@ class SubjectDataStreamHandler extends DataStreamHandler<Subject> {
         }
     }
 
+    /**
+     * Writes a Subject object to the output stream.
+     *
+     * @param out   the output stream to write to
+     * @param subject the Subject object to write
+     * @throws IOException if an I/O error occurs while writing to the stream
+     */
     @Override
-    void writeObject(DataOutputStream out, Subject object) throws IOException {
-        writeUuid(object.getId(), out);
-        out.writeUTF(object.getName());
+    void writeObject(DataOutputStream out, Subject subject) throws IOException {
+        writeUuid(subject.getId(), out);
+        out.writeUTF(subject.getName());
     }
 }
