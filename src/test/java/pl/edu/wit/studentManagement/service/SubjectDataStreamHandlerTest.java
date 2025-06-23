@@ -12,6 +12,11 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test suite for {@link SubjectDataStreamHandler} class.
+ *
+ * @author Michał Zawadzki
+ */
 @DisplayName("SubjectDataStreamHandler Test Suite")
 class SubjectDataStreamHandlerTest {
 
