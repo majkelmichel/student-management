@@ -6,12 +6,14 @@ import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.student.UpdateStudentDto;
 import pl.edu.wit.studentManagement.translations.Translator;
+import pl.edu.wit.studentManagement.view.AppWindow;
 import pl.edu.wit.studentManagement.view.dialogs.AddStudentDialog;
 import pl.edu.wit.studentManagement.view.interfaces.Fragment;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import java.util.UUID;
@@ -33,7 +35,7 @@ public class StudentsFragment implements Fragment {
     public StudentsFragment() {
         panel = new JPanel(new BorderLayout());
 
-        currentStudents = studentService.getAllStudents();
+        currentStudents = new ArrayList<>();
 
         var leftPanel = createLeftPanel();
         var rightPanel = createDetailsPanel();
@@ -42,6 +44,8 @@ public class StudentsFragment implements Fragment {
         splitPane.setResizeWeight(0.8);
 
         panel.add(splitPane, BorderLayout.CENTER);
+
+        reloadStudents();
 
         setDetailsEditable(false);
     }
@@ -111,18 +115,18 @@ public class StudentsFragment implements Fragment {
         searchPanel.add(searchLabel, BorderLayout.WEST);
         searchPanel.add(searchField, BorderLayout.CENTER);
 
-        searchField.addActionListener(e -> handleSearch());
+        searchField.addActionListener(e -> reloadStudents());
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                handleSearch();
+                reloadStudents();
             }
 
             public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                handleSearch();
+                reloadStudents();
             }
 
             public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                handleSearch();
+                reloadStudents();
             }
         });
 
@@ -209,7 +213,7 @@ public class StudentsFragment implements Fragment {
         if (!added)
             return;
 
-        fetchStudents();
+        reloadStudents();
     }
 
     private void handleRemoveStudentButton(ActionEvent e) {
@@ -230,7 +234,7 @@ public class StudentsFragment implements Fragment {
         UUID id = currentStudents.get(selectedRow).getId();
         try {
             studentService.deleteStudent(id);
-            fetchStudents();
+            reloadStudents();
         } catch (ValidationException ex) {
             JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
@@ -249,33 +253,44 @@ public class StudentsFragment implements Fragment {
         try {
             studentService.updateStudent(selected.getId(), updateDto);
 
-            fetchStudents();
+            UUID selectedId = selected.getId();
+            reloadStudents(selectedId);
 
-            studentsTable.setRowSelectionInterval(selectedRow, selectedRow);
-            updateDetailsPanel();
         } catch (ValidationException ex) {
             JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void handleSearch() {
-        String query = searchField.getText();
-        if (query == null || query.isBlank()) {
-            currentStudents = studentService.getAllStudents();
-        } else {
-            currentStudents = studentService.search(query);
-        }
-        refreshTableData(currentStudents);
+    private void reloadStudents() {
+        reloadStudents(null);
     }
 
-    private void fetchStudents() {
+    private void reloadStudents(UUID studentIdToSelect) {
         String query = searchField.getText();
-        if (query == null || query.isBlank()) {
-            currentStudents = studentService.getAllStudents();
-        } else {
-            currentStudents = studentService.search(query);
-        }
-        refreshTableData(currentStudents);
+
+        AppWindow.threadPool.submit(() -> {
+            if (query == null || query.isBlank()) {
+                currentStudents = studentService.getAllStudents();
+            } else {
+                currentStudents = studentService.search(query);
+            }
+            SwingUtilities.invokeLater(() -> {
+                refreshTableData(currentStudents);
+
+                if (studentIdToSelect != null) {
+                    int idx = -1;
+                    for (int i = 0; i < currentStudents.size(); i++) {
+                        if (currentStudents.get(i).getId().equals(studentIdToSelect)) {
+                            idx = i;
+                            break;
+                        }
+                    }
+                    if (idx != -1) {
+                        studentsTable.setRowSelectionInterval(idx, idx);
+                    }
+                }
+            });
+        });
     }
 
     private void refreshTableData(List<StudentDto> students) {

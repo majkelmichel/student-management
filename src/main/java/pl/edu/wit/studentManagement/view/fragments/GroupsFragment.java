@@ -8,11 +8,13 @@ import pl.edu.wit.studentManagement.service.StudentGroupSubjectAssignmentService
 import pl.edu.wit.studentManagement.service.SubjectService;
 import pl.edu.wit.studentManagement.service.dto.student.StudentDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupDto;
+import pl.edu.wit.studentManagement.service.dto.studentGroup.StudentGroupWithStudentsDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.CreateStudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.translations.Translator;
+import pl.edu.wit.studentManagement.view.AppWindow;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignSubjectToGroupDialog;
@@ -22,6 +24,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.List;
+import java.util.UUID;
 
 public class GroupsFragment implements Fragment {
     private final JPanel panel;
@@ -51,7 +54,8 @@ public class GroupsFragment implements Fragment {
     public GroupsFragment() {
         this.panel = new JPanel(new BorderLayout());
 
-        groups = studentGroupService.getAll();
+        groups = new java.util.ArrayList<>();
+        reloadGroups();
 
         groupsTableModel = new GroupsTableModel(groups);
         groupsTable = new JTable(groupsTableModel);
@@ -266,31 +270,44 @@ public class GroupsFragment implements Fragment {
         reloadGroupSubjects(group.getId());
     }
 
-    private void reloadGroupStudents(java.util.UUID groupId) {
-        var groupWithStudents = studentGroupService.getWithStudentsById(groupId);
-        groupStudents.clear();
-        if (groupWithStudents.isEmpty()) {
-            groupStudentsTableModel.fireTableDataChanged();
-            return;
-        }
-        groupStudents.addAll(groupWithStudents.get().getStudents());
-        groupStudentsTableModel.fireTableDataChanged();
+    private void reloadGroupStudents(UUID groupId) {
+        AppWindow.threadPool.submit(() -> {
+            var groupWithStudents = studentGroupService.getWithStudentsById(groupId);
+            List<StudentDto> fetchedStudents = groupWithStudents.map(StudentGroupWithStudentsDto::getStudents).orElseGet(java.util.ArrayList::new);
+            SwingUtilities.invokeLater(() -> {
+                groupStudents.clear();
+                groupStudents.addAll(fetchedStudents);
+                groupStudentsTableModel.fireTableDataChanged();
+            });
+        });
     }
 
-    private void reloadGroupSubjects(java.util.UUID groupId) {
-        groupSubjects.clear();
-        groupSubjectsListModel.clear();
-        List<StudentGroupSubjectAssignmentDto> assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(groupId);
-        List<SubjectDto> allSubjects = subjectService.getAllSubjects();
-        for (StudentGroupSubjectAssignmentDto assignment : assignments) {
-            for (SubjectDto subject : allSubjects) {
-                if (subject.getId().equals(assignment.getSubjectId())) {
-                    groupSubjects.add(subject);
-                    groupSubjectsListModel.addElement(subject.getName());
-                    break;
+    private void reloadGroupSubjects(UUID groupId) {
+        AppWindow.threadPool.submit(() -> {
+            var assignments = groupSubjectAssignmentService.getAssignmentsByStudentGroup(groupId);
+            var allSubjects = subjectService.getAllSubjects();
+            java.util.List<SubjectDto> fetchedSubjects = new java.util.ArrayList<>();
+            DefaultListModel<String> fetchedSubjectsListModel = new DefaultListModel<>();
+
+            for (StudentGroupSubjectAssignmentDto assignment : assignments) {
+                for (SubjectDto subject : allSubjects) {
+                    if (subject.getId().equals(assignment.getSubjectId())) {
+                        fetchedSubjects.add(subject);
+                        fetchedSubjectsListModel.addElement(subject.getName());
+                        break;
+                    }
                 }
             }
-        }
+            SwingUtilities.invokeLater(() -> {
+                groupSubjects.clear();
+                groupSubjects.addAll(fetchedSubjects);
+                groupSubjectsListModel.clear();
+
+                for (int i = 0; i < fetchedSubjectsListModel.size(); i++) {
+                    groupSubjectsListModel.addElement(fetchedSubjectsListModel.get(i));
+                }
+            });
+        });
     }
 
     private void handleSaveGroup() {
@@ -306,8 +323,7 @@ public class GroupsFragment implements Fragment {
 
         try {
             studentGroupService.update(group.getId(), dto);
-            reloadGroups();
-            groupsTable.setRowSelectionInterval(selectedRow, selectedRow);
+            reloadGroups(group.getId());
             handleGroupSelected();
         } catch (ValidationException ex) {
             JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
@@ -438,9 +454,29 @@ public class GroupsFragment implements Fragment {
     }
 
     private void reloadGroups() {
-        groups.clear();
-        groups.addAll(studentGroupService.getAll());
-        groupsTableModel.fireTableDataChanged();
+        reloadGroups(null);
+    }
+
+    private void reloadGroups(UUID groupIdToSelect) {
+        AppWindow.threadPool.submit(() -> {
+            List<StudentGroupDto> fetchedGroups = studentGroupService.getAll();
+            SwingUtilities.invokeLater(() -> {
+                groups.clear();
+                groups.addAll(fetchedGroups);
+                if (groupsTableModel != null) {
+                    groupsTableModel.fireTableDataChanged();
+                }
+
+                if (groupIdToSelect != null && !groups.isEmpty()) {
+                    for (int i = 0; i < groups.size(); i++) {
+                        if (groups.get(i).getId().equals(groupIdToSelect)) {
+                            groupsTable.setRowSelectionInterval(i, i);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
     }
 
     private static class GroupsTableModel extends AbstractTableModel {

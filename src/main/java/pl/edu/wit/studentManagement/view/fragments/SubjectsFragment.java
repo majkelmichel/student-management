@@ -10,6 +10,7 @@ import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
 import pl.edu.wit.studentManagement.translations.Translator;
+import pl.edu.wit.studentManagement.view.AppWindow;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
 import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
 import pl.edu.wit.studentManagement.view.interfaces.Fragment;
@@ -19,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,9 +41,7 @@ public class SubjectsFragment implements Fragment {
     public SubjectsFragment() {
         panel = new JPanel(new BorderLayout());
 
-        List<SubjectDto> subjects = subjectService.getAllSubjects();
-
-        var leftPanel = createLeftPanel(subjects);
+        var leftPanel = createLeftPanel();
         var rightPanel = createDetailsPanel();
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
@@ -49,16 +49,36 @@ public class SubjectsFragment implements Fragment {
 
         panel.add(splitPane, BorderLayout.CENTER);
 
+        reloadSubjects();
+
         setDetailsEditable(false);
     }
 
-    private JPanel createLeftPanel(List<SubjectDto> subjects) {
+    private void reloadSubjects() {
+        AppWindow.threadPool.submit(() -> {
+            List<SubjectDto> subjects = subjectService.getAllSubjects();
+            if (subjects == null) {
+                subjects = new ArrayList<>();
+            }
+
+            final List<SubjectDto> finalSubjects = subjects;
+
+            SwingUtilities.invokeLater(() -> {
+                listModel.clear();
+                for (SubjectDto s : finalSubjects) {
+                    listModel.addElement(s);
+                }
+                if (!listModel.isEmpty()) {
+                    subjectsList.setSelectedIndex(0);
+                }
+            });
+        });
+    }
+
+    private JPanel createLeftPanel() {
         JPanel leftPanel = new JPanel(new BorderLayout(4, 4));
 
         listModel = new DefaultListModel<>();
-        for (SubjectDto s : subjects) {
-            listModel.addElement(s);
-        }
 
         subjectsList = new JList<>(listModel);
         subjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
