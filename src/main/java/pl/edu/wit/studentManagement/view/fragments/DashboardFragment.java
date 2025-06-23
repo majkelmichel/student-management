@@ -1,5 +1,6 @@
 package pl.edu.wit.studentManagement.view.fragments;
 
+import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.AppWindow;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class DashboardFragment {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
 
         JButton studentButton = addBigButton(
-                "Studenci",
+                Translator.translate("students"),
                 studentColor,
                 loadIcon("icons/student.png"),
                 e -> AppWindow.navigateToStudents()
@@ -36,7 +37,7 @@ public class DashboardFragment {
         buttonsPanel.add(studentButton);
 
         JButton groupButton = addBigButton(
-                "Grupy",
+                Translator.translate("groups"),
                 groupColor,
                 loadIcon("icons/group.png"),
                 e -> AppWindow.navigateToGroups()
@@ -44,7 +45,7 @@ public class DashboardFragment {
         buttonsPanel.add(groupButton);
 
         JButton subjectButton = addBigButton(
-                "Przedmioty",
+                Translator.translate("subjects"),
                 subjectColor,
                 loadIcon("icons/subject.png"),
                 e -> AppWindow.navigateToSubjects()
@@ -52,7 +53,7 @@ public class DashboardFragment {
         buttonsPanel.add(subjectButton);
 
         JButton gradesButton = addBigButton(
-                "Oceny",
+                Translator.translate("grades"),
                 gradeColor,
                 loadIcon("icons/grade.png"),
                 e -> AppWindow.navigateToGrades()

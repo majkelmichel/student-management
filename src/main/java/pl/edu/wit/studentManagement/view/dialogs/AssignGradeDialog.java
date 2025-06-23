@@ -1,6 +1,7 @@
 package pl.edu.wit.studentManagement.view.dialogs;
 
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,13 +40,13 @@ public class AssignGradeDialog {
         JPanel dialogPanel = new JPanel();
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
 
-        JLabel studentLabel = new JLabel("Student: " + studentName);
+        JLabel studentLabel = new JLabel(Translator.translate("student") + ": " + studentName);
         studentLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dialogPanel.add(studentLabel);
 
         dialogPanel.add(Box.createVerticalStrut(8));
 
-        JLabel criterionLabel = new JLabel("Kryterium:");
+        JLabel criterionLabel = new JLabel(Translator.translate("gradeCriterion.name") + ":");
         criterionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dialogPanel.add(criterionLabel);
 
@@ -68,9 +69,9 @@ public class AssignGradeDialog {
         JLabel rangeLabel = new JLabel();
         GradeCriterionDto initialCriterion = (GradeCriterionDto) criteriaCombo.getSelectedItem();
         if (initialCriterion != null) {
-            rangeLabel.setText("Zakres punktów: 0 - " + initialCriterion.getMaxPoints());
+            rangeLabel.setText(Translator.translate("gradeCriterion.pointsRange") + " 0 - " + initialCriterion.getMaxPoints());
         } else {
-            rangeLabel.setText("Zakres punktów: -");
+            rangeLabel.setText(Translator.translate("gradeCriterion.pointsRange") + ": -");
         }
         rangeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dialogPanel.add(Box.createVerticalStrut(4));
@@ -79,22 +80,22 @@ public class AssignGradeDialog {
         criteriaCombo.addActionListener(e -> {
             GradeCriterionDto selected = (GradeCriterionDto) criteriaCombo.getSelectedItem();
             if (selected != null) {
-                rangeLabel.setText("Zakres punktów: 0 - " + selected.getMaxPoints());
+                rangeLabel.setText(Translator.translate("gradeCriterion.pointsRange") + ": 0 - " + selected.getMaxPoints());
             } else {
-                rangeLabel.setText("Zakres punktów: -");
+                rangeLabel.setText(Translator.translate("gradeCriterion.pointsRange") + ": -");
             }
         });
 
         dialogPanel.add(Box.createVerticalStrut(8));
 
-        JLabel gradeLabel = new JLabel("Punkty:");
+        JLabel gradeLabel = new JLabel(Translator.translate("grade.points") + ":");
         gradeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dialogPanel.add(gradeLabel);
 
         JTextField gradeField = new JTextField();
         gradeField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JCheckBox noGradeCheckBox = new JCheckBox("Bez oceny");
+        JCheckBox noGradeCheckBox = new JCheckBox(Translator.translate("grade.noGrade"));
         noGradeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         noGradeCheckBox.addActionListener(e -> {
@@ -111,7 +112,7 @@ public class AssignGradeDialog {
         dialogPanel.add(noGradeCheckBox);
 
         while (true) {
-            int result = JOptionPane.showConfirmDialog(parent, dialogPanel, "Ustaw ocenę", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(parent, dialogPanel, Translator.translate("grade.set"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result != JOptionPane.OK_OPTION) {
                 return false;
             }
@@ -119,7 +120,7 @@ public class AssignGradeDialog {
             boolean noGrade = noGradeCheckBox.isSelected();
             String gradeText = gradeField.getText().trim();
             if (selected == null) {
-                JOptionPane.showMessageDialog(parent, "Wybierz kryterium.", "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, Translator.translate("grade.gradeCriterion.empty"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                 continue;
             }
             if (noGrade) {
@@ -128,13 +129,13 @@ public class AssignGradeDialog {
                 return true;
             }
             if (gradeText.isEmpty()) {
-                JOptionPane.showMessageDialog(parent, "Podaj ocenę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, Translator.translate("grade.wrongGrade"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                 continue;
             }
             try {
                 byte parsedGrade = Byte.parseByte(gradeText);
                 if (parsedGrade < 0 || parsedGrade > selected.getMaxPoints()) {
-                    JOptionPane.showMessageDialog(parent, "Ocena musi być w zakresie 0-" + selected.getMaxPoints(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, Translator.translate("grade.value.outOfRange"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
                 this.grade = parsedGrade;
@@ -142,7 +143,7 @@ public class AssignGradeDialog {
                 this.noGradeSelected = false;
                 return true;
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(parent, "Ocena musi być liczbą.", "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, Translator.translate("grade.wrongFormat"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }

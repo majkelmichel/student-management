@@ -4,6 +4,7 @@ import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentService;
 import pl.edu.wit.studentManagement.service.dto.student.CreateStudentDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,24 +35,24 @@ public class AddStudentDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Imię:"), gbc);
+        panel.add(new JLabel(Translator.translate("first.name") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(firstNameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Nazwisko:"), gbc);
+        panel.add(new JLabel(Translator.translate("last.name") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(lastNameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("Nr albumu:"), gbc);
+        panel.add(new JLabel(Translator.translate("student.id") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(albumField, gbc);
 
         while (true) {
-            int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj studenta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(parent, panel, Translator.translate("student.add"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
                 String firstName = firstNameField.getText().trim();
@@ -66,7 +67,7 @@ public class AddStudentDialog {
                     ));
                     return true;
                 } catch (ValidationException e) {
-                    JOptionPane.showMessageDialog(parent, e.getMessageKey(), "Błąd walidacji", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, Translator.translate(e.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 return false;

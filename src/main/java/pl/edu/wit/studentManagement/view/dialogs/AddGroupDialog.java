@@ -4,6 +4,7 @@ import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.StudentGroupService;
 import pl.edu.wit.studentManagement.service.dto.studentGroup.CreateStudentGroupDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,24 +36,24 @@ public class AddGroupDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Kod grupy:"), gbc);
+        panel.add(new JLabel(Translator.translate("studentGroup.code") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(codeField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Specjalizacja:"), gbc);
+        panel.add(new JLabel(Translator.translate("studenGroup.specialization") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(specField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("Opis:"), gbc);
+        panel.add(new JLabel(Translator.translate("description") + ":"), gbc);
         gbc.gridx = 1;
         panel.add(descField, gbc);
 
         while (true) {
-            int result = JOptionPane.showConfirmDialog(parent, panel, "Dodaj grupę", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(parent, panel, Translator.translate("studentGroup.add"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
                 String code = codeField.getText().trim();
@@ -69,7 +70,7 @@ public class AddGroupDialog {
                     groupService.create(dto);
                     return true;
                 } catch (ValidationException ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 return false;

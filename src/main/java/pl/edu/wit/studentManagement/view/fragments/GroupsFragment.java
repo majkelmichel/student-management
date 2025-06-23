@@ -12,6 +12,7 @@ import pl.edu.wit.studentManagement.service.dto.studentGroup.UpdateStudentGroupD
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.CreateStudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AddGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignStudentToGroupDialog;
 import pl.edu.wit.studentManagement.view.dialogs.AssignSubjectToGroupDialog;
@@ -68,8 +69,8 @@ public class GroupsFragment {
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JButton addButton = new JButton("Dodaj grupę");
-        JButton removeButton = new JButton("Usuń grupę");
+        JButton addButton = new JButton(Translator.translate("studentGroup.add"));
+        JButton removeButton = new JButton(Translator.translate("studentGroup.delete"));
 
         actionsPanel.add(addButton);
         actionsPanel.add(Box.createHorizontalStrut(8));
@@ -89,9 +90,9 @@ public class GroupsFragment {
     private JPanel createDetailsPanel() {
         var detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
-        detailsPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły grupy"));
+        detailsPanel.setBorder(BorderFactory.createTitledBorder(Translator.translate("studentGroup.details")));
 
-        detailsPanel.add(new JLabel("Kod grupy:"));
+        detailsPanel.add(new JLabel(Translator.translate("studentGroup.code") + ":"));
         codeField = new JTextField();
         codeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
         codeField.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -99,7 +100,7 @@ public class GroupsFragment {
 
         detailsPanel.add(Box.createVerticalStrut(8));
 
-        detailsPanel.add(new JLabel("Specjalizacja:"));
+        detailsPanel.add(new JLabel(Translator.translate("studentGroup.specialization") + ":"));
         specializationField = new JTextField();
         specializationField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
         specializationField.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -107,7 +108,7 @@ public class GroupsFragment {
 
         detailsPanel.add(Box.createVerticalStrut(8));
 
-        detailsPanel.add(new JLabel("Opis:"));
+        detailsPanel.add(new JLabel(Translator.translate("studentGroup.details") + ":"));
         descriptionArea = new JTextArea(3, 20);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
@@ -121,7 +122,7 @@ public class GroupsFragment {
 
         detailsPanel.add(Box.createVerticalStrut(8));
 
-        saveButton = new JButton("Zapisz zmiany");
+        saveButton = new JButton(Translator.translate("save.changes"));
         saveButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsPanel.add(saveButton);
 
@@ -132,7 +133,7 @@ public class GroupsFragment {
 
         JPanel studentsPanel = new JPanel();
         studentsPanel.setLayout(new BoxLayout(studentsPanel, BoxLayout.Y_AXIS));
-        studentsPanel.add(new JLabel("Studenci w grupie:"));
+        studentsPanel.add(new JLabel(Translator.translate("studentGroup.assignedStudents") + ":"));
         groupStudents = new java.util.ArrayList<>();
         groupStudentsTableModel = new GroupStudentsTableModel(groupStudents);
         groupStudentsTable = new JTable(groupStudentsTableModel);
@@ -147,14 +148,14 @@ public class GroupsFragment {
         studentsActionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         studentsActionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        var assignStudentButton = new JButton("Przypisz studentów do grupy");
+        var assignStudentButton = new JButton(Translator.translate("studentGroup.assignStudentToGroup"));
         assignStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         assignStudentButton.addActionListener(e -> handleAssignStudentsToGroup());
         studentsActionsPanel.add(assignStudentButton);
 
         studentsActionsPanel.add(Box.createHorizontalStrut(8));
 
-        var removeStudentButton = new JButton("Usuń z grupy");
+        var removeStudentButton = new JButton(Translator.translate("studentGroup.removeStudentFromGroup"));
         removeStudentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         removeStudentButton.addActionListener(e -> handleRemoveStudentFromGroup());
         studentsActionsPanel.add(removeStudentButton);
@@ -163,7 +164,7 @@ public class GroupsFragment {
 
         JPanel subjectsPanel = new JPanel();
         subjectsPanel.setLayout(new BoxLayout(subjectsPanel, BoxLayout.Y_AXIS));
-        subjectsPanel.add(new JLabel("Przypisane przedmioty:"));
+        subjectsPanel.add(new JLabel(Translator.translate("studentGroup.assignedSubjects") + ":"));
         groupSubjects = new java.util.ArrayList<>();
         groupSubjectsListModel = new DefaultListModel<>();
         groupSubjectsList = new JList<>(groupSubjectsListModel);
@@ -177,14 +178,14 @@ public class GroupsFragment {
         subjectActionsPanel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
         subjectActionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        var assignSubjectButton = new JButton("Przypisz przedmiot");
+        var assignSubjectButton = new JButton(Translator.translate("studentGroup.assignSubjectToGroup"));
         assignSubjectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         assignSubjectButton.addActionListener(e -> handleAssignSubjectToGroup());
         subjectActionsPanel.add(assignSubjectButton);
 
         subjectActionsPanel.add(Box.createHorizontalStrut(8));
 
-        var removeSubjectButton = new JButton("Usuń przypisanie");
+        var removeSubjectButton = new JButton(Translator.translate("studentGroup.removeSubjectFromGroup"));
         removeSubjectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         removeSubjectButton.addActionListener(e -> handleRemoveSubjectFromGroup());
         subjectActionsPanel.add(removeSubjectButton);
@@ -234,8 +235,8 @@ public class GroupsFragment {
         var group = groups.get(selectedRow);
         int result = JOptionPane.showConfirmDialog(
                 panel,
-                "Czy na pewno usunąć grupę?",
-                "Potwierdzenie usunięcia",
+                Translator.translate("confirm.group.deletion"),
+                Translator.translate("confirm.deletion.title"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
         );
@@ -245,7 +246,7 @@ public class GroupsFragment {
             reloadGroups();
             clearDetails();
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, getTranslation(ex.getMessageKey()), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -307,16 +308,15 @@ public class GroupsFragment {
             reloadGroups();
             groupsTable.setRowSelectionInterval(selectedRow, selectedRow);
             handleGroupSelected();
-            JOptionPane.showMessageDialog(panel, "Grupa została zaktualizowana.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, getTranslation(ex.getMessageKey()), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void handleAssignStudentsToGroup() {
         int selectedGroupRow = groupsTable.getSelectedRow();
         if (selectedGroupRow == -1) {
-            JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("studentGroup.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         AssignStudentToGroupDialog dialog = new AssignStudentToGroupDialog();
@@ -329,7 +329,7 @@ public class GroupsFragment {
             try {
                 studentService.assignStudentToGroup(studentId, group.getId());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd przypisywania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessage()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             }
         }
         reloadGroupStudents(group.getId());
@@ -339,7 +339,7 @@ public class GroupsFragment {
         int selectedStudentRow = groupStudentsTable.getSelectedRow();
 
         if (selectedStudentRow == -1) {
-            JOptionPane.showMessageDialog(panel, "Wybierz studenta do usunięcia z grupy.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("student.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -347,8 +347,8 @@ public class GroupsFragment {
 
         var result = JOptionPane.showConfirmDialog(
                 panel,
-                "Czy na pewno usunąć studenta z grupy?",
-                "Potwierdzenie usunięcia",
+                Translator.translate("confirm.removeStudentFromGroup"),
+                Translator.translate("confirm.deletion.title"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
         );
@@ -365,14 +365,14 @@ public class GroupsFragment {
                 reloadGroupStudents(group.getId());
             }
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void handleAssignSubjectToGroup() {
         int selectedGroupRow = groupsTable.getSelectedRow();
         if (selectedGroupRow == -1) {
-            JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("studentGroup.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         var group = groups.get(selectedGroupRow);
@@ -381,7 +381,7 @@ public class GroupsFragment {
         allSubjects.removeIf(subject -> groupSubjects.stream().anyMatch(s -> s.getId().equals(subject.getId())));
 
         if (allSubjects.isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "Brak dostępnych przedmiotów do przypisania.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("studentGroup.noSubjectsToAssign"), Translator.translate("information"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -394,7 +394,7 @@ public class GroupsFragment {
                 groupSubjectAssignmentService.createAssignment(dto);
                 reloadGroupSubjects(group.getId());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Błąd przypisywania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessage()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -404,11 +404,11 @@ public class GroupsFragment {
         int selectedSubjectIndex = groupSubjectsList.getSelectedIndex();
 
         if (selectedGroupRow == -1) {
-            JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("studentGroup.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (selectedSubjectIndex == -1) {
-            JOptionPane.showMessageDialog(panel, "Wybierz przedmiot do usunięcia z grupy.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("subject.notSelected"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -423,8 +423,8 @@ public class GroupsFragment {
         if (assignment.isPresent()) {
             int result = JOptionPane.showConfirmDialog(
                     panel,
-                    "Czy na pewno usunąć przypisanie przedmiotu?",
-                    "Potwierdzenie usunięcia",
+                    Translator.translate("studentGroup.confirmRemoveSubjectFromGroup"),
+                    Translator.translate("confirm.deletion.title"),
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
             );
@@ -442,12 +442,12 @@ public class GroupsFragment {
         groupsTableModel.fireTableDataChanged();
     }
 
-    private String getTranslation(String key) {
-        return key;
-    }
-
     private static class GroupsTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"Kod grupy", "Specjalizacja", "Opis"};
+        private final String[] columnNames = {
+                Translator.translate("studentGroup.code"),
+                Translator.translate("studentGroup.specialization"),
+                Translator.translate("studentGroup.description")
+        };
         private final List<StudentGroupDto> groups;
 
         public GroupsTableModel(List<StudentGroupDto> groups) {
@@ -487,7 +487,7 @@ public class GroupsFragment {
     }
 
     private static class GroupStudentsTableModel extends AbstractTableModel {
-        private final String[] columns = {"Imię", "Nazwisko", "Album"};
+        private final String[] columns = {Translator.translate("first.name"), Translator.translate("last.name"), Translator.translate("student.id")};
         private final List<StudentDto> students;
 
         public GroupStudentsTableModel(List<StudentDto> students) {

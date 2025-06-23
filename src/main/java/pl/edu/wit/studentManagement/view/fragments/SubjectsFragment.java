@@ -9,6 +9,7 @@ import pl.edu.wit.studentManagement.service.dto.gradeCriterion.UpdateGradeCriter
 import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
+import pl.edu.wit.studentManagement.translations.Translator;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
 import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
 
@@ -47,7 +48,7 @@ public class SubjectsFragment {
 
         panel.add(splitPane, BorderLayout.CENTER);
 
-        setDetailsEditable(false); // domyślnie zablokowane pole
+        setDetailsEditable(false);
     }
 
     private JPanel createLeftPanel(List<SubjectDto> subjects) {
@@ -86,8 +87,8 @@ public class SubjectsFragment {
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.X_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JButton addButton = new JButton("Dodaj przedmiot");
-        JButton removeButton = new JButton("Usuń przedmiot");
+        JButton addButton = new JButton(Translator.translate("subject.add"));
+        JButton removeButton = new JButton(Translator.translate("subject.delete"));
 
         actionsPanel.add(addButton);
         actionsPanel.add(Box.createHorizontalStrut(8));
@@ -102,7 +103,7 @@ public class SubjectsFragment {
     private JPanel createDetailsPanel() {
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
-        detailsPanel.setBorder(BorderFactory.createTitledBorder("Szczegóły przedmiotu"));
+        detailsPanel.setBorder(BorderFactory.createTitledBorder(Translator.translate("subject.details")));
 
         renderSubjectNameField(detailsPanel);
         renderCriteriaSection(detailsPanel);
@@ -111,7 +112,7 @@ public class SubjectsFragment {
     }
 
     private void renderSubjectNameField(JPanel panel) {
-        panel.add(new JLabel("Nazwa przedmiotu:"));
+        panel.add(new JLabel(Translator.translate("subject.name") + ":"));
 
         subjectNameField = new JTextField();
         subjectNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
@@ -125,15 +126,15 @@ public class SubjectsFragment {
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         panel.add(actionsPanel);
 
-        JButton saveButton = new JButton("Zapisz zmiany");
+        JButton saveButton = new JButton(Translator.translate("save.changes"));
         saveButton.addActionListener(e -> handleSaveSubject());
         actionsPanel.add(saveButton);
     }
 
     private void renderCriteriaSection(JPanel panel) {
-        panel.add(new JLabel("Kryteria oceniania:"));
+        panel.add(new JLabel(Translator.translate("grading.criteria") + ":"));
 
-        String[] colNames = {"Nazwa kryterium", "Maks. liczba punktów"};
+        String[] colNames = {Translator.translate("gradeCriterion.name"), Translator.translate("max.points")};
         criteriaTableModel = new DefaultTableModel(colNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -161,9 +162,9 @@ public class SubjectsFragment {
         criteriaActions.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         criteriaActions.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton addCriterionBtn = new JButton("Dodaj kryterium");
-        JButton editCriterionBtn = new JButton("Edytuj kryterium");
-        JButton removeCriterionBtn = new JButton("Usuń kryterium");
+        JButton addCriterionBtn = new JButton(Translator.translate("gradeCriterion.add"));
+        JButton editCriterionBtn = new JButton(Translator.translate("gradeCriterion.edit"));
+        JButton removeCriterionBtn = new JButton(Translator.translate("gradeCriterion.delete"));
 
         criteriaActions.add(addCriterionBtn);
         criteriaActions.add(Box.createHorizontalStrut(8));
@@ -217,7 +218,7 @@ public class SubjectsFragment {
     }
 
     private void handleAddSubject() {
-        var name = JOptionPane.showInputDialog(panel, "Nazwa przedmiotu:", "Dodaj przedmiot", JOptionPane.PLAIN_MESSAGE);
+        var name = JOptionPane.showInputDialog(panel, Translator.translate("subject.name"), Translator.translate("subject.add"), JOptionPane.PLAIN_MESSAGE);
 
         if (name == null) {
             return;
@@ -227,7 +228,7 @@ public class SubjectsFragment {
             listModel.addElement(newSubject);
             subjectsList.setSelectedValue(newSubject, true);
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -236,7 +237,7 @@ public class SubjectsFragment {
         if (idx == -1)
             return;
 
-        var result = JOptionPane.showConfirmDialog(panel, "Czy na pewno chcesz usunąć ten przedmiot?", "Usuń przedmiot", JOptionPane.YES_NO_OPTION);
+        var result = JOptionPane.showConfirmDialog(panel, Translator.translate("confirm.subject.deletion"), Translator.translate("subject.delete"), JOptionPane.YES_NO_OPTION);
         if (result != JOptionPane.YES_OPTION)
             return;
 
@@ -250,7 +251,7 @@ public class SubjectsFragment {
                 }
             }
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -277,9 +278,9 @@ public class SubjectsFragment {
             );
             criteriaTableModel.addRow(new Object[]{newCriterion.getName(), (int) newCriterion.getMaxPoints()});
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("gradeCriterion.wrongFormat"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -287,7 +288,7 @@ public class SubjectsFragment {
         int row = criteriaTable.getSelectedRow();
         SubjectDto selected = subjectsList.getSelectedValue();
         if (row == -1 || selected == null) {
-            JOptionPane.showMessageDialog(panel, "Nie wybrano kryterium do edycji!", "Błąd", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("gradeCriterion.notSelected"), Translator.translate("error"), JOptionPane.WARNING_MESSAGE);
             return;
         }
         var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
@@ -317,9 +318,9 @@ public class SubjectsFragment {
             criteriaTableModel.setValueAt(updated.getName(), row, 0);
             criteriaTableModel.setValueAt((int) updated.getMaxPoints(), row, 1);
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate("gradeCriterion.wrongFormat"), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -346,7 +347,7 @@ public class SubjectsFragment {
                 criteriaTableModel.removeRow(row);
             }
         } catch (ValidationException ex) {
-            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -367,11 +368,9 @@ public class SubjectsFragment {
                     listModel.set(idx, updated);
                     subjectsList.setSelectedIndex(idx);
 
-                    JOptionPane.showMessageDialog(panel, "Przedmiot został zaktualizowany.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
-
                     return;
                 } catch (ValidationException ex) {
-                    JOptionPane.showMessageDialog(panel, "Błąd: " + ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, Translator.translate(ex.getMessageKey()), Translator.translate("error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
 
