@@ -125,7 +125,7 @@ abstract class DataStreamHandler<T extends Entity> {
      * @param out  the output stream to write to
      * @throws IOException if an I/O error occurs during writing
      */
-    void writeUuid(UUID uuid, DataOutputStream out) throws IOException {
+    protected void writeUuid(UUID uuid, DataOutputStream out) throws IOException {
         if (uuid == null) {
             out.writeBoolean(false);
             return;
@@ -144,7 +144,7 @@ abstract class DataStreamHandler<T extends Entity> {
      * @return the UUID read from the stream, or null if the stored value was null
      * @throws IOException if an I/O error occurs during reading
      */
-    UUID readUuid(DataInputStream in) throws IOException {
+    protected UUID readUuid(DataInputStream in) throws IOException {
         if (!in.readBoolean()) {
             return null;
         }

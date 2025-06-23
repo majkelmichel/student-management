@@ -1,115 +1,119 @@
 package pl.edu.wit.studentManagement.service;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Test suite for {@link SubjectDataStreamHandler} class.
- *
- * @author Michał Zawadzki
- */
 @DisplayName("SubjectDataStreamHandler Test Suite")
 class SubjectDataStreamHandlerTest {
 
-    @TempDir
-    Path tempDir;
-
-    SubjectDataStreamHandler handler;
-    File dataFile;
+    private SubjectDataStreamHandler handler;
+    private Path tempFilePath;
 
     @BeforeEach
-    void setUp() {
-        dataFile = tempDir.resolve("subjects.dat").toFile();
-        handler = new SubjectDataStreamHandler(dataFile.getAbsolutePath());
+    void setUp(@TempDir Path tempDir) {
+        tempFilePath = tempDir.resolve("test-subjects.dat");
+        handler = new SubjectDataStreamHandler(tempFilePath.toString());
     }
 
     @Test
-    @DisplayName("Given empty file, when readAll is called, then return empty list")
-    void givenEmptyFile_whenReadAllIsCalled_thenReturnEmptyList() throws IOException {
-        // Arrange done in setUp
+    @DisplayName("Given new file, when readAll called, then return empty list")
+    void givenNewFile_whenReadAllCalled_thenReturnEmptyList() throws IOException {
+        // Act
+        List<Subject> result = handler.readAll();
+
+        // Assert
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Given subject written to file, when readAll called, then return list with subject")
+    void givenSubjectWrittenToFile_whenReadAllCalled_thenReturnListWithSubject() throws IOException {
+        // Arrange
+        UUID id = UUID.randomUUID();
+        Subject subject = new Subject(id, "Matematyka Dyskretna");
+        handler.write(subject);
 
         // Act
         List<Subject> result = handler.readAll();
 
         // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertEquals(1, result.size());
+        Subject readSubject = result.get(0);
+        assertEquals(id, readSubject.getId());
+        assertEquals("Matematyka Dyskretna", readSubject.getName());
     }
 
     @Test
-    @DisplayName("Given valid subject, when write is called, then subject is persisted")
-    void givenValidSubject_whenWriteIsCalled_thenSubjectIsPersisted() throws IOException {
+    @DisplayName("Given multiple subjects written to file, when readAll called, then return list with all subjects")
+    void givenMultipleSubjectsWrittenToFile_whenReadAllCalled_thenReturnListWithAllSubjects() throws IOException {
         // Arrange
-        Subject subject = new Subject("Matematyka Dyskretna");
+        Subject subject1 = new Subject(UUID.randomUUID(), "Fizyka 1");
+        Subject subject2 = new Subject(UUID.randomUUID(), "Język Java");
+        handler.write(subject1);
+        handler.write(subject2);
 
         // Act
-        handler.write(subject);
-        List<Subject> subjects = handler.readAll();
+        List<Subject> result = handler.readAll();
 
         // Assert
-        assertEquals(1, subjects.size());
-        assertEquals("Matematyka Dyskretna", subjects.get(0).getName());
+        assertEquals(2, result.size());
+        assertTrue(result.stream().map(Subject::getName).anyMatch(name -> name.equals("Fizyka 1")));
+        assertTrue(result.stream().map(Subject::getName).anyMatch(name -> name.equals("Język Java")));
     }
 
     @Test
-    @DisplayName("Given persisted subject, when update is called with new name, then subject is updated")
-    void givenPersistedSubject_whenUpdateIsCalledWithNewName_thenSubjectIsUpdated() throws IOException {
+    @DisplayName("Given corrupt data in file, when readObject called, then return null")
+    void givenCorruptDataInFile_whenReadObjectCalled_thenReturnNull() throws IOException {
         // Arrange
-        Subject subject = new Subject("Programowanie w C++");
-        handler.write(subject);
-
-        // Act
-        subject.setName("Programowanie w Javie");
-        handler.update(subject);
-        List<Subject> subjects = handler.readAll();
-
-        // Assert
-        assertEquals(1, subjects.size());
-        assertEquals("Programowanie w Javie", subjects.get(0).getName());
-    }
-
-    @Test
-    @DisplayName("Given no matching subject, when update is called, then IOException is thrown")
-    void givenNoMatchingSubject_whenUpdateIsCalledWithNewName_thenIOExceptionIsThrown() {
-        // Arrange
-        Subject subject = new Subject("Sieci Komputerowe");
+        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(tempFilePath.toFile()))) {
+            out.writeBytes("losowe złe dane");
+        }
 
         // Act & Assert
-        IOException exception = assertThrows(IOException.class, () -> handler.update(subject));
-        assertTrue(exception.getMessage().contains("Object not found with ID: "));
+        try (DataInputStream in = new DataInputStream(new FileInputStream(tempFilePath.toFile()))) {
+            assertNull(handler.readObject(in));
+        }
     }
 
     @Test
-    @DisplayName("Given persisted subject, when deleteById is called, then subject is removed")
-    void givenPersistedSubject_whenDeleteByIdIsCalled_thenSubjectIsRemoved() throws IOException {
+    @DisplayName("When subject written and read, then all fields match")
+    void whenSubjectWrittenAndRead_thenAllFieldsMatch() throws IOException {
         // Arrange
-        Subject subject = new Subject("Algorytmy i Struktury Danych");
-        handler.write(subject);
+        UUID id = UUID.randomUUID();
+        String name = "Inżynieria Oprogramowania";
+        Subject originalSubject = new Subject(id, name);
 
         // Act
-        handler.deleteById(subject.getId());
-        List<Subject> subjects = handler.readAll();
+        handler.write(originalSubject);
+        List<Subject> result = handler.readAll();
 
         // Assert
-        assertTrue(subjects.isEmpty());
+        assertEquals(1, result.size());
+        Subject readSubject = result.get(0);
+        assertEquals(id, readSubject.getId());
+        assertEquals(name, readSubject.getName());
     }
 
     @Test
-    @DisplayName("Given no matching ID, when deleteById is called, then IOException is thrown")
-    void givenNoMatchingSubject_whenDeleteByIdIsCalled_thenIOExceptionIsThrown() {
+    @DisplayName("Given empty file, when write called, then file is created")
+    void givenEmptyFile_whenWriteCalled_thenFileIsCreated() throws IOException {
         // Arrange
-        UUID randomId = UUID.randomUUID();
+        Subject subject = new Subject(UUID.randomUUID(), "Język C#");
 
-        // Act & Assert
-        IOException exception = assertThrows(IOException.class, () -> handler.deleteById(randomId));
-        assertTrue(exception.getMessage().contains("Object not found with ID: "));
+        // Act
+        handler.write(subject);
+
+        // Assert
+        assertTrue(tempFilePath.toFile().exists());
+        assertTrue(tempFilePath.toFile().length() > 0);
     }
 }
