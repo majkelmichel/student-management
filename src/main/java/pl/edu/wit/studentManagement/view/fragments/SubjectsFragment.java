@@ -190,25 +190,21 @@ public class SubjectsFragment {
 
     private void updateDetailsPanel() {
         SubjectDto selected = subjectsList.getSelectedValue();
-
-        if (selected != null) {
-            var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
-
-            subjectNameField.setText(selected.getName());
-            setDetailsEditable(true);
-            criteriaTableModel.setRowCount(0);
-
-            if (subjectWithGradeCriteria.isPresent()) {
-                var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
-
-                for (GradeCriterionDto c : criteria) {
-                    criteriaTableModel.addRow(new Object[]{c.getName(), (int) c.getMaxPoints()});
-                }
-            }
-        } else {
+        if (selected == null) {
             subjectNameField.setText("");
             criteriaTableModel.setRowCount(0);
             setDetailsEditable(false);
+            return;
+        }
+        var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
+        subjectNameField.setText(selected.getName());
+        setDetailsEditable(true);
+        criteriaTableModel.setRowCount(0);
+        if (subjectWithGradeCriteria.isPresent()) {
+            var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
+            for (GradeCriterionDto c : criteria) {
+                criteriaTableModel.addRow(new Object[]{c.getName(), (int) c.getMaxPoints()});
+            }
         }
     }
 
@@ -241,10 +237,8 @@ public class SubjectsFragment {
             return;
 
         var result = JOptionPane.showConfirmDialog(panel, "Czy na pewno chcesz usunąć ten przedmiot?", "Usuń przedmiot", JOptionPane.YES_NO_OPTION);
-
-        if (result != JOptionPane.YES_OPTION) {
+        if (result != JOptionPane.YES_OPTION)
             return;
-        }
 
         SubjectDto selected = subjectsList.getSelectedValue();
         try {
@@ -263,29 +257,29 @@ public class SubjectsFragment {
 
     private void handleAddCriterion(JPanel panel) {
         SubjectDto selected = subjectsList.getSelectedValue();
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
         var res = AddGradeCriterionDialog.showDialog(panel);
-
         if (res == null)
             return;
 
         String name = res[0].trim();
         String ptsStr = res[1].trim();
+        if (name.isEmpty() || ptsStr.isEmpty())
+            return;
 
-        if (!name.isEmpty() && !ptsStr.isEmpty()) {
-            try {
-                int pts = Integer.parseInt(ptsStr);
-                var newCriterion = subjectService.addCriterionToSubject(
-                        selected.getId(),
-                        new CreateGradeCriterionDto(name, (byte) pts)
-                );
-                criteriaTableModel.addRow(new Object[]{newCriterion.getName(), (int) newCriterion.getMaxPoints()});
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
+        try {
+            int pts = Integer.parseInt(ptsStr);
+            var newCriterion = subjectService.addCriterionToSubject(
+                    selected.getId(),
+                    new CreateGradeCriterionDto(name, (byte) pts)
+            );
+            criteriaTableModel.addRow(new Object[]{newCriterion.getName(), (int) newCriterion.getMaxPoints()});
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -296,58 +290,63 @@ public class SubjectsFragment {
             JOptionPane.showMessageDialog(panel, "Nie wybrano kryterium do edycji!", "Błąd", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
-        if (subjectWithGradeCriteria.isPresent()) {
-            var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
+        if (subjectWithGradeCriteria.isEmpty())
+            return;
 
-            if (row < criteria.size()) {
-                var criterion = criteria.get(row);
-                var res = EditGradeCriterionDialog.showDialog(panel, criterion.getName(), String.valueOf(criterion.getMaxPoints()));
+        var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
+        if (row >= criteria.size())
+            return;
 
-                if (res == null) return;
+        var criterion = criteria.get(row);
+        var res = EditGradeCriterionDialog.showDialog(panel, criterion.getName(), String.valueOf(criterion.getMaxPoints()));
+        if (res == null)
+            return;
 
-                String name = res[0].trim();
-                String ptsStr = res[1].trim();
-                if (!name.isEmpty() && !ptsStr.isEmpty()) {
-                    try {
-                        int pts = Integer.parseInt(ptsStr);
+        String name = res[0].trim();
+        String ptsStr = res[1].trim();
+        if (name.isEmpty() || ptsStr.isEmpty())
+            return;
 
-                        GradeCriterionDto updated = subjectService.updateGradeCriterion(
-                                criterion.getId(),
-                                new UpdateGradeCriterionDto(name, (byte) pts)
-                        );
-                        criteriaTableModel.setValueAt(updated.getName(), row, 0);
-                        criteriaTableModel.setValueAt((int) updated.getMaxPoints(), row, 1);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
-                    } catch (ValidationException ex) {
-                        JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
+        try {
+            int pts = Integer.parseInt(ptsStr);
+            GradeCriterionDto updated = subjectService.updateGradeCriterion(
+                    criterion.getId(),
+                    new UpdateGradeCriterionDto(name, (byte) pts)
+            );
+            criteriaTableModel.setValueAt(updated.getName(), row, 0);
+            criteriaTableModel.setValueAt((int) updated.getMaxPoints(), row, 1);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void handleRemoveCriterion() {
         int row = criteriaTable.getSelectedRow();
         SubjectDto selected = subjectsList.getSelectedValue();
-        if (row != -1 && selected != null) {
-            Optional<SubjectWithGradeCriteriaDto> subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
-            if (subjectWithGradeCriteria.isPresent()) {
-                List<GradeCriterionDto> criteria = subjectWithGradeCriteria.get().getGradeCriteria();
-                if (row < criteria.size()) {
-                    GradeCriterionDto criterion = criteria.get(row);
-                    try {
-                        boolean deleted = subjectService.deleteGradeCriterion(criterion.getId());
-                        if (deleted) {
-                            criteriaTableModel.removeRow(row);
-                        }
-                    } catch (ValidationException ex) {
-                        JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+        if (row == -1 || selected == null)
+            return;
+
+        var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
+        if (subjectWithGradeCriteria.isEmpty())
+            return;
+
+        var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
+
+        if (row >= criteria.size())
+            return;
+
+        var criterion = criteria.get(row);
+
+        try {
+            boolean deleted = subjectService.deleteGradeCriterion(criterion.getId());
+            if (deleted) {
+                criteriaTableModel.removeRow(row);
             }
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 

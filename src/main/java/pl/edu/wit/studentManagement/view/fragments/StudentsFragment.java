@@ -1,4 +1,3 @@
-
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -177,9 +176,8 @@ public class StudentsFragment {
     }
 
     private void updateDetailsPanel() {
-        if (studentsTable == null) {
+        if (studentsTable == null)
             return;
-        }
 
         int selectedRow = studentsTable.getSelectedRow();
 
@@ -206,53 +204,53 @@ public class StudentsFragment {
         AddStudentDialog dialog = new AddStudentDialog();
         var added = dialog.showDialog(panel);
 
-        if (added)
-            fetchStudents();
+        if (!added)
+            return;
+
+        fetchStudents();
     }
 
     private void handleRemoveStudentButton(ActionEvent e) {
         int selectedRow = studentsTable.getSelectedRow();
-        if (selectedRow != -1 && selectedRow < currentStudents.size()) {
-            int result = JOptionPane.showConfirmDialog(
-                    panel,
-                    "Czy na pewno usunąć studenta?",
-                    "Potwierdzenie usunięcia",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            if (result == JOptionPane.YES_OPTION) {
-                UUID id = currentStudents.get(selectedRow).getId();
-                try {
-                    studentService.deleteStudent(id);
-                    fetchStudents();
-                } catch (ValidationException ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+        if (selectedRow == -1 || selectedRow >= currentStudents.size())
+            return;
+
+        int result = JOptionPane.showConfirmDialog(
+                panel,
+                "Czy na pewno usunąć studenta?",
+                "Potwierdzenie usunięcia",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        if (result != JOptionPane.YES_OPTION) return;
+        UUID id = currentStudents.get(selectedRow).getId();
+        try {
+            studentService.deleteStudent(id);
+            fetchStudents();
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void handleSaveStudentButton() {
         int selectedRow = studentsTable.getSelectedRow();
+        if (selectedRow == -1 || selectedRow >= currentStudents.size())
+            return;
 
-        if (selectedRow != -1 && selectedRow < currentStudents.size()) {
-            StudentDto selected = currentStudents.get(selectedRow);
-            UpdateStudentDto updateDto = new UpdateStudentDto();
-            updateDto.setFirstName(firstNameField.getText());
-            updateDto.setLastName(lastNameField.getText());
-            updateDto.setAlbum(albumField.getText());
-            try {
-                studentService.updateStudent(selected.getId(), updateDto);
+        StudentDto selected = currentStudents.get(selectedRow);
+        UpdateStudentDto updateDto = new UpdateStudentDto();
+        updateDto.setFirstName(firstNameField.getText());
+        updateDto.setLastName(lastNameField.getText());
+        updateDto.setAlbum(albumField.getText());
+        try {
+            studentService.updateStudent(selected.getId(), updateDto);
 
-                fetchStudents();
+            fetchStudents();
 
-                studentsTable.setRowSelectionInterval(selectedRow, selectedRow);
-                updateDetailsPanel();
-
-                JOptionPane.showMessageDialog(panel, "Zmiany zostały zapisane.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-            } catch (ValidationException ex) {
-                JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
-            }
+            studentsTable.setRowSelectionInterval(selectedRow, selectedRow);
+            updateDetailsPanel();
+        } catch (ValidationException ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 

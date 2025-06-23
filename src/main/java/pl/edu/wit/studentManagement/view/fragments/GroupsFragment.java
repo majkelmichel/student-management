@@ -224,17 +224,14 @@ public class GroupsFragment {
     private void handleAddGroup() {
         AddGroupDialog dialog = new AddGroupDialog();
         var added = dialog.showDialog(panel);
-        if (added)
-            reloadGroups();
+        if (!added) return;
+        reloadGroups();
     }
 
     private void handleDeleteGroup() {
         int selectedRow = groupsTable.getSelectedRow();
-        if (selectedRow == -1)
-            return;
-
+        if (selectedRow == -1) return;
         var group = groups.get(selectedRow);
-
         int result = JOptionPane.showConfirmDialog(
                 panel,
                 "Czy na pewno usunąć grupę?",
@@ -242,10 +239,7 @@ public class GroupsFragment {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
         );
-
-        if (result != JOptionPane.YES_OPTION)
-            return;
-
+        if (result != JOptionPane.YES_OPTION) return;
         try {
             studentGroupService.delete(group.getId());
             reloadGroups();
@@ -257,30 +251,27 @@ public class GroupsFragment {
 
     private void handleGroupSelected() {
         int selectedRow = groupsTable.getSelectedRow();
-        if (selectedRow != -1) {
-            StudentGroupDto group = groups.get(selectedRow);
-            codeField.setText(group.getCode());
-            specializationField.setText(group.getSpecialization());
-            descriptionArea.setText(group.getDescription());
-            setDetailsEditable(true);
-            reloadGroupStudents(group.getId());
-            reloadGroupSubjects(group.getId());
-        } else {
+        if (selectedRow == -1) {
             clearDetails();
+            return;
         }
+        StudentGroupDto group = groups.get(selectedRow);
+        codeField.setText(group.getCode());
+        specializationField.setText(group.getSpecialization());
+        descriptionArea.setText(group.getDescription());
+        setDetailsEditable(true);
+        reloadGroupStudents(group.getId());
+        reloadGroupSubjects(group.getId());
     }
 
     private void reloadGroupStudents(java.util.UUID groupId) {
         var groupWithStudents = studentGroupService.getWithStudentsById(groupId);
         groupStudents.clear();
-
         if (groupWithStudents.isEmpty()) {
             groupStudentsTableModel.fireTableDataChanged();
             return;
         }
-
         groupStudents.addAll(groupWithStudents.get().getStudents());
-
         groupStudentsTableModel.fireTableDataChanged();
     }
 
@@ -302,7 +293,6 @@ public class GroupsFragment {
 
     private void handleSaveGroup() {
         int selectedRow = groupsTable.getSelectedRow();
-
         if (selectedRow == -1)
             return;
 
@@ -315,10 +305,8 @@ public class GroupsFragment {
         try {
             studentGroupService.update(group.getId(), dto);
             reloadGroups();
-
             groupsTable.setRowSelectionInterval(selectedRow, selectedRow);
             handleGroupSelected();
-
             JOptionPane.showMessageDialog(panel, "Grupa została zaktualizowana.", "Sukces", JOptionPane.INFORMATION_MESSAGE);
         } catch (ValidationException ex) {
             JOptionPane.showMessageDialog(panel, getTranslation(ex.getMessageKey()), "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -331,20 +319,20 @@ public class GroupsFragment {
             JOptionPane.showMessageDialog(panel, "Najpierw wybierz grupę.", "Błąd", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         AssignStudentToGroupDialog dialog = new AssignStudentToGroupDialog();
         var result = dialog.showDialog(panel);
-        if (result != null) {
-            StudentGroupDto group = groups.get(selectedGroupRow);
-            for (var studentId : result.studentIds) {
-                try {
-                    studentService.assignStudentToGroup(studentId, group.getId());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, "Błąd przypisywania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
-                }
+        if (result == null)
+            return;
+
+        StudentGroupDto group = groups.get(selectedGroupRow);
+        for (var studentId : result.studentIds) {
+            try {
+                studentService.assignStudentToGroup(studentId, group.getId());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Błąd przypisywania: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
             }
-            reloadGroupStudents(group.getId());
         }
+        reloadGroupStudents(group.getId());
     }
 
     private void handleRemoveStudentFromGroup() {
