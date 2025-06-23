@@ -1,4 +1,3 @@
-
 package pl.edu.wit.studentManagement.view.fragments;
 
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
@@ -6,11 +5,13 @@ import pl.edu.wit.studentManagement.service.ServiceFactory;
 import pl.edu.wit.studentManagement.service.SubjectService;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.CreateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto;
+import pl.edu.wit.studentManagement.service.dto.gradeCriterion.UpdateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectWithGradeCriteriaDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
+import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -159,9 +160,12 @@ public class SubjectsFragment {
         criteriaActions.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JButton addCriterionBtn = new JButton("Dodaj kryterium");
+        JButton editCriterionBtn = new JButton("Edytuj kryterium");
         JButton removeCriterionBtn = new JButton("Usuń kryterium");
 
         criteriaActions.add(addCriterionBtn);
+        criteriaActions.add(Box.createHorizontalStrut(8));
+        criteriaActions.add(editCriterionBtn);
         criteriaActions.add(Box.createHorizontalStrut(8));
         criteriaActions.add(removeCriterionBtn);
 
@@ -169,7 +173,16 @@ public class SubjectsFragment {
         panel.add(criteriaActions);
 
         addCriterionBtn.addActionListener(e -> handleAddCriterion(panel));
+        editCriterionBtn.addActionListener(e -> handleEditCriterion(panel));
         removeCriterionBtn.addActionListener(e -> handleRemoveCriterion());
+
+        criteriaTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2 && criteriaTable.getSelectedRow() != -1) {
+                    handleEditCriterion(panel);
+                }
+            }
+        });
 
     }
 
@@ -177,7 +190,7 @@ public class SubjectsFragment {
         SubjectDto selected = subjectsList.getSelectedValue();
 
         if (selected != null) {
-            Optional<SubjectWithGradeCriteriaDto> subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
+            var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
 
             subjectNameField.setText(selected.getName());
             setDetailsEditable(true);
@@ -270,6 +283,46 @@ public class SubjectsFragment {
                 JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
             } catch (ValidationException ex) {
                 JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void handleEditCriterion(JPanel panel) {
+        int row = criteriaTable.getSelectedRow();
+        SubjectDto selected = subjectsList.getSelectedValue();
+        if (row == -1 || selected == null) {
+            JOptionPane.showMessageDialog(panel, "Nie wybrano kryterium do edycji!", "Błąd", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        var subjectWithGradeCriteria = subjectService.getSubjectWithGradeCriteriaById(selected.getId());
+        if (subjectWithGradeCriteria.isPresent()) {
+            var criteria = subjectWithGradeCriteria.get().getGradeCriteria();
+
+            if (row < criteria.size()) {
+                var criterion = criteria.get(row);
+                var res = EditGradeCriterionDialog.showDialog(panel, criterion.getName(), String.valueOf(criterion.getMaxPoints()));
+
+                if (res == null) return;
+
+                String name = res[0].trim();
+                String ptsStr = res[1].trim();
+                if (!name.isEmpty() && !ptsStr.isEmpty()) {
+                    try {
+                        int pts = Integer.parseInt(ptsStr);
+
+                        GradeCriterionDto updated = subjectService.updateGradeCriterion(
+                                criterion.getId(),
+                                new UpdateGradeCriterionDto(name, (byte) pts)
+                        );
+                        criteriaTableModel.setValueAt(updated.getName(), row, 0);
+                        criteriaTableModel.setValueAt((int) updated.getMaxPoints(), row, 1);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(panel, "Nieprawidłowa liczba punktów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                    } catch (ValidationException ex) {
+                        JOptionPane.showMessageDialog(panel, ex.getMessageKey(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         }
     }
