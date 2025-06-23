@@ -152,9 +152,11 @@ public class SubjectsFragment {
         criteriaTable.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JScrollPane criteriaScroll = new JScrollPane(criteriaTable);
-        criteriaScroll.setPreferredSize(new Dimension(350, 120));
         criteriaScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+        criteriaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        criteriaScroll.setPreferredSize(null);
         panel.add(criteriaScroll);
+        panel.add(Box.createVerticalGlue());
 
         JPanel criteriaActions = new JPanel();
         criteriaActions.setLayout(new BoxLayout(criteriaActions, BoxLayout.X_AXIS));
