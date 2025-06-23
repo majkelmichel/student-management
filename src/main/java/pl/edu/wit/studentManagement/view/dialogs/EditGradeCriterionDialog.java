@@ -5,6 +5,7 @@ import java.awt.*;
 
 /**
  * Dialog do edycji istniejącego kryterium oceniania (nazwa i maksymalna liczba punktów).
+ *
  * @author Wojciech Berdowski
  */
 public class EditGradeCriterionDialog {

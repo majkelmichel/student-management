@@ -8,7 +8,6 @@ import pl.edu.wit.studentManagement.service.dto.gradeCriterion.GradeCriterionDto
 import pl.edu.wit.studentManagement.service.dto.gradeCriterion.UpdateGradeCriterionDto;
 import pl.edu.wit.studentManagement.service.dto.subject.CreateSubjectDto;
 import pl.edu.wit.studentManagement.service.dto.subject.SubjectDto;
-import pl.edu.wit.studentManagement.service.dto.subject.SubjectWithGradeCriteriaDto;
 import pl.edu.wit.studentManagement.service.dto.subject.UpdateSubjectDto;
 import pl.edu.wit.studentManagement.view.dialogs.AddGradeCriterionDialog;
 import pl.edu.wit.studentManagement.view.dialogs.EditGradeCriterionDialog;
@@ -19,7 +18,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Fragment for managing subjects in the application
