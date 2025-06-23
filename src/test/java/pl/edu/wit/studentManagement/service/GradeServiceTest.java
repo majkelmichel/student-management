@@ -9,16 +9,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
 import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
+import pl.edu.wit.studentManagement.service.dto.grade.UpdateGradeDto;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit test suite for {@link GradeService}, verifying methods handling grades and grade criteria.
+ * Unit test suite for {@link GradeService}, verifying methods handling grades.
  *
  * @author Martin Szum
  */
@@ -160,5 +161,36 @@ class GradeServiceTest {
         assertEquals("grade.wrongGrade", result.getMessageKey());
     }
 
+    @Test
+    @DisplayName("Given existing grade and correct dto, when updateGrade called, then update and return updated grade")
+    void givenExistingGradeAndCorrectDto_whenUpdateGradeCalled_thenUpdateAndReturnUpdatedGrade() {
+        // Arrange
+        Grade grade = new Grade(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), (byte) 50);
+        UpdateGradeDto updateGradeDto = new UpdateGradeDto();
+        updateGradeDto.setGrade((byte) 60);
 
+        when(gradeDao.get(grade.getId())).thenReturn(Optional.of(grade));
+
+        // Act & Assert
+        GradeDto result = assertDoesNotThrow(() -> gradeService.updateGrade(grade.getId(), updateGradeDto));
+        assertNotNull(result);
+        assertEquals(grade.getId(), result.getId());
+        assertEquals(grade.getStudentId(), result.getStudentId());
+        assertEquals(grade.getSubjectId(), result.getSubjectId());
+        assertEquals((byte) 60, result.getGrade());
+        assertEquals(grade.getGradeCriterionId(), result.getGradeCriterionId());
+    }
+
+    @Test
+    @DisplayName("Given existing grade, when deleteGrade called, then delete and return true")
+    void givenExistingGrade_whenDeleteGradeCalled_thenDeleteAndReturnTrue() {
+        // Assert
+        Grade grade = new Grade(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), (byte) 50);
+
+        when(gradeDao.delete(grade.getId())).thenReturn(true);
+        // Act & Assert
+        boolean result = assertDoesNotThrow(() -> gradeService.deleteGrade(grade.getId()));
+        assertTrue(result);
+        verify(gradeDao).delete(grade.getId());
+    }
 }

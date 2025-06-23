@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit test suite for {@link SubjectService}, verifying methods handling grades and grade criteria.
+ * Unit test suite for {@link SubjectService}, verifying methods handling subjects.
  *
  * @author Michał Zawadzki
  */
@@ -246,10 +246,8 @@ class SubjectServiceTest {
         when(gradeDao.getAll()).thenReturn(List.of());
         when(gradeCriterionDao.delete(gradeCriterion.getId())).thenReturn(true);
 
-        // Act
+        // Act & Assert
         boolean result = assertDoesNotThrow(() -> subjectService.deleteGradeCriterion(gradeCriterion.getId()));
-
-        // Assert
         assertTrue(result);
         verify(gradeCriterionDao).delete(gradeCriterion.getId());
     }
@@ -265,10 +263,8 @@ class SubjectServiceTest {
 
         when(gradeCriterionDao.get(gradeCriterion.getId())).thenReturn(Optional.of(gradeCriterion));
 
-        // Act
+        // Act & Assert
         GradeCriterionDto result = assertDoesNotThrow(() -> subjectService.updateGradeCriterion(gradeCriterion.getId(), dto));
-
-        // Assert
         assertEquals("Kolokwium 2", result.getName());
         assertEquals((byte) 20, result.getMaxPoints());
         verify(gradeCriterionDao).update(gradeCriterion);
