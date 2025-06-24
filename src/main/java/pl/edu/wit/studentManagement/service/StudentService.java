@@ -7,7 +7,6 @@ import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -55,17 +54,6 @@ public class StudentService {
     public List<StudentDto> getStudentsNotAssignedToAnyGroup() {
         return studentDao.getAll().stream().filter(x-> x.getStudentGroupId() == null)
                 .map(StudentMapper::toDto).collect(Collectors.toList());
-    }
-
-    /**
-     * Retrieves a student by their unique identifier.
-     *
-     * @param id the unique ID of the student
-     * @return an Optional containing the student if found, or empty if not found
-     */
-    public Optional<StudentDto> getStudentById(UUID id) {
-        var student = studentDao.get(id);
-        return student.map(StudentMapper::toDto);
     }
 
     /**

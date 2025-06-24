@@ -2,7 +2,6 @@ package pl.edu.wit.studentManagement.service;
 
 import pl.edu.wit.studentManagement.service.dto.grade.AssignGradeDto;
 import pl.edu.wit.studentManagement.service.dto.grade.GradeDto;
-import pl.edu.wit.studentManagement.service.dto.grade.UpdateGradeDto;
 import pl.edu.wit.studentManagement.exceptions.ValidationException;
 
 import java.util.UUID;
@@ -73,33 +72,24 @@ public class GradeService {
             throw new ValidationException("grade.wrongGrade");
         }
 
+        // check if the grade is being updated or a new one has to be added
+        var grade = gradeDao.getAll()
+                .stream()
+                .filter(g -> g.getStudentId().equals(assignGradeDto.getStudentId()) &&
+                        g.getGradeCriterionId().equals(assignGradeDto.getGradeCriterionId()))
+                .findFirst();
+
+        if (grade.isPresent()) {
+            // update existing grade
+            grade.get().setGrade(assignGradeDto.getGrade());
+            gradeDao.update(grade.get());
+            return GradeMapper.toDto(grade.get());
+        }
+
         var newGrade = new Grade(subject.getId(), gradeCriterion.getId(), student.getId(), assignGradeDto.getGrade());
         gradeDao.save(newGrade);
 
         return GradeMapper.toDto(newGrade);
-    }
-
-    /**
-     * Updates an existing grade's value.
-     *
-     * <p>This method does not allow modifying the associated student, subject, or criterion.
-     * It only updates the numeric grade value.
-     *
-     * @param gradeId        the UUID of the grade to update
-     * @param updateGradeDto the DTO containing the new grade value
-     * @return a {@link GradeDto} reflecting the updated grade
-     * @throws ValidationException if the grade does not exist or fails validation
-     */
-    public GradeDto updateGrade(UUID gradeId, UpdateGradeDto updateGradeDto) throws ValidationException {
-        var grade = gradeDao.get(gradeId)
-                .orElseThrow(() -> new ValidationException("grade.notExists"));
-
-        if (updateGradeDto.getGrade() != null) {
-            grade.setGrade(updateGradeDto.getGrade());
-        }
-
-        gradeDao.update(grade);
-        return GradeMapper.toDto(grade);
     }
 
     /**

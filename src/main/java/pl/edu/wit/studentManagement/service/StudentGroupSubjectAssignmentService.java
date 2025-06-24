@@ -5,7 +5,6 @@ import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.Cr
 import pl.edu.wit.studentManagement.service.dto.studentGroupSubjectAssignment.StudentGroupSubjectAssignmentDto;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,28 +46,6 @@ public class StudentGroupSubjectAssignmentService {
     }
 
     /**
-     * Retrieves an assignment by its unique identifier.
-     *
-     * @param id the UUID of the assignment
-     * @return an Optional containing the assignment if found, or empty if not found
-     */
-    public Optional<StudentGroupSubjectAssignmentDto> getAssignment(UUID id) {
-        return dao.get(id).map(StudentGroupSubjectAssignmentMapper::toDto);
-    }
-
-    /**
-     * Retrieves all existing assignments.
-     *
-     * @return a list of all student group-subject assignments
-     */
-    public List<StudentGroupSubjectAssignmentDto> getAllAssignments() {
-        return dao.getAll()
-                .stream()
-                .map(StudentGroupSubjectAssignmentMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Deletes the assignment identified by the given ID.
      *
      * @param id the UUID of the assignment to delete
@@ -88,20 +65,6 @@ public class StudentGroupSubjectAssignmentService {
         return dao.getAll()
                 .stream()
                 .filter(a -> a.getStudentGroupId().equals(studentGroupId))
-                .map(StudentGroupSubjectAssignmentMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Retrieves all assignments associated with a particular subject.
-     *
-     * @param subjectId the UUID of the subject
-     * @return list of assignments linked to the specified subject
-     */
-    public List<StudentGroupSubjectAssignmentDto> getAssignmentsBySubject(UUID subjectId) {
-        return dao.getAll()
-                .stream()
-                .filter(a -> a.getSubjectId().equals(subjectId))
                 .map(StudentGroupSubjectAssignmentMapper::toDto)
                 .collect(Collectors.toList());
     }
