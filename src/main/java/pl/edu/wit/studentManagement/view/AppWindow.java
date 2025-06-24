@@ -61,7 +61,7 @@ public final class AppWindow {
 
     private static void showAboutDialog(ActionEvent e) {
         JOptionPane.showMessageDialog(frame,
-                Translator.translate("about.description"),
+                Translator.translate("about.description") + ": Micha\u0142 Zawadzki,\nWojciech Berdowski,\nMartin Szum,\nMicha\u0142 Pokrzywka",
                 Translator.translate("about"),
                 JOptionPane.INFORMATION_MESSAGE);
     }
