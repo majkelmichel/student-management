@@ -55,8 +55,7 @@ class TranslatorTest {
 
     @Test
     void translateUnknownKeyException() {
-        assertThrows(java.util.MissingResourceException.class, () -> {
-            Translator.translate("non.existent.key");
-        });
+        String result = Translator.translate("non.existent.key");
+        assertEquals("[non.existent.key]",result);
     }
 }
