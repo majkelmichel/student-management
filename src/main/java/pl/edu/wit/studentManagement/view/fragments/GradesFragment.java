@@ -119,7 +119,6 @@ public class GradesFragment implements Fragment {
         });
 
         updateGroupsComboBox();
-        updateSubjectsComboBox();
 
         refreshTable();
     }
@@ -144,7 +143,6 @@ public class GradesFragment implements Fragment {
     private void updateSubjectsComboBox() {
         var selectedGroup = (StudentGroupDto) groupComboBox.getSelectedItem();
 
-        subjectComboBox.removeAllItems();
         if (selectedGroup == null) return;
 
         AppWindow.threadPool.submit(() -> {
@@ -153,6 +151,8 @@ public class GradesFragment implements Fragment {
             var allSubjects = subjectService.getAllSubjects();
 
             SwingUtilities.invokeLater(() -> {
+                subjectComboBox.removeAllItems();
+
                 for (StudentGroupSubjectAssignmentDto assignment : assignments) {
                     for (SubjectDto subject : allSubjects) {
                         if (subject.getId().equals(assignment.getSubjectId())) {
