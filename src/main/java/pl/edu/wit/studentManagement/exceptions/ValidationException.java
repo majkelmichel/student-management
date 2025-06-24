@@ -15,18 +15,15 @@ package pl.edu.wit.studentManagement.exceptions;
  */
 public class ValidationException extends Exception {
     private final String messageKey;
-    private final Object[] messageArgs;
 
     /**
      * Constructs a new ValidationException with the given message key and optional arguments.
      *
      * @param messageKey  a key referencing a localized error message
-     * @param messageArgs optional arguments to be inserted into the localized message
      */
-    public ValidationException(String messageKey, Object... messageArgs) {
+    public ValidationException(String messageKey) {
         super();
         this.messageKey = messageKey;
-        this.messageArgs = messageArgs;
     }
 
     /**
@@ -38,12 +35,4 @@ public class ValidationException extends Exception {
         return messageKey;
     }
 
-    /**
-     * Returns the arguments used in the localized message.
-     *
-     * @return an array of arguments for message formatting
-     */
-    public Object[] getMessageArgs() {
-        return messageArgs;
-    }
 }

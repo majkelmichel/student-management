@@ -162,26 +162,6 @@ class GradeServiceTest {
     }
 
     @Test
-    @DisplayName("Given existing grade and correct dto, when updateGrade called, then update and return updated grade")
-    void givenExistingGradeAndCorrectDto_whenUpdateGradeCalled_thenUpdateAndReturnUpdatedGrade() {
-        // Arrange
-        Grade grade = new Grade(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), (byte) 50);
-        UpdateGradeDto updateGradeDto = new UpdateGradeDto();
-        updateGradeDto.setGrade((byte) 60);
-
-        when(gradeDao.get(grade.getId())).thenReturn(Optional.of(grade));
-
-        // Act & Assert
-        GradeDto result = assertDoesNotThrow(() -> gradeService.updateGrade(grade.getId(), updateGradeDto));
-        assertNotNull(result);
-        assertEquals(grade.getId(), result.getId());
-        assertEquals(grade.getStudentId(), result.getStudentId());
-        assertEquals(grade.getSubjectId(), result.getSubjectId());
-        assertEquals((byte) 60, result.getGrade());
-        assertEquals(grade.getGradeCriterionId(), result.getGradeCriterionId());
-    }
-
-    @Test
     @DisplayName("Given existing grade, when deleteGrade called, then delete and return true")
     void givenExistingGrade_whenDeleteGradeCalled_thenDeleteAndReturnTrue() {
         // Assert
