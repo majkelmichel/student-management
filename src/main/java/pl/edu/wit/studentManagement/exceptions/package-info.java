@@ -7,7 +7,6 @@
  *   <li>Signal validation failures and business rule violations</li>
  *   <li>Support consistent error messaging with localization</li>
  * </ul>
- * </p>
  *
  * Key exceptions:
  * <ul>
