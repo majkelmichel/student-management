@@ -70,7 +70,7 @@ class Dao<T extends Entity> {
         try {
             dataStreamHandler.write(t);
         } catch (Exception e) {
-            throw new ValidationException(String.format("%s.save.failed", t.getClass().getName()), e);
+            throw new ValidationException(String.format("%s.save.failed", t.getClass().getName()));
         }
     }
 
@@ -85,7 +85,7 @@ class Dao<T extends Entity> {
         try {
             dataStreamHandler.update(t);
         } catch (Exception e) {
-            throw new ValidationException(String.format("%s.update.failed", t.getClass().getName()), e);
+            throw new ValidationException(String.format("%s.update.failed", t.getClass().getName()));
         }
     }
 

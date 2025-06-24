@@ -1,18 +1,20 @@
 /**
- * Contains custom exception classes used throughout the student management system.
+ * Exception classes for the student management system.
  * <p>
- * These exceptions provide a structured way to signal and handle error conditions
- * such as validation failures or data access issues. They are typically used in the
- * service and domain layers to enforce business rules and encapsulate infrastructure-level
- * errors.
+ * This package contains custom exceptions that provide structured error handling across
+ * the application. These exceptions are designed to:
+ * <ul>
+ *   <li>Signal validation failures and business rule violations</li>
+ *   <li>Support consistent error messaging with localization</li>
+ * </ul>
  * </p>
  *
+ * Key exceptions:
  * <ul>
- *     <li>{@link pl.edu.wit.studentManagement.exceptions.ValidationException} — Represents user input or business rule validation failures, with localization support.</li>
- *     <li>{@link pl.edu.wit.studentManagement.exceptions.DataAccessException} — Wraps lower-level persistence or I/O errors as unchecked exceptions.</li>
+ *   <li>{@link pl.edu.wit.studentManagement.exceptions.ValidationException} - Handles
+ *       input validation and business rule violations with localized messages</li>
  * </ul>
  *
- * This package helps separate application logic from error-handling mechanisms and enables
- * consistent exception propagation and messaging.
+ * @see pl.edu.wit.studentManagement.exceptions.ValidationException
  */
 package pl.edu.wit.studentManagement.exceptions;
