@@ -8,53 +8,52 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test suite for {@link SubjectDataStreamHandler} class.
- *
- * @author Michał Zawadzki
+ * Test suite for {@link StudentDataStreamHandler} class.
+ * 
+ * @author Martin Szum
  */
-@DisplayName("SubjectDataStreamHandler Test Suite")
-class SubjectDataStreamHandlerTest {
 
-    private SubjectDataStreamHandler handler;
+class StudentDataStreamHandlerTest {
+
+    private StudentDataStreamHandler handler;
     private Path tempFilePath;
 
     @BeforeEach
     void setUp(@TempDir Path tempDir) {
-        tempFilePath = tempDir.resolve("test-subjects.dat");
-        handler = new SubjectDataStreamHandler(tempFilePath.toString());
+        tempFilePath = tempDir.resolve("test-students.dat");
+        handler = new StudentDataStreamHandler(tempFilePath.toString());
     }
 
     @Test
     @DisplayName("Given new file, when readAll called, then return empty list")
     void givenNewFile_whenReadAllCalled_thenReturnEmptyList() throws IOException {
         // Act
-        List<Subject> result = handler.readAll();
+        List<Student> result = handler.readAll();
 
         // Assert
         assertTrue(result.isEmpty());
     }
 
     @Test
-    @DisplayName("Given multiple subjects written to file, when readAll called, then return list with all subjects")
-    void givenMultipleSubjectsWrittenToFile_whenReadAllCalled_thenReturnListWithAllSubjects() throws IOException {
+    @DisplayName("Given multiple Students written to file, when readAll called, then return list with all Students")
+    void givenMultipleStudentsWrittenToFile_whenReadAllCalled_thenReturnListWithAllStudents() throws IOException {
         // Arrange
-        Subject subject1 = new Subject(UUID.randomUUID(), "Fizyka 1");
-        Subject subject2 = new Subject(UUID.randomUUID(), "Język Java");
-        handler.write(subject1);
-        handler.write(subject2);
+        Student Student1 = new Student("Jan", "Kowalski", "A0001");
+        Student Student2 = new Student("Maria", "Nowak", "A0002");
+        handler.write(Student1);
+        handler.write(Student2);
 
         // Act
-        List<Subject> result = handler.readAll();
+        List<Student> result = handler.readAll();
 
         // Assert
         assertEquals(2, result.size());
-        assertTrue(result.stream().map(Subject::getName).anyMatch(name -> name.equals("Fizyka 1")));
-        assertTrue(result.stream().map(Subject::getName).anyMatch(name -> name.equals("Język Java")));
+        assertTrue(result.stream().map(Student::getFirstName).anyMatch(name -> name.equals("Jan")));
+        assertTrue(result.stream().map(Student::getFirstName).anyMatch(name -> name.equals("Maria")));
     }
 
     @Test
@@ -72,30 +71,32 @@ class SubjectDataStreamHandlerTest {
     }
 
     @Test
-    @DisplayName("When subject written and read, then all fields match")
-    void whenSubjectWrittenAndRead_thenAllFieldsMatch() throws IOException {
+    @DisplayName("When Student written and read, then all fields match")
+    void whenStudentWrittenAndRead_thenAllFieldsMatch() throws IOException {
         // Arrange
-        Subject originalSubject = new Subject(UUID.randomUUID(), "Inżynieria Oprogramowania");
+        Student originalStudent = new Student("Jan", "Kowalski", "A0001");
 
         // Act
-        handler.write(originalSubject);
-        List<Subject> result = handler.readAll();
+        handler.write(originalStudent);
+        List<Student> result = handler.readAll();
 
         // Assert
         assertEquals(1, result.size());
-        Subject readSubject = result.get(0);
-        assertEquals(originalSubject.getId(), readSubject.getId());
-        assertEquals(originalSubject.getName(), readSubject.getName());
+        Student readStudent = result.get(0);
+        assertEquals(originalStudent.getId(), readStudent.getId());
+        assertEquals(originalStudent.getFirstName(), readStudent.getFirstName());
+        assertEquals(originalStudent.getLastName(), readStudent.getLastName());
+        assertEquals(originalStudent.getAlbum(), readStudent.getAlbum());
     }
 
     @Test
     @DisplayName("Given empty file, when write called, then file is created")
     void givenEmptyFile_whenWriteCalled_thenFileIsCreated() throws IOException {
         // Arrange
-        Subject subject = new Subject(UUID.randomUUID(), "Język C#");
+        Student Student = new Student("Jan", "Kowalski", "A0001");
 
         // Act
-        handler.write(subject);
+        handler.write(Student);
 
         // Assert
         assertTrue(tempFilePath.toFile().exists());
